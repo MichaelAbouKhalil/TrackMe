@@ -11,6 +11,8 @@ spring:
           clone-on-start: true
           search-paths:
             - 'trackme-conf'
+            - 'trackme-conf/*'
+            - 'trackme-conf/**'
           default-label: master
 server:
   port: 8888
