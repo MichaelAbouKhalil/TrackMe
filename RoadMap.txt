@@ -9,7 +9,7 @@
 - End   Date:
 - TODO
     [X] Centralized Configuration connected to Github
-    [] Discovery Service using Eureka
+    [X] Discovery Service using Eureka
     [] API Gateway Service using Zuul and Eureka
     [] Authorization Service to generate OAuth 2 Tokens
         [] Login: /oauth/token (username and password)
