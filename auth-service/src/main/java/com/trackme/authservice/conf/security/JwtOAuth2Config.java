@@ -22,7 +22,6 @@ public class JwtOAuth2Config extends AuthorizationServerConfigurerAdapter {
 
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
-    private final PasswordEncoder passwordEncoder;
     private final TokenStore jwtTokenStore;
     private final JwtAccessTokenConverter jwtAccessTokenConverter;
     private final TokenEnhancer jwtTokenEnhancer;
