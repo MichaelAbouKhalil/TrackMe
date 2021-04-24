@@ -19,7 +19,7 @@
       <module name="auth-service" target="11" />
       <module name="centralized-config" target="11" />
       <module name="discovery-service" target="11" />
-      <module name="models" target="1.5" />
+      <module name="models" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
