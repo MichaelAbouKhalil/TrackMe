@@ -10,9 +10,9 @@
 - TODO
     [X] Centralized Configuration connected to Github
     [X] Discovery Service using Eureka
-    [] API Gateway Service using Zuul and Eureka
-    [] Authorization Service to generate OAuth 2 Tokens
-        [] Login: /oauth/token (username and password)
+    [X] API Gateway Service using Zuul and Eureka
+    [X] Authorization Service to generate OAuth 2 Tokens
+        [X] Login: /oauth/token (username and password)
         [] Logout: (FE will handle it)
         [] Signup
             [] Users on signup will enter an organization ID and role
@@ -20,7 +20,7 @@
             [] PM can promote DEV_PENDING to DEV (within the same org)
             [] PM can promote CUSTOMER_PENDING to CUSTOMER (within the same org)
             [] CUSTOMER can have multiple orgs under his profile
-        [] Roles:
+        [X] Roles:
             - DEV_PENDING       ( Waiting PM approval)
             - DEV               ( Developer: Involved in ticket lifecycle)
             - PM_PENDING        ( Waiting admin approval)
