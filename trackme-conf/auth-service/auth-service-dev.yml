@@ -27,5 +27,4 @@ jwt:
 logging:
   org:
     springframework:
-      security:
-        oauth2: DEBUG
+      security: DEBUG
