@@ -1,0 +1,25 @@
+server:
+  port: 8060
+
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: jdbc:postgresql://localhost:5555/trackme-auth-db
+    username: admin
+    password: password
+    driverClassName: org.postgresql.Driver
+  jpa:
+    hibernate:
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      ddl-auto: update
+    generate-ddl: true
+    show-sql: true
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+
+jwt:
+  secret: shushhIamSecret
