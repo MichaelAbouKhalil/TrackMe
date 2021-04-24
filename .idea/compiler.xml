@@ -7,20 +7,25 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="centralized-config" />
         <module name="api-gateway" />
+        <module name="models" />
+        <module name="auth-service" />
+        <module name="centralized-config" />
         <module name="discovery-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="api-gateway" target="11" />
+      <module name="auth-service" target="11" />
       <module name="centralized-config" target="11" />
       <module name="discovery-service" target="11" />
+      <module name="models" target="1.5" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-gateway" options="-parameters" />
+      <module name="auth-service" options="-parameters" />
       <module name="centralized-config" options="-parameters" />
       <module name="discovery-service" options="-parameters" />
     </option>
