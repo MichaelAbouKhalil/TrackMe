@@ -23,3 +23,9 @@ eureka:
 
 jwt:
   secret: shushhIamSecret
+
+logging:
+  org:
+    springframework:
+      security:
+        oauth2: DEBUG

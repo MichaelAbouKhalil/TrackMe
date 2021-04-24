@@ -10,6 +10,7 @@
         <module name="api-gateway" />
         <module name="models" />
         <module name="auth-service" />
+        <module name="common-utils" />
         <module name="centralized-config" />
         <module name="discovery-service" />
       </profile>
@@ -18,6 +19,7 @@
       <module name="api-gateway" target="11" />
       <module name="auth-service" target="11" />
       <module name="centralized-config" target="11" />
+      <module name="common-utils" target="11" />
       <module name="discovery-service" target="11" />
       <module name="models" target="11" />
     </bytecodeTargetLevel>
