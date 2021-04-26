@@ -30,6 +30,9 @@ public class UserEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "org_id")
+    private String orgId;
+
     @CreationTimestamp
     @Column(name = "created_date")
     private LocalDateTime createdDate;
