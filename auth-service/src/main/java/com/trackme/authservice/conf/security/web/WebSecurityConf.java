@@ -1,4 +1,4 @@
-package com.trackme.authservice.conf.security;
+package com.trackme.authservice.conf.security.web;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

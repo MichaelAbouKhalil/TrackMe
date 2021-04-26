@@ -1,4 +1,4 @@
-package com.trackme.authservice.conf.security;
+package com.trackme.authservice.conf.security.jwt;
 
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;

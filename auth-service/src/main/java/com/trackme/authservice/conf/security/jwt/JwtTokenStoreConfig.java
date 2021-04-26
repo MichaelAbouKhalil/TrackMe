@@ -1,4 +1,4 @@
-package com.trackme.authservice.conf.security;
+package com.trackme.authservice.conf.security.jwt;
 
 import com.trackme.authservice.conf.ServiceConf;
 import lombok.RequiredArgsConstructor;
