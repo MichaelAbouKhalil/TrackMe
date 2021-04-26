@@ -1,7 +1,7 @@
 package com.trackme.authservice.service;
 
 import com.trackme.authservice.repository.UserRepository;
-import com.trackme.common.utils.EmailUtils;
+import com.trackme.common.validator.EmailValidator;
 import com.trackme.models.security.UserDetail;
 import com.trackme.models.security.UserEntity;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Optional<UserEntity> optionalUserEntity;
 
         // check if email.
-        if(EmailUtils.isEmail(username)){
+        if(EmailValidator.isEmail(username)){
             optionalUserEntity = userRepository.findByEmail(username);
         }else{
             optionalUserEntity = userRepository.findByUsername(username);
