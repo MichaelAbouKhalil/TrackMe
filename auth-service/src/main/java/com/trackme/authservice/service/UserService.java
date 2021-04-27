@@ -10,7 +10,7 @@ import com.trackme.models.payload.request.signup.SignupRequest;
 import com.trackme.models.security.RoleEntity;
 import com.trackme.models.security.UserEntity;
 import lombok.RequiredArgsConstructor;
-import org.apache.http.HttpStatus;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -55,7 +55,7 @@ public class UserService {
         UserEntity savedUser = userRepository.save(user);
 
         if (savedUser == null) {
-            return CommonResponse.error(HttpStatus.SC_INTERNAL_SERVER_ERROR, ConstantMessages.USER_NOT_SAVED);
+            return CommonResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), ConstantMessages.USER_NOT_SAVED);
         }
 
         return CommonResponse.ok();
