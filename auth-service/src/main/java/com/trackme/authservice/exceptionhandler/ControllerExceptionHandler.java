@@ -1,11 +1,13 @@
 package com.trackme.authservice.exceptionhandler;
 
 import com.trackme.models.common.CommonResponse;
+import com.trackme.models.exception.InvalidRoleException;
 import com.trackme.models.exception.UserAlreadyExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,26 +25,35 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   HttpHeaders headers, HttpStatus status,
                                                                   WebRequest request) {
         String errorMessage = ex.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
-
-        CommonResponse response = CommonResponse.error(status.value(), errorMessage);
-
-        String requestURI = ((ServletWebRequest) request).getRequest().getRequestURI();
-        log.error("request validation error occurred for request on {}", requestURI);
-        log.error("exception: {}", errorMessage);
-
-        return ResponseEntity.ok().body(response);
+        return exceptionConverter(errorMessage, ex, request);
     }
 
     @ExceptionHandler(value = UserAlreadyExistException.class)
     protected ResponseEntity<Object> handleUserAlreadyExistException(Exception ex, WebRequest request) {
-
         String errorMessage = ex.getMessage();
+        return exceptionConverter(errorMessage, ex, request);
+    }
+
+    @ExceptionHandler(value = UsernameNotFoundException.class)
+    protected ResponseEntity<Object> handleUsernameNotFoundException(Exception ex, WebRequest request) {
+        String errorMessage = ex.getMessage();
+        return exceptionConverter(errorMessage, ex, request);
+    }
+
+    @ExceptionHandler(value = InvalidRoleException.class)
+    protected ResponseEntity<Object> handleInvalidRoleException(Exception ex, WebRequest request) {
+        String errorMessage = ex.getMessage();
+        return exceptionConverter(errorMessage, ex, request);
+    }
+
+    private ResponseEntity<Object> exceptionConverter(String errorMessage, Exception ex, WebRequest request){
 
         CommonResponse response = CommonResponse.error(HttpStatus.BAD_REQUEST.value(), errorMessage);
         String requestURI = ((ServletWebRequest) request).getRequest().getRequestURI();
-        log.error("user already exist exception occurred for request on {}", requestURI);
+        log.error("{} occurred for request on {}", ex.getClass().getSimpleName(), requestURI);
         log.error("exception: {}", errorMessage);
 
         return ResponseEntity.ok().body(response);
     }
+
 }
