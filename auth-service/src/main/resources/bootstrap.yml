@@ -7,9 +7,10 @@ spring:
     config:
       uri: http://localhost:8888
       fail-fast: true
-      label: auth-service-branch
+#      label: auth-service-branch
 
 #logging:
 #  level:
 #    org:
-#      springframework: DEBUG
+#      springframework:
+#        security: DEBUG
