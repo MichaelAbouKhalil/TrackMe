@@ -16,7 +16,8 @@ public abstract class BaseIT {
     @Autowired
     WebApplicationContext wac;
 
-    ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    ObjectMapper objectMapper;
 
     public MockMvc mockMvc;
 
