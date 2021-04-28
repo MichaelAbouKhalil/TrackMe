@@ -29,7 +29,7 @@ public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         String errorMessage = e.getMessage();
 
-        CommonResponse response = CommonResponse.error(HttpStatus.FORBIDDEN.value(), errorMessage);
+        CommonResponse response = CommonResponse.error(HttpStatus.UNAUTHORIZED.value(), errorMessage);
         String requestURI = httpServletRequest.getRequestURI();
         log.error("authentication exception occurred for request on {}", requestURI);
         log.error("exception: {}", errorMessage);
