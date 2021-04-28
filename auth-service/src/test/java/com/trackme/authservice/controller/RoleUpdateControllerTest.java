@@ -21,6 +21,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.TokenRequest;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +55,9 @@ class RoleUpdateControllerTest extends BaseIT {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(
                         RoleUpdateRequest.builder().email("test@signup.com").build())))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.status").value("401"));
     }
 
     @Test
@@ -78,11 +81,13 @@ class RoleUpdateControllerTest extends BaseIT {
 
         String accessToken = accessTokenUtil.obtainAccessToken("demo-pm", "demo-pm");
 
-        mockMvc.perform(post(PROMOTE_API + "/pm")
+        ResultActions resultActions = mockMvc.perform(post(PROMOTE_API + "/pm")
                 .header("Authorization", "Bearer " + accessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(
                         RoleUpdateRequest.builder().email("test@signup.com").build())))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.status").value("403"));
     }
 }
