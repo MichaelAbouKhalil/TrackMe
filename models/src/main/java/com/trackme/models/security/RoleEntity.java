@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 @Entity
 @Table(name = "roles",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"role_name"})})
