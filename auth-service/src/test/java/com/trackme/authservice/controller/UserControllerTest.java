@@ -6,7 +6,6 @@ import com.trackme.models.constants.ConstantMessages;
 import com.trackme.models.enums.PendingRoleEnum;
 import com.trackme.models.exception.UserAlreadyExistException;
 import com.trackme.models.payload.request.signup.SignupRequest;
-import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -14,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -64,7 +64,7 @@ class UserControllerTest extends BaseIT {
 
             when(userService.processSignup(any(SignupRequest.class)))
                     .thenReturn(CommonResponse.error(
-                            HttpStatus.SC_INTERNAL_SERVER_ERROR, ConstantMessages.USER_NOT_SAVED
+                            HttpStatus.INTERNAL_SERVER_ERROR.value(), ConstantMessages.USER_NOT_SAVED
                     ));
 
             mockMvc.perform(post(BASE_ROOT)
@@ -72,7 +72,7 @@ class UserControllerTest extends BaseIT {
                     .content(objectMapper.writeValueAsString(validRequest)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.success").value("false"))
-                    .andExpect(jsonPath("$.status").value(HttpStatus.SC_INTERNAL_SERVER_ERROR))
+                    .andExpect(jsonPath("$.status").value(HttpStatus.INTERNAL_SERVER_ERROR.value()))
                     .andExpect(jsonPath("$.error.errorMessage").value(ConstantMessages.USER_NOT_SAVED));
         }
 
@@ -87,7 +87,7 @@ class UserControllerTest extends BaseIT {
                     .content(objectMapper.writeValueAsString(validRequest)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.success").value("false"))
-                    .andExpect(jsonPath("$.status").value(HttpStatus.SC_BAD_REQUEST))
+                    .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.value()))
                     .andExpect(jsonPath("$.error.errorMessage").value("User Already found"));
         }
     }
