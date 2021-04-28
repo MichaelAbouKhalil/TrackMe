@@ -1,4 +1,4 @@
-package com.trackme.authservice.controller.advice;
+package com.trackme.authservice.exceptionhandler;
 
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.exception.UserAlreadyExistException;
