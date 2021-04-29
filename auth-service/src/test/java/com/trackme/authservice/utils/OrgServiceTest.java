@@ -1,5 +1,6 @@
 package com.trackme.authservice.utils;
 
+import com.trackme.authservice.Base;
 import com.trackme.authservice.repository.RoleRepository;
 import com.trackme.authservice.repository.UserRepository;
 import com.trackme.models.enums.RoleEnum;
@@ -19,8 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class OrgServiceTest {
+class OrgServiceTest extends Base {
 
     @Autowired
     OrgService orgService;
