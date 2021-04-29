@@ -1,6 +1,6 @@
 package com.trackme.authservice.controller;
 
-import com.trackme.authservice.service.UserService;
+import com.trackme.authservice.service.SignupService;
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.constants.ConstantMessages;
 import com.trackme.models.enums.PendingRoleEnum;
@@ -21,13 +21,12 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UserControllerTest extends BaseIT {
+class SignupControllerTest extends BaseIT {
 
     private static final String BASE_ROOT = "/signup";
 
     @MockBean
-    UserService userService;
+    SignupService signupService;
 
     SignupRequest validRequest;
 
@@ -49,7 +48,7 @@ class UserControllerTest extends BaseIT {
         @Test
         public void signup_Success() throws Exception {
 
-            when(userService.processSignup(any(SignupRequest.class))).thenReturn(CommonResponse.ok());
+            when(signupService.processSignup(any(SignupRequest.class))).thenReturn(CommonResponse.ok());
 
             mockMvc.perform(post(BASE_ROOT)
                     .contentType(MediaType.APPLICATION_JSON)
@@ -62,7 +61,7 @@ class UserControllerTest extends BaseIT {
         @Test
         public void signup_Failure() throws Exception {
 
-            when(userService.processSignup(any(SignupRequest.class)))
+            when(signupService.processSignup(any(SignupRequest.class)))
                     .thenReturn(CommonResponse.error(
                             HttpStatus.INTERNAL_SERVER_ERROR.value(), ConstantMessages.USER_NOT_SAVED
                     ));
@@ -79,7 +78,7 @@ class UserControllerTest extends BaseIT {
         @Test
         public void signup_UserAlreadyExistException() throws Exception {
 
-            when(userService.processSignup(any(SignupRequest.class)))
+            when(signupService.processSignup(any(SignupRequest.class)))
                     .thenThrow(new UserAlreadyExistException("User Already found"));
 
             mockMvc.perform(post(BASE_ROOT)
@@ -97,7 +96,7 @@ class UserControllerTest extends BaseIT {
     class SignupValidationTests {
         @Test
         public void signup_ValidRequest() throws Exception {
-            when(userService.processSignup(any(SignupRequest.class))).thenReturn(CommonResponse.ok());
+            when(signupService.processSignup(any(SignupRequest.class))).thenReturn(CommonResponse.ok());
 
             mockMvc.perform(post(BASE_ROOT)
                     .contentType(MediaType.APPLICATION_JSON)
