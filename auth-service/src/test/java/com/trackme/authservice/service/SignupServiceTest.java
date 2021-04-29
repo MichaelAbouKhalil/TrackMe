@@ -1,9 +1,8 @@
 package com.trackme.authservice.service;
 
-import com.trackme.authservice.AuthServiceApplicationTests;
+import com.trackme.authservice.Base;
 import com.trackme.authservice.repository.RoleRepository;
 import com.trackme.authservice.repository.UserRepository;
-import com.trackme.authservice.service.UserService;
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.constants.ConstantMessages;
 import com.trackme.models.enums.PendingRoleEnum;
@@ -26,11 +25,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UserServiceTest {
+class SignupServiceTest extends Base {
 
     @Autowired
-    UserService userService;
+    SignupService signupService;
 
     @MockBean
     UserRepository userRepository;
@@ -71,7 +69,7 @@ class UserServiceTest {
                         .role(role)
                         .build());
 
-        CommonResponse commonResponse = userService.processSignup(validRequest);
+        CommonResponse commonResponse = signupService.processSignup(validRequest);
 
         assertTrue(commonResponse.isSuccess());
         assertEquals(HttpStatus.OK.value(), commonResponse.getStatus());
@@ -88,7 +86,7 @@ class UserServiceTest {
 
         UserAlreadyExistException exception = assertThrows(
                 UserAlreadyExistException.class,
-                () -> userService.processSignup(validRequest));
+                () -> signupService.processSignup(validRequest));
 
         assertEquals("Username [" + validRequest.getUsername() + "] already exists.",
                 exception.getMessage());
@@ -104,7 +102,7 @@ class UserServiceTest {
 
         UserAlreadyExistException exception = assertThrows(
                 UserAlreadyExistException.class,
-                () -> userService.processSignup(validRequest));
+                () -> signupService.processSignup(validRequest));
 
         assertEquals("Email [" + validRequest.getEmail() + "] already exists.",
                 exception.getMessage());
@@ -121,7 +119,7 @@ class UserServiceTest {
 
         RoleNotFoundException exception = assertThrows(
                 RoleNotFoundException.class,
-                () -> userService.processSignup(validRequest));
+                () -> signupService.processSignup(validRequest));
 
         assertEquals("Requested Role [" + role.getRoleName() + "] not found.",
                 exception.getMessage());
@@ -135,7 +133,7 @@ class UserServiceTest {
 
         when(userRepository.save(any(UserEntity.class))).thenReturn(null);
 
-        CommonResponse commonResponse = userService.processSignup(validRequest);
+        CommonResponse commonResponse = signupService.processSignup(validRequest);
 
         assertFalse(commonResponse.isSuccess());
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), commonResponse.getStatus());
