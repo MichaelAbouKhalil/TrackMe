@@ -1,6 +1,7 @@
 package com.trackme.authservice.exceptionhandler;
 
 import com.trackme.models.common.CommonResponse;
+import com.trackme.models.exception.InvalidOperationException;
 import com.trackme.models.exception.InvalidRoleException;
 import com.trackme.models.exception.UserAlreadyExistException;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -42,6 +44,18 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = InvalidRoleException.class)
     protected ResponseEntity<Object> handleInvalidRoleException(Exception ex, WebRequest request) {
+        String errorMessage = ex.getMessage();
+        return exceptionConverter(errorMessage, ex, request);
+    }
+
+    @ExceptionHandler(value = InvalidOperationException.class)
+    protected ResponseEntity<Object> handleInvalidOperationException(Exception ex, WebRequest request) {
+        String errorMessage = ex.getMessage();
+        return exceptionConverter(errorMessage, ex, request);
+    }
+
+    @ExceptionHandler(value = UnauthorizedUserException.class)
+    protected ResponseEntity<Object> handleUnauthorizedUserException(Exception ex, WebRequest request) {
         String errorMessage = ex.getMessage();
         return exceptionConverter(errorMessage, ex, request);
     }
