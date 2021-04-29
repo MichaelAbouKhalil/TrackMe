@@ -16,6 +16,15 @@ public enum RoleEnum {
         this.roleName = roleName;
     }
 
+    public static RoleEnum returnByName(String roleToPromoteName) {
+        for(RoleEnum role : RoleEnum.values()){
+            if(role.getRoleName().equals(roleToPromoteName)){
+                return role;
+            }
+        }
+        return null;
+    }
+
     public String getRoleName() {
         return roleName;
     }
