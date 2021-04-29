@@ -1,9 +1,8 @@
 package com.trackme.authservice.controller;
 
-import com.trackme.authservice.service.RoleService;
+import com.trackme.authservice.service.RoleUpdateService;
 import com.trackme.authservice.utils.AccessTokenUtil;
 import com.trackme.models.common.CommonResponse;
-import com.trackme.models.enums.RoleEnum;
 import com.trackme.models.payload.request.roleupdate.RoleUpdateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,14 +20,13 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class RoleUpdateControllerTest extends BaseIT {
 
     private final static String PROMOTE_API = "/role/promote";
     private final static String DEMOTE_API = "/role/demote";
 
     @MockBean
-    RoleService roleService;
+    RoleUpdateService roleUpdateService;
 
     @Autowired
     private AccessTokenUtil accessTokenUtil;
@@ -46,7 +44,7 @@ class RoleUpdateControllerTest extends BaseIT {
     class requestValidationTests{
         @Test
         public void roleUpdate_ValidRequest() throws Exception {
-            when(roleService.promote(any(RoleUpdateRequest.class), RoleEnum.PM)).thenReturn(CommonResponse.ok());
+            when(roleUpdateService.updateRole(any(RoleUpdateRequest.class))).thenReturn(CommonResponse.ok());
 
             String accessToken = accessTokenUtil.obtainAccessToken("demo-admin", "demo-admin");
 
@@ -61,7 +59,7 @@ class RoleUpdateControllerTest extends BaseIT {
 
         @Test
         public void roleUpdate_InvalidEmail() throws Exception {
-            when(roleService.promote(any(RoleUpdateRequest.class), RoleEnum.PM)).thenReturn(CommonResponse.ok());
+            when(roleUpdateService.updateRole(any(RoleUpdateRequest.class))).thenReturn(CommonResponse.ok());
 
             String accessToken = accessTokenUtil.obtainAccessToken("demo-admin", "demo-admin");
 
@@ -94,7 +92,7 @@ class RoleUpdateControllerTest extends BaseIT {
 
         @Test
         public void promotePm_Admin() throws Exception {
-            when(roleService.promote(any(RoleUpdateRequest.class), RoleEnum.PM)).thenReturn(CommonResponse.ok());
+            when(roleUpdateService.updateRole(any(RoleUpdateRequest.class))).thenReturn(CommonResponse.ok());
 
             String accessToken = accessTokenUtil.obtainAccessToken("demo-admin", "demo-admin");
 
@@ -113,6 +111,80 @@ class RoleUpdateControllerTest extends BaseIT {
             String accessToken = accessTokenUtil.obtainAccessToken("demo-pm", "demo-pm");
 
             ResultActions resultActions = mockMvc.perform(post(PROMOTE_API + "/pm")
+                    .header("Authorization", "Bearer " + accessToken)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.success").value("false"))
+                    .andExpect(jsonPath("$.status").value("403"));
+        }
+    }
+
+
+    @DisplayName("Promote DEV/CUSTOMER API access Tests")
+    @Nested
+    class promoteDevCustomerTests {
+        @Test
+        public void promoteDev_NoAuth_Invalid() throws Exception {
+
+            mockMvc.perform(post(PROMOTE_API)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.success").value("false"))
+                    .andExpect(jsonPath("$.status").value("401"));
+        }
+
+        @Test
+        public void promoteDev_Admin_Valid() throws Exception {
+            when(roleUpdateService.updateRole(any(RoleUpdateRequest.class))).thenReturn(CommonResponse.ok());
+
+            String accessToken = accessTokenUtil.obtainAccessToken("demo-admin", "demo-admin");
+
+            mockMvc.perform(post(PROMOTE_API)
+                    .header("Authorization", "Bearer " + accessToken)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.success").value("true"))
+                    .andExpect(jsonPath("$.status").value("200"));
+        }
+
+        @Test
+        public void promoteCustomer_PM_Valid() throws Exception {
+            when(roleUpdateService.updateRole(any(RoleUpdateRequest.class))).thenReturn(CommonResponse.ok());
+
+            String accessToken = accessTokenUtil.obtainAccessToken("demo-pm", "demo-pm");
+
+            mockMvc.perform(post(PROMOTE_API)
+                    .header("Authorization", "Bearer " + accessToken)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.success").value("true"))
+                    .andExpect(jsonPath("$.status").value("200"));
+        }
+
+        @Test
+        public void promoteDev_NotAuthorized_Invalid() throws Exception {
+
+            String accessToken = accessTokenUtil.obtainAccessToken("demo-dev", "demo-dev");
+
+            mockMvc.perform(post(PROMOTE_API )
+                    .header("Authorization", "Bearer " + accessToken)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.success").value("false"))
+                    .andExpect(jsonPath("$.status").value("403"));
+        }
+
+        @Test
+        public void promoteCustomer_NotAuthorized_Invalid() throws Exception {
+
+            String accessToken = accessTokenUtil.obtainAccessToken("demo-customer", "demo-customer");
+
+            mockMvc.perform(post(PROMOTE_API )
                     .header("Authorization", "Bearer " + accessToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
