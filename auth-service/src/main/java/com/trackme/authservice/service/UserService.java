@@ -1,63 +1,42 @@
 package com.trackme.authservice.service;
 
-import com.trackme.authservice.repository.RoleRepository;
 import com.trackme.authservice.repository.UserRepository;
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.constants.ConstantMessages;
-import com.trackme.models.exception.RoleNotFoundException;
-import com.trackme.models.exception.UserAlreadyExistException;
-import com.trackme.models.payload.request.signup.SignupRequest;
 import com.trackme.models.security.RoleEntity;
 import com.trackme.models.security.UserEntity;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
 
-    public CommonResponse processSignup(SignupRequest request) throws UserAlreadyExistException {
+    public UserEntity findUserByEmail(String email){
+        log.info("finding user with email [{}]", email);
+        UserEntity user = userRepository.findByEmail(email).orElseThrow(
+                () -> new UsernameNotFoundException("User with email [" + email + "] is not found.")
+        );
+        return user;
+    }
 
-        userRepository.findByUsername(request.getUsername())
-                .ifPresent((user) -> {
-                    throw new UserAlreadyExistException("Username [" + user.getUsername() + "] already exists.");
-                });
+    public UserEntity updateUserRoles(UserEntity user, RoleEntity role){
 
-        userRepository.findByEmail(request.getEmail())
-                .ifPresent(user -> {
-                    throw new UserAlreadyExistException("Email [" + user.getEmail() + "] already exists.");
-                });
+        user.setRoles(Arrays.asList(role));
 
-        if (!request.getRole().startsWith("ROLE_")) {
-            request.setRole("ROLE_" + request.getRole());
-        }
-        String requestedRole = request.getRole();
+        log.info("updated user [{}] with role [{}]", user.getEmail(), role.getRoleName());
+        log.info("updating user in database");
 
-        RoleEntity role = roleRepository.findByRoleName(requestedRole)
-                .orElseThrow(() -> {
-                    throw new RoleNotFoundException("Requested Role [" + requestedRole + "] not found.");
-                });
-
-        UserEntity user = UserEntity.builder()
-                .username(request.getUsername())
-                .email(request.getEmail())
-                .password(request.getPassword())
-                .orgId(request.getOrgId())
-                .role(role)
-                .build();
-
-        UserEntity savedUser = userRepository.save(user);
-
-        if (savedUser == null) {
-            return CommonResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), ConstantMessages.USER_NOT_SAVED);
-        }
-
-        return CommonResponse.ok();
+        // update user in database
+        return userRepository.save(user);
     }
 }
