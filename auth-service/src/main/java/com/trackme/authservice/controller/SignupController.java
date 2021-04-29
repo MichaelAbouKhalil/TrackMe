@@ -1,7 +1,7 @@
 package com.trackme.authservice.controller;
 
 
-import com.trackme.authservice.service.UserService;
+import com.trackme.authservice.service.SignupService;
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.payload.request.signup.SignupRequest;
 import lombok.RequiredArgsConstructor;
@@ -17,16 +17,16 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class UserController {
+public class SignupController {
 
-    private final UserService userService;
+    private final SignupService signupService;
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/signup")
     public ResponseEntity<CommonResponse> signup(@Valid @RequestBody SignupRequest request){
         log.debug("received request on signup()...");
 
-        CommonResponse response = userService.processSignup(request);
+        CommonResponse response = signupService.processSignup(request);
 
         return ResponseEntity.ok().body(response);
     }
