@@ -5,6 +5,7 @@ import com.trackme.models.common.CommonResponse;
 import com.trackme.models.enums.RoleEnum;
 import com.trackme.models.payload.request.roleupdate.RoleUpdateRequest;
 import com.trackme.models.security.permission.PmPromotePermission;
+import com.trackme.models.security.permission.PromotePermission;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ public class RoleUpdateController {
     private final RoleService roleService;
 
     @PostMapping("/role/promote")
+    @PromotePermission
     public ResponseEntity<CommonResponse> promote(@Valid @RequestBody RoleUpdateRequest request){
         CommonResponse response = roleService.promote(request, null);
         return ResponseEntity.ok().body(response);
