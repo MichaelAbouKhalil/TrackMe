@@ -1,5 +1,6 @@
 package com.trackme.authservice.controller;
 
+import com.trackme.authservice.Base;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
-@ActiveProfiles("test")
-public abstract class BaseIT {
+public abstract class BaseIT extends Base {
 
     @Autowired
     WebApplicationContext wac;
