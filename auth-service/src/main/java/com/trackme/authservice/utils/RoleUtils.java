@@ -1,5 +1,6 @@
 package com.trackme.authservice.utils;
 
+import com.trackme.models.constants.ConstantMessages;
 import com.trackme.models.enums.RoleEnum;
 import com.trackme.models.security.RoleEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -8,41 +9,24 @@ import lombok.extern.slf4j.Slf4j;
 public class RoleUtils {
 
     /**
-     * this method is used to determine if the role to be promoted is valid and has prefix _PENDING
+     * this method is used to remove _PENDING suffix for promote and add for demote
      *
      * @param userRole
-     * @param roleToPromote
      * @return
      */
-    public static RoleEnum getPromoteRole(RoleEntity userRole, RoleEnum roleToPromote) {
-
+    public static RoleEnum getUpdateRole(RoleEntity userRole) {
+        RoleEnum roleToPromote;
+        String roleToPromoteName;
         String userRoleName = userRole.getRoleName();
 
-        if (roleToPromote == null) {
-
-            if (userRoleName.equals(RoleEnum.DEV_PENDING.getRoleName())) {
-                return RoleEnum.DEV;
-            }
-
-            if (userRoleName.equals(RoleEnum.CUSTOMER_PENDING.getRoleName())) {
-                return RoleEnum.CUSTOMER;
-            }
-        } else if (roleToPromote.equals(RoleEnum.PM)) {
-            if (!userRoleName.equals(RoleEnum.PM_PENDING.getRoleName())) {
-                log.error("invalid promote operation, user cannot be promoted from [{}] to [{}]",
-                        userRoleName, roleToPromote.getRoleName());
-                return null;
-            }
-
-            return RoleEnum.PM;
-        } else if (roleToPromote.equals(RoleEnum.ADMIN)) {
-            log.error("invalid promote operation, user cannot be promoted to [{}]",
-                    roleToPromote.getRoleName());
-            return null;
+        if (userRoleName.contains(ConstantMessages.PENDING_ROLE_SUFFIX)) {
+            roleToPromoteName = userRoleName.replace(ConstantMessages.PENDING_ROLE_SUFFIX, "");
+        } else {
+            roleToPromoteName = userRoleName + ConstantMessages.PENDING_ROLE_SUFFIX;
         }
 
-        log.error("invalid promote operation");
-        return null;
+        roleToPromote = RoleEnum.returnByName(roleToPromoteName);
 
+        return roleToPromote;
     }
 }

@@ -16,57 +16,63 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 class RoleUtilsTest {
 
     RoleEntity adminRole;
+    RoleEntity pmRole;
     RoleEntity pmPendingRole;
+    RoleEntity devRole;
     RoleEntity devPendingRole;
+    RoleEntity customerRole;
     RoleEntity customerPendingRole;
 
     @BeforeEach
     void setUp() {
         adminRole = RoleEntity.builder().roleName(RoleEnum.ADMIN.getRoleName()).build();
+        pmRole = RoleEntity.builder().roleName(RoleEnum.PM.getRoleName()).build();
         pmPendingRole = RoleEntity.builder().roleName(RoleEnum.PM_PENDING.getRoleName()).build();
+        devRole = RoleEntity.builder().roleName(RoleEnum.DEV.getRoleName()).build();
         devPendingRole = RoleEntity.builder().roleName(RoleEnum.DEV_PENDING.getRoleName()).build();
+        customerRole = RoleEntity.builder().roleName(RoleEnum.CUSTOMER.getRoleName()).build();
         customerPendingRole = RoleEntity.builder().roleName(RoleEnum.CUSTOMER_PENDING.getRoleName()).build();
     }
 
     @Test
     public void getPromoteRole_PM_Valid() {
-        RoleEnum promoteRole = RoleUtils.getPromoteRole(pmPendingRole, RoleEnum.PM);
+        RoleEnum promoteRole = RoleUtils.getUpdateRole(pmPendingRole);
         assertEquals(RoleEnum.PM, promoteRole);
     }
 
     @Test
     public void getPromoteRole_DEV_Valid() {
-        RoleEnum promoteRole = RoleUtils.getPromoteRole(devPendingRole, null);
+        RoleEnum promoteRole = RoleUtils.getUpdateRole(devPendingRole);
         assertEquals(RoleEnum.DEV, promoteRole);
     }
 
     @Test
     public void getPromoteRole_CUSTOMER_Valid() {
-        RoleEnum promoteRole = RoleUtils.getPromoteRole(customerPendingRole, null);
+        RoleEnum promoteRole = RoleUtils.getUpdateRole(customerPendingRole);
         assertEquals(RoleEnum.CUSTOMER, promoteRole);
     }
 
     @Test
     public void getPromoteRole_ADMIN_Invalid() {
-        RoleEnum promoteRole = RoleUtils.getPromoteRole(adminRole, RoleEnum.ADMIN);
+        RoleEnum promoteRole = RoleUtils.getUpdateRole(adminRole);
         assertNull(promoteRole);
     }
 
     @Test
-    public void getPromoteRole_PM_Invalid() {
-        RoleEnum promoteRole = RoleUtils.getPromoteRole(pmPendingRole, null);
-        assertNull(promoteRole);
+    public void getDemoteRole_PM_Valid() {
+        RoleEnum promoteRole = RoleUtils.getUpdateRole(pmRole);
+        assertEquals(RoleEnum.PM_PENDING, promoteRole);
     }
 
     @Test
-    public void getPromoteRole_DEV_Invalid() {
-        RoleEnum promoteRole = RoleUtils.getPromoteRole(devPendingRole, RoleEnum.PM);
-        assertNull(promoteRole);
+    public void getDemoteRole_DEV_VALID() {
+        RoleEnum promoteRole = RoleUtils.getUpdateRole(devRole);
+        assertEquals(RoleEnum.DEV_PENDING, promoteRole);
     }
 
     @Test
-    public void getPromoteRole_Customer_Invalid() {
-        RoleEnum promoteRole = RoleUtils.getPromoteRole(customerPendingRole, RoleEnum.DEV);
-        assertNull(promoteRole);
+    public void getDemoteRole_Customer_Valid() {
+        RoleEnum promoteRole = RoleUtils.getUpdateRole(customerRole);
+        assertEquals(RoleEnum.CUSTOMER_PENDING, promoteRole);
     }
 }
