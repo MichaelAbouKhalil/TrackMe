@@ -1,6 +1,6 @@
 package com.trackme.authservice.controller;
 
-import com.trackme.authservice.service.RoleService;
+import com.trackme.authservice.service.RoleUpdateService;
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.enums.RoleEnum;
 import com.trackme.models.payload.request.roleupdate.RoleUpdateRequest;
@@ -20,31 +20,31 @@ import javax.validation.Valid;
 @Slf4j
 public class RoleUpdateController {
 
-    private final RoleService roleService;
+    private final RoleUpdateService roleUpdateService;
 
     @PostMapping("/role/promote")
     @PromotePermission
     public ResponseEntity<CommonResponse> promote(@Valid @RequestBody RoleUpdateRequest request){
-        CommonResponse response = roleService.promote(request, null);
+        CommonResponse response = roleUpdateService.updateRole(request);
         return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/role/promote/pm")
     @PmPromotePermission
     public ResponseEntity<CommonResponse> promotePm(@Valid @RequestBody RoleUpdateRequest request){
-        CommonResponse response = roleService.promote(request, RoleEnum.PM);
+        CommonResponse response = roleUpdateService.updateRole(request);
         return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/role/demote")
     public ResponseEntity<CommonResponse> demote(@Valid @RequestBody RoleUpdateRequest request){
-
-        return null;
+        CommonResponse response = roleUpdateService.updateRole(request);
+        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/role/demote/pm")
     public ResponseEntity<CommonResponse> demotePm(@Valid @RequestBody RoleUpdateRequest request){
-
-        return null;
+        CommonResponse response = roleUpdateService.updateRole(request);
+        return ResponseEntity.ok().body(response);
     }
 }
