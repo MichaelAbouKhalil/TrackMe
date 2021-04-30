@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,7 +32,8 @@ public class UserService {
 
     public UserEntity updateUserRoles(UserEntity user, RoleEntity role){
 
-        user.setRoles(Arrays.asList(role));
+        user.setRoles(new ArrayList<>());
+        user.getRoles().add(role);
 
         log.info("updated user [{}] with role [{}]", user.getEmail(), role.getRoleName());
         log.info("updating user in database");
