@@ -14,14 +14,14 @@ public class RoleUtils {
      * @param userRole
      * @return
      */
-    public static RoleEnum getUpdateRole(RoleEntity userRole) {
+    public static RoleEnum getUpdateRole(RoleEntity userRole, boolean isPromote) {
         RoleEnum roleToPromote;
-        String roleToPromoteName;
+        String roleToPromoteName = new String();
         String userRoleName = userRole.getRoleName();
 
-        if (userRoleName.contains(ConstantMessages.PENDING_ROLE_SUFFIX)) {
+        if (userRoleName.contains(ConstantMessages.PENDING_ROLE_SUFFIX) && isPromote) {
             roleToPromoteName = userRoleName.replace(ConstantMessages.PENDING_ROLE_SUFFIX, "");
-        } else {
+        } else if( !(userRoleName.contains(ConstantMessages.PENDING_ROLE_SUFFIX)) && !isPromote) {
             roleToPromoteName = userRoleName + ConstantMessages.PENDING_ROLE_SUFFIX;
         }
 
