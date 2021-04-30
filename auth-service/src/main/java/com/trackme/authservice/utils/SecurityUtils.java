@@ -7,18 +7,25 @@ import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserExc
 
 public class SecurityUtils {
 
-    private static User getAuthenticatedUser(){
-        if(SecurityContextHolder.getContext() == null
-        || SecurityContextHolder.getContext().getAuthentication() == null
-        || SecurityContextHolder.getContext().getAuthentication().getPrincipal() == null){
+    private static Object getAuthenticatedUser() {
+        if (SecurityContextHolder.getContext() == null
+                || SecurityContextHolder.getContext().getAuthentication() == null
+                || SecurityContextHolder.getContext().getAuthentication().getPrincipal() == null) {
 
             throw new UnauthorizedUserException("Unauthorized/Unauthenticated user exception");
         }
 
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-    public static String getUsername(){
-        return getAuthenticatedUser().getUsername();
+    public static String getUsername() {
+        Object authObject = getAuthenticatedUser();
+        if (authObject instanceof User) {
+            return ((User) authObject).getUsername();
+        } else if (authObject instanceof String) {
+            return (String) authObject;
+        }
+
+        throw new UnauthorizedUserException("Authentication is not instance on User or String, " + authObject);
     }
 }
