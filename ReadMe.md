@@ -1,6 +1,6 @@
 # **TrackMe Application**
 
-Hello, my name is Michael.
+Hello,
 
 TrackMe is a web application for tracking bugs in projects.
 
