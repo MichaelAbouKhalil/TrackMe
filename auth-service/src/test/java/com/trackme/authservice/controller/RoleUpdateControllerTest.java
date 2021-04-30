@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -41,10 +42,11 @@ class RoleUpdateControllerTest extends BaseIT {
 
     @DisplayName("Request validation Tests")
     @Nested
-    class requestValidationTests{
+    class requestValidationTests {
         @Test
         public void roleUpdate_ValidRequest() throws Exception {
-            when(roleUpdateService.updateRole(any(RoleUpdateRequest.class))).thenReturn(CommonResponse.ok());
+            when(roleUpdateService.updateRole(any(RoleUpdateRequest.class), eq(true)))
+                    .thenReturn(CommonResponse.ok());
 
             String accessToken = accessTokenUtil.obtainAccessToken("demo-admin", "demo-admin");
 
@@ -59,7 +61,8 @@ class RoleUpdateControllerTest extends BaseIT {
 
         @Test
         public void roleUpdate_InvalidEmail() throws Exception {
-            when(roleUpdateService.updateRole(any(RoleUpdateRequest.class))).thenReturn(CommonResponse.ok());
+            when(roleUpdateService.updateRole(any(RoleUpdateRequest.class), eq(true)))
+                    .thenReturn(CommonResponse.ok());
 
             String accessToken = accessTokenUtil.obtainAccessToken("demo-admin", "demo-admin");
 
@@ -92,7 +95,8 @@ class RoleUpdateControllerTest extends BaseIT {
 
         @Test
         public void promotePm_Admin() throws Exception {
-            when(roleUpdateService.updateRole(any(RoleUpdateRequest.class))).thenReturn(CommonResponse.ok());
+            when(roleUpdateService.updateRole(any(RoleUpdateRequest.class), eq(true)))
+                    .thenReturn(CommonResponse.ok());
 
             String accessToken = accessTokenUtil.obtainAccessToken("demo-admin", "demo-admin");
 
@@ -137,7 +141,8 @@ class RoleUpdateControllerTest extends BaseIT {
 
         @Test
         public void promoteDev_Admin_Valid() throws Exception {
-            when(roleUpdateService.updateRole(any(RoleUpdateRequest.class))).thenReturn(CommonResponse.ok());
+            when(roleUpdateService.updateRole(any(RoleUpdateRequest.class), eq(true)))
+                    .thenReturn(CommonResponse.ok());
 
             String accessToken = accessTokenUtil.obtainAccessToken("demo-admin", "demo-admin");
 
@@ -152,7 +157,8 @@ class RoleUpdateControllerTest extends BaseIT {
 
         @Test
         public void promoteCustomer_PM_Valid() throws Exception {
-            when(roleUpdateService.updateRole(any(RoleUpdateRequest.class))).thenReturn(CommonResponse.ok());
+            when(roleUpdateService.updateRole(any(RoleUpdateRequest.class), eq(true)))
+                    .thenReturn(CommonResponse.ok());
 
             String accessToken = accessTokenUtil.obtainAccessToken("demo-pm", "demo-pm");
 
@@ -170,7 +176,7 @@ class RoleUpdateControllerTest extends BaseIT {
 
             String accessToken = accessTokenUtil.obtainAccessToken("demo-dev", "demo-dev");
 
-            mockMvc.perform(post(PROMOTE_API )
+            mockMvc.perform(post(PROMOTE_API)
                     .header("Authorization", "Bearer " + accessToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
@@ -184,7 +190,7 @@ class RoleUpdateControllerTest extends BaseIT {
 
             String accessToken = accessTokenUtil.obtainAccessToken("demo-customer", "demo-customer");
 
-            mockMvc.perform(post(PROMOTE_API )
+            mockMvc.perform(post(PROMOTE_API)
                     .header("Authorization", "Bearer " + accessToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
@@ -194,4 +200,123 @@ class RoleUpdateControllerTest extends BaseIT {
         }
     }
 
+    @DisplayName("Demote Pm API access Tests")
+    @Nested
+    class demotePmTests {
+        @Test
+        public void demotePm_NoAuth() throws Exception {
+
+            mockMvc.perform(post(DEMOTE_API + "/pm")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.success").value("false"))
+                    .andExpect(jsonPath("$.status").value("401"));
+        }
+
+        @Test
+        public void demotePm_Admin() throws Exception {
+            when(roleUpdateService.updateRole(any(RoleUpdateRequest.class), eq(false)))
+                    .thenReturn(CommonResponse.ok());
+
+            String accessToken = accessTokenUtil.obtainAccessToken("demo-admin", "demo-admin");
+
+            mockMvc.perform(post(DEMOTE_API + "/pm")
+                    .header("Authorization", "Bearer " + accessToken)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.success").value("true"))
+                    .andExpect(jsonPath("$.status").value("200"));
+        }
+
+        @Test
+        public void demotePm_NotAuthorized() throws Exception {
+
+            String accessToken = accessTokenUtil.obtainAccessToken("demo-pm", "demo-pm");
+
+            ResultActions resultActions = mockMvc.perform(post(DEMOTE_API + "/pm")
+                    .header("Authorization", "Bearer " + accessToken)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.success").value("false"))
+                    .andExpect(jsonPath("$.status").value("403"));
+        }
+    }
+
+    @DisplayName("Demote DEV/CUSTOMER API access Tests")
+    @Nested
+    class demoteDevCustomerTests {
+        @Test
+        public void demoteDev_NoAuth_Invalid() throws Exception {
+
+            mockMvc.perform(post(DEMOTE_API)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.success").value("false"))
+                    .andExpect(jsonPath("$.status").value("401"));
+        }
+
+        @Test
+        public void demoteDev_Admin_Valid() throws Exception {
+            when(roleUpdateService.updateRole(any(RoleUpdateRequest.class), eq(false)))
+                    .thenReturn(CommonResponse.ok());
+
+            String accessToken = accessTokenUtil.obtainAccessToken("demo-admin", "demo-admin");
+
+            mockMvc.perform(post(DEMOTE_API)
+                    .header("Authorization", "Bearer " + accessToken)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.success").value("true"))
+                    .andExpect(jsonPath("$.status").value("200"));
+        }
+
+        @Test
+        public void demoteCustomer_PM_Valid() throws Exception {
+            when(roleUpdateService.updateRole(any(RoleUpdateRequest.class), eq(false)))
+                    .thenReturn(CommonResponse.ok());
+
+            String accessToken = accessTokenUtil.obtainAccessToken("demo-pm", "demo-pm");
+
+            mockMvc.perform(post(DEMOTE_API)
+                    .header("Authorization", "Bearer " + accessToken)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.success").value("true"))
+                    .andExpect(jsonPath("$.status").value("200"));
+        }
+
+        @Test
+        public void demoteDev_NotAuthorized_Invalid() throws Exception {
+
+            String accessToken = accessTokenUtil.obtainAccessToken("demo-dev", "demo-dev");
+
+            mockMvc.perform(post(DEMOTE_API)
+                    .header("Authorization", "Bearer " + accessToken)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.success").value("false"))
+                    .andExpect(jsonPath("$.status").value("403"));
+        }
+
+        @Test
+        public void demoteCustomer_NotAuthorized_Invalid() throws Exception {
+
+            String accessToken = accessTokenUtil.obtainAccessToken("demo-customer", "demo-customer");
+
+            mockMvc.perform(post(DEMOTE_API)
+                    .header("Authorization", "Bearer " + accessToken)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.success").value("false"))
+                    .andExpect(jsonPath("$.status").value("403"));
+        }
+    }
 }

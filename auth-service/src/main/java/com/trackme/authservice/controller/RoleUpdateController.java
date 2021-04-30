@@ -25,26 +25,28 @@ public class RoleUpdateController {
     @PostMapping("/role/promote")
     @PromotePermission
     public ResponseEntity<CommonResponse> promote(@Valid @RequestBody RoleUpdateRequest request){
-        CommonResponse response = roleUpdateService.updateRole(request);
+        CommonResponse response = roleUpdateService.updateRole(request, true);
         return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/role/promote/pm")
     @PmPromotePermission
     public ResponseEntity<CommonResponse> promotePm(@Valid @RequestBody RoleUpdateRequest request){
-        CommonResponse response = roleUpdateService.updateRole(request);
+        CommonResponse response = roleUpdateService.updateRole(request, true);
         return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/role/demote")
+    @PromotePermission
     public ResponseEntity<CommonResponse> demote(@Valid @RequestBody RoleUpdateRequest request){
-        CommonResponse response = roleUpdateService.updateRole(request);
+        CommonResponse response = roleUpdateService.updateRole(request, false);
         return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/role/demote/pm")
+    @PmPromotePermission
     public ResponseEntity<CommonResponse> demotePm(@Valid @RequestBody RoleUpdateRequest request){
-        CommonResponse response = roleUpdateService.updateRole(request);
+        CommonResponse response = roleUpdateService.updateRole(request, false);
         return ResponseEntity.ok().body(response);
     }
 }
