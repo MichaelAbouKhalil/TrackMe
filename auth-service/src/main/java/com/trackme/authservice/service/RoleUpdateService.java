@@ -32,7 +32,7 @@ public class RoleUpdateService {
     private final RoleService roleService;
     private final OrgService orgService;
 
-    public CommonResponse updateRole(RoleUpdateRequest request){
+    public CommonResponse updateRole(RoleUpdateRequest request, boolean isPromote){
 
         // find user to promote
         UserEntity user = userService.findUserByEmail(request.getEmail());
@@ -40,7 +40,7 @@ public class RoleUpdateService {
         RoleEntity userRole = user.getRoles().get(0);
 
         // get role to promote
-        RoleEnum promoteRole = RoleUtils.getUpdateRole(userRole);
+        RoleEnum promoteRole = RoleUtils.getUpdateRole(userRole, isPromote);
 
         if (promoteRole == null) {
             throw new InvalidRoleException("User has invalid Role for this request");

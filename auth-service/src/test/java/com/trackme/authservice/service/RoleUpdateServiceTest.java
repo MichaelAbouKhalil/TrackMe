@@ -15,11 +15,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -98,13 +96,12 @@ class RoleUpdateServiceTest extends Base {
             doNothing().when(orgService).validateOrg(any(UserEntity.class));
             when(roleRepository.findByRoleName(any(String.class)))
                     .thenReturn(Optional.of(adminRole));
-            adminUser.setRoles(Arrays.asList(adminRole));
             when(userRepository.save(any(UserEntity.class)))
                     .thenReturn(adminUser);
 
             InvalidRoleException invalidRoleException = assertThrows(InvalidRoleException.class,
                     () -> {
-                        roleUpdateService.updateRole(adminRoleUpdateRequest);
+                        roleUpdateService.updateRole(adminRoleUpdateRequest, true);
                     });
 
             assertEquals("User has invalid Role for this request", invalidRoleException.getMessage());
@@ -122,11 +119,10 @@ class RoleUpdateServiceTest extends Base {
             doNothing().when(orgService).validateOrg(any(UserEntity.class));
             when(roleRepository.findByRoleName(any(String.class)))
                     .thenReturn(Optional.of(pmRole));
-            pmPendingUser.setRoles(Arrays.asList(pmRole));
             when(userRepository.save(any(UserEntity.class)))
                     .thenReturn(pmPendingUser);
 
-            CommonResponse response = roleUpdateService.updateRole(pmRoleUpdateRequest);
+            CommonResponse response = roleUpdateService.updateRole(pmRoleUpdateRequest, true);
 
             assertEquals(pmUser.getRoles().get(0), pmRole);
             assertEquals(HttpStatus.OK.value(), response.getStatus());
@@ -140,11 +136,10 @@ class RoleUpdateServiceTest extends Base {
             doNothing().when(orgService).validateOrg(any(UserEntity.class));
             when(roleRepository.findByRoleName(any(String.class)))
                     .thenReturn(Optional.of(devRole));
-            devPendingUser.setRoles(Arrays.asList(devRole));
             when(userRepository.save(any(UserEntity.class)))
                     .thenReturn(devPendingUser);
 
-            CommonResponse response = roleUpdateService.updateRole(devRoleUpdateRequest);
+            CommonResponse response = roleUpdateService.updateRole(devRoleUpdateRequest, true);
 
             assertEquals(devUser.getRoles().get(0), devRole);
             assertEquals(HttpStatus.OK.value(), response.getStatus());
@@ -158,11 +153,10 @@ class RoleUpdateServiceTest extends Base {
             doNothing().when(orgService).validateOrg(any(UserEntity.class));
             when(roleRepository.findByRoleName(any(String.class)))
                     .thenReturn(Optional.of(custRole));
-            custPendingUser.setRoles(Arrays.asList(custRole));
             when(userRepository.save(any(UserEntity.class)))
                     .thenReturn(custPendingUser);
 
-            CommonResponse response = roleUpdateService.updateRole(custRoleUpdateRequest);
+            CommonResponse response = roleUpdateService.updateRole(custRoleUpdateRequest, true);
 
             assertEquals(custUser.getRoles().get(0), custRole);
             assertEquals(HttpStatus.OK.value(), response.getStatus());
@@ -180,11 +174,10 @@ class RoleUpdateServiceTest extends Base {
             doNothing().when(orgService).validateOrg(any(UserEntity.class));
             when(roleRepository.findByRoleName(any(String.class)))
                     .thenReturn(Optional.of(pmPendingRole));
-            pmUser.setRoles(Arrays.asList(pmRole));
             when(userRepository.save(any(UserEntity.class)))
                     .thenReturn(pmUser);
 
-            CommonResponse response = roleUpdateService.updateRole(pmRoleUpdateRequest);
+            CommonResponse response = roleUpdateService.updateRole(pmRoleUpdateRequest, false);
 
             assertEquals(pmUser.getRoles().get(0), pmPendingRole);
             assertEquals(HttpStatus.OK.value(), response.getStatus());
@@ -197,11 +190,10 @@ class RoleUpdateServiceTest extends Base {
             doNothing().when(orgService).validateOrg(any(UserEntity.class));
             when(roleRepository.findByRoleName(any(String.class)))
                     .thenReturn(Optional.of(devPendingRole));
-            devUser.setRoles(Arrays.asList(devRole));
             when(userRepository.save(any(UserEntity.class)))
                     .thenReturn(devUser);
 
-            CommonResponse response = roleUpdateService.updateRole(devRoleUpdateRequest);
+            CommonResponse response = roleUpdateService.updateRole(devRoleUpdateRequest, false);
 
             assertEquals(devUser.getRoles().get(0), devPendingRole);
             assertEquals(HttpStatus.OK.value(), response.getStatus());
@@ -214,11 +206,10 @@ class RoleUpdateServiceTest extends Base {
             doNothing().when(orgService).validateOrg(any(UserEntity.class));
             when(roleRepository.findByRoleName(any(String.class)))
                     .thenReturn(Optional.of(custPendingRole));
-            custUser.setRoles(Arrays.asList(custPendingRole));
             when(userRepository.save(any(UserEntity.class)))
                     .thenReturn(custUser);
 
-            CommonResponse response = roleUpdateService.updateRole(custRoleUpdateRequest);
+            CommonResponse response = roleUpdateService.updateRole(custRoleUpdateRequest, false);
 
             assertEquals(custUser.getRoles().get(0), custPendingRole);
             assertEquals(HttpStatus.OK.value(), response.getStatus());
