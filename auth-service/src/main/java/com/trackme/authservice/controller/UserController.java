@@ -23,9 +23,9 @@ public class UserController {
 
     @GetMapping("/user")
     @GetUserPermission
-    public ResponseEntity<CommonResponse> retrieveUser(@Valid @RequestBody RetrieveUserRequest request) {
+    public ResponseEntity<CommonResponse> retrieveUser() {
         log.info("received request on retrieveUser()");
-        UserEntity user = userService.findUserByUsername(request);
+        UserEntity user = userService.findUserByUsername();
 
         CommonResponse response = CommonResponse.ok(user);
 
