@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -21,8 +23,8 @@ public class UserController {
 
     @GetMapping("/user")
     @GetUserPermission
-    public ResponseEntity<CommonResponse> retrieveUser(@RequestBody RetrieveUserRequest request) {
-
+    public ResponseEntity<CommonResponse> retrieveUser(@Valid @RequestBody RetrieveUserRequest request) {
+        log.info("received request on retrieveUser()");
         UserEntity user = userService.findUserByUsername(request);
 
         CommonResponse response = CommonResponse.ok(user);
