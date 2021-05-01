@@ -23,3 +23,7 @@ eureka:
 
 jwt:
   secret: ENC(tpN5k5aIW1HYEapi+hlvVOTObuZ4feb+TQsErlUHgk0=)
+
+jasypt:
+  encryptor:
+    password: trackme-secretkey
