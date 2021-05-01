@@ -3,15 +3,13 @@ package com.trackme.models.common;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.trackme.models.constants.ConstantMessages;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "status",
