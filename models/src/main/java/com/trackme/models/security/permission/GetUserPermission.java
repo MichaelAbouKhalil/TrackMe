@@ -9,6 +9,6 @@ import java.lang.annotation.RetentionPolicy;
  * this permission is to get user info
  */
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("isFullyAuthenticated()")
+@PreAuthorize("isAuthenticated()")
 public @interface GetUserPermission {
 }
