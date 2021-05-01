@@ -29,9 +29,6 @@ class RoleUpdateControllerTest extends BaseIT {
     @MockBean
     RoleUpdateService roleUpdateService;
 
-    @Autowired
-    private AccessTokenUtil accessTokenUtil;
-
     RoleUpdateRequest request;
 
     @BeforeEach
