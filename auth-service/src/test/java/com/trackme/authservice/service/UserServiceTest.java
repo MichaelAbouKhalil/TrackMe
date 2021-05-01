@@ -48,58 +48,10 @@ class UserServiceTest extends Base {
             when(userRepository.findByUsername(any(String.class)))
                     .thenReturn(Optional.of(returnedUser));
 
-            UserEntity user = userService.findUserByUsername(RetrieveUserRequest
-                    .builder().username("test-user").build());
+            UserEntity user = userService.findUserByUsername();
 
             assertEquals(returnedUser, user);
         }
-
-        @Test
-        @WithMockUser(username = "user", roles = {"PM"})
-        public void findUserByUsername_DifferentUser_Invalid() {
-            UserEntity returnedUser = UserEntity.builder().username("test-user")
-                    .build();
-
-            when(userRepository.findByUsername(any(String.class)))
-                    .thenReturn(Optional.of(returnedUser));
-
-            UnauthorizedUserException exception = assertThrows(UnauthorizedUserException.class,
-                    () -> {
-                        userService.findUserByUsername(RetrieveUserRequest
-                                .builder().username("test-user").build());
-                    }
-            );
-
-            assertEquals(exception.getMessage(),
-                    "User is not allowed to retrieve "
-                            + returnedUser.getUsername() + "'s into");
-
-            verify(userRepository, times(0)).findByUsername(anyString());
-        }
-
-        @Test
-        @WithMockUser(username = "test-user", roles = {"PM"})
-        public void findUserByUsername_UserNotFound_Invalid() {
-            UserEntity returnedUser = UserEntity.builder().username("test-user")
-                    .build();
-
-            when(userRepository.findByUsername(any(String.class)))
-                    .thenThrow(
-                            new UsernameNotFoundException("user with username [" + returnedUser.getUsername() + "] is not found")
-                    );
-
-            UsernameNotFoundException exception = assertThrows(
-                    UsernameNotFoundException.class,
-                    () -> {
-                        userService.findUserByUsername(RetrieveUserRequest
-                                .builder().username("test-user").build());
-                    }
-            );
-            assertEquals(exception.getMessage(),
-                    "user with username [" + returnedUser.getUsername() + "] is not found");
-
-        }
-
     }
 
     @DisplayName("Find User By email Tests")

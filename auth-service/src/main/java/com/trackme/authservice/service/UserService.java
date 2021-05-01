@@ -25,23 +25,17 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserEntity findUserByUsername(RetrieveUserRequest request) {
+    public UserEntity findUserByUsername() {
 
-        log.info("making user is retrieving their info");
+        log.info("getting username form auth token");
         String authUsername = SecurityUtils.getUsername();
 
-        if (!authUsername.equals(request.getUsername())) {
-            log.error("User [{}] not allowed to retrieve user [{}] info",
-                    authUsername, request.getUsername());
-            throw new UnauthorizedUserException("User is not allowed to retrieve " + request.getUsername() + "'s into");
-        }
+        log.info("finding user for username [{}]", authUsername);
 
-        log.info("finding user for username [{}]", request.getUsername());
-
-        UserEntity userEntity = userRepository.findByUsername(request.getUsername())
+        UserEntity userEntity = userRepository.findByUsername(authUsername)
                 .orElseThrow(
                         () -> new UsernameNotFoundException(
-                                "user with username [" + request.getUsername() + "] is not found")
+                                "user with username [" + authUsername + "] is not found")
                 );
 
         return userEntity;
