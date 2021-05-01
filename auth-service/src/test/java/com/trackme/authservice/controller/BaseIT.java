@@ -1,6 +1,7 @@
 package com.trackme.authservice.controller;
 
 import com.trackme.authservice.Base;
+import com.trackme.authservice.utils.AccessTokenUtil;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public abstract class BaseIT extends Base {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    AccessTokenUtil accessTokenUtil;
 
     public MockMvc mockMvc;
 
