@@ -1,4 +1,4 @@
-package com.trackme.userservice.conf;
+package com.trackme.userservice.conf.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -13,7 +13,7 @@ public class ResourceServerConf
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("").permitAll()
+//                .antMatchers("").permitAll()
                 .anyRequest().authenticated();
     }
 }

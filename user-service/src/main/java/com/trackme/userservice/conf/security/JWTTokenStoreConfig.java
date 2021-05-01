@@ -1,5 +1,6 @@
-package com.trackme.userservice.conf;
+package com.trackme.userservice.conf.security;
 
+import com.trackme.userservice.conf.ServiceConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
