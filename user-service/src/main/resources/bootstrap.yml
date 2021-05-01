@@ -1,6 +1,6 @@
 spring:
   application:
-    name: auth-service
+    name: user-service
   profiles:
     active: dev
   cloud:
