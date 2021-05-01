@@ -7,7 +7,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5555/trackme-auth-db
     username: admin
-    password: ENC(oV9bkFo5UOAl9tnpsOj0HEn4B1hGhYw+l5D7FfCEEIY=)
+    password: ENC(P/mTks+sO+MKVPFW4JaKh7nvZERQ2lfu)
     driverClassName: org.postgresql.Driver
   jpa:
     hibernate:
@@ -22,7 +22,7 @@ eureka:
       defaultZone: http://localhost:8761/eureka
 
 jwt:
-  secret: ENC(tpN5k5aIW1HYEapi+hlvVOTObuZ4feb+TQsErlUHgk0=)
+  secret: ENC(vsphGaygBANGokzkd30owPBUe+q6apyJ)
 
 jasypt:
   encryptor:
