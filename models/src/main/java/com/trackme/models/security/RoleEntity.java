@@ -1,5 +1,6 @@
 package com.trackme.models.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Fetch;
@@ -30,6 +31,7 @@ public class RoleEntity {
     private LocalDateTime createdDate;
 
     @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
     private List<UserEntity> users;
 
     @Singular
