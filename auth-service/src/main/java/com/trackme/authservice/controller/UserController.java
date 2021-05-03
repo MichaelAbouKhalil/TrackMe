@@ -2,17 +2,13 @@ package com.trackme.authservice.controller;
 
 import com.trackme.authservice.service.UserService;
 import com.trackme.models.common.CommonResponse;
-import com.trackme.models.payload.request.retrieveuser.RetrieveUserRequest;
 import com.trackme.models.security.UserEntity;
-import com.trackme.models.security.permission.GetUserPermission;
+import com.trackme.models.security.permission.AuthenticatedPermission;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,7 +18,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/user")
-    @GetUserPermission
+    @AuthenticatedPermission
     public ResponseEntity<CommonResponse> retrieveUser() {
         log.info("received request on retrieveUser()");
         UserEntity user = userService.findUserByUsername();
