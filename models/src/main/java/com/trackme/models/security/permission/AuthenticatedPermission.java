@@ -10,5 +10,5 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @PreAuthorize("isAuthenticated()")
-public @interface GetUserPermission {
+public @interface AuthenticatedPermission {
 }
