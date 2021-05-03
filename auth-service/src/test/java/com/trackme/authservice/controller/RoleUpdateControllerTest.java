@@ -1,7 +1,6 @@
 package com.trackme.authservice.controller;
 
 import com.trackme.authservice.service.RoleUpdateService;
-import com.trackme.authservice.utils.AccessTokenUtil;
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.payload.request.roleupdate.RoleUpdateRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,8 +8,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
@@ -21,7 +18,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-class RoleUpdateControllerTest extends BaseIT {
+class RoleUpdateControllerTest extends BaseController {
 
     private final static String PROMOTE_API = "/role/promote";
     private final static String DEMOTE_API = "/role/demote";
