@@ -1,4 +1,4 @@
-package com.trackme.common.validator;
+package com.trackme.models.validation;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

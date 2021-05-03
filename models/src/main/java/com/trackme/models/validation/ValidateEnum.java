@@ -1,4 +1,4 @@
-package com.trackme.common.validator;
+package com.trackme.models.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = EnumValidator.class)
 public @interface ValidateEnum {
-    String message() default "{com.trackme.common.validator.ValidateEnum.message}";
+    String message() default "{com.trackme.models.validation.ValidateEnum.message}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
     Class<? extends Enum<?>> targetClassType();

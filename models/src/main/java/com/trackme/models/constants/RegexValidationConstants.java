@@ -1,4 +1,4 @@
-package com.trackme.common.constant;
+package com.trackme.models.constants;
 
 public class RegexValidationConstants {
 

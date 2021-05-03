@@ -1,13 +1,12 @@
 package com.trackme.models.payload.request.roleupdate;
 
-import com.trackme.common.constant.RegexValidationConstants;
+import com.trackme.models.constants.RegexValidationConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 
 @Data
 @NoArgsConstructor

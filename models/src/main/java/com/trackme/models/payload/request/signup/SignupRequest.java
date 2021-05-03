@@ -1,9 +1,6 @@
 package com.trackme.models.payload.request.signup;
 
-import com.trackme.common.constant.RegexValidationConstants;
-import com.trackme.common.validator.EmailValidator;
-import com.trackme.common.validator.ValidateEnum;
-import com.trackme.models.enums.PendingRoleEnum;
+import com.trackme.models.constants.RegexValidationConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,8 +28,6 @@ public class SignupRequest {
     @Pattern(regexp = RegexValidationConstants.BCRYPT_PATTERN_REGEX, message = "Password is not encrypted")
     private String password;
 
-    @ValidateEnum(targetClassType = PendingRoleEnum.class,
-            message = "Please select a valid role")
     private String role;
 
     @NotBlank(message = "OrgId must not be blank")
