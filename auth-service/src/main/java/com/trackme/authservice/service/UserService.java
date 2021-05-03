@@ -1,22 +1,15 @@
 package com.trackme.authservice.service;
 
 import com.trackme.authservice.repository.UserRepository;
-import com.trackme.authservice.utils.SecurityUtils;
-import com.trackme.models.common.CommonResponse;
-import com.trackme.models.constants.ConstantMessages;
-import com.trackme.models.payload.request.retrieveuser.RetrieveUserRequest;
+import com.trackme.common.security.SecurityUtils;
 import com.trackme.models.security.RoleEntity;
 import com.trackme.models.security.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

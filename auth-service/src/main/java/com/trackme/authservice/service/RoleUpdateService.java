@@ -1,27 +1,18 @@
 package com.trackme.authservice.service;
 
-import com.trackme.authservice.repository.RoleRepository;
-import com.trackme.authservice.repository.UserRepository;
 import com.trackme.authservice.utils.OrgService;
 import com.trackme.authservice.utils.RoleUtils;
-import com.trackme.authservice.utils.SecurityUtils;
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.constants.ConstantMessages;
 import com.trackme.models.enums.RoleEnum;
-import com.trackme.models.exception.InvalidOperationException;
 import com.trackme.models.exception.InvalidRoleException;
-import com.trackme.models.exception.RoleNotFoundException;
 import com.trackme.models.payload.request.roleupdate.RoleUpdateRequest;
 import com.trackme.models.security.RoleEntity;
 import com.trackme.models.security.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
-import java.util.Arrays;
 
 @Service
 @RequiredArgsConstructor

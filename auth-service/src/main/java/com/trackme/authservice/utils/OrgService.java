@@ -1,6 +1,7 @@
 package com.trackme.authservice.utils;
 
 import com.trackme.authservice.repository.UserRepository;
+import com.trackme.common.security.SecurityUtils;
 import com.trackme.models.enums.RoleEnum;
 import com.trackme.models.exception.InvalidOperationException;
 import com.trackme.models.security.RoleEntity;

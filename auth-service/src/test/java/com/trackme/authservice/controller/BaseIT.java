@@ -17,11 +17,11 @@ public abstract class BaseIT extends Base {
     @Autowired
     WebApplicationContext wac;
 
-    @Autowired
-    ObjectMapper objectMapper;
 
     @Autowired
     AccessTokenUtil accessTokenUtil;
+
+    ObjectMapper objectMapper = new ObjectMapper();
 
     public MockMvc mockMvc;
 

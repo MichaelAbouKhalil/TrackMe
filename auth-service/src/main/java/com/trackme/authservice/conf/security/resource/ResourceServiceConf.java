@@ -1,7 +1,7 @@
 package com.trackme.authservice.conf.security.resource;
 
-import com.trackme.authservice.exceptionhandler.MyAccessDeniedHandler;
-import com.trackme.authservice.exceptionhandler.MyAuthenticationEntryPoint;
+import com.trackme.common.exceptionhandler.MyAccessDeniedHandler;
+import com.trackme.common.exceptionhandler.MyAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;

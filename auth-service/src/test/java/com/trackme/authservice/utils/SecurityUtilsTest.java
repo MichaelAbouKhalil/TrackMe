@@ -1,8 +1,8 @@
 package com.trackme.authservice.utils;
 
 import com.trackme.authservice.Base;
+import com.trackme.common.security.SecurityUtils;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 import org.springframework.security.test.context.support.WithMockUser;
 
