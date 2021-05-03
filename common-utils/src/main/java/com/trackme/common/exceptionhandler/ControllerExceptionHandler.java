@@ -1,4 +1,4 @@
-package com.trackme.authservice.exceptionhandler;
+package com.trackme.common.exceptionhandler;
 
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.exception.InvalidOperationException;
@@ -29,7 +29,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("{} occurred for request on {}", ex.getClass().getSimpleName(), requestURI);
         log.error("exception: {}", errorMessage);
 
-        return ResponseEntity.ok().body(response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Override

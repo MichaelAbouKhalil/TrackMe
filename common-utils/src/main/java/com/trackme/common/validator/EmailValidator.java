@@ -3,7 +3,7 @@ package com.trackme.common.validator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.trackme.common.constant.RegexValidationConstants.EMAIL_REGEX;
+import static com.trackme.models.constants.RegexValidationConstants.EMAIL_REGEX;
 
 public class EmailValidator {
 
