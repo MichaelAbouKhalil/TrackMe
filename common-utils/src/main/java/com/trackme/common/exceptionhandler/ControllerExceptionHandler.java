@@ -76,4 +76,9 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return exceptionConverter(errorMessage, ex, request);
     }
 
+    @ExceptionHandler(value = {Exception.class})
+    protected ResponseEntity<Object> handleGenericException(Exception ex, WebRequest request) {
+        String errorMessage = ex.getMessage();
+        return exceptionConverter(errorMessage, ex, request);
+    }
 }
