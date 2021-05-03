@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 @SpringBootApplication
@@ -12,6 +13,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @EnableResourceServer
 @EnableFeignClients
 @EntityScan(basePackages = {"com.trackme.models.profile"})
+@ComponentScan(basePackages = {"com.trackme"})
 public class UserServiceApplication {
 
     public static void main(String[] args) {
