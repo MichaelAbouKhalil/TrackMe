@@ -16,7 +16,6 @@ public abstract class BaseController extends Base {
     @Autowired
     WebApplicationContext wac;
 
-
     @Autowired
     AccessTokenUtil accessTokenUtil;
 
