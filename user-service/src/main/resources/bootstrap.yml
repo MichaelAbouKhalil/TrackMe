@@ -8,3 +8,9 @@ spring:
       uri: http://localhost:8888
       fail-fast: true
       label: user-service-branch-impl
+
+logging:
+  level:
+    org:
+      springframework:
+        security: debug
