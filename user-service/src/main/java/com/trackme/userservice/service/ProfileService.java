@@ -48,7 +48,7 @@ public class ProfileService {
         UserEntity user = userService.getUser();
         if (user == null) {
             // this should never reach because user was already authenticated.
-            throw new UsernameNotFoundException("user with username [" + user.getUsername() + "] is not found");
+            throw new UsernameNotFoundException("user is not found");
         }
 
         Optional<ProfileEntity> optionalProfile = findProfileByUsername(user.getUsername());
@@ -85,14 +85,15 @@ public class ProfileService {
         } else {
             profile = ProfileEntity.builder()
                     .username(authUsername)
-                    .firstName(request.getFirstName())
-                    .lastName(request.getLastName())
                     .build();
         }
 
+        profile.setFirstName(request.getFirstName());
+        profile.setLastName(request.getLastName());
+
         ProfileEntity savedProfile = profileRepository.save(profile);
 
-        if(savedProfile == null){
+        if (savedProfile == null) {
             throw new RuntimeException("Failed to save user in database");
         }
 
