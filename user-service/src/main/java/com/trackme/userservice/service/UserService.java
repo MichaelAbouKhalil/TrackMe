@@ -22,8 +22,8 @@ public class UserService {
         CommonResponse response = authServiceFeignProxy.retrieveUser();
 
         if (response.isSuccess()) {
-            log.info("user [{}] found with id [{}]", user.getUsername(), user.getId());
             user = (UserEntity) response.getPayload();
+            log.info("user [{}] found with id [{}]", user.getUsername(), user.getId());
         } else {
             log.error("user [{}] not found", SecurityUtils.getUsername());
         }
