@@ -1,56 +1,45 @@
 package com.trackme.userservice.utils;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.common.util.JacksonJsonParser;
+import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.token.AccessTokenRequest;
+import org.springframework.security.oauth2.client.token.DefaultAccessTokenRequest;
+import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.context.WebApplicationContext;
 
-import javax.annotation.PostConstruct;
-
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import java.util.Arrays;
 
 @Service
 public class AccessTokenUtil {
 
-    public MockMvc mockMvc;
-
-    @Autowired
-    WebApplicationContext wac;
-
-    @PostConstruct
-    public void init(){
-        mockMvc = MockMvcBuilders
-                .webAppContextSetup(wac)
-                .apply(springSecurity())
-                .build();
-    }
+    private static final String OAUTH_API = "http://localhost:8080/auth-service/oauth/token";
 
     public String obtainAccessToken(String username, String password) throws Exception {
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("grant_type", "password");
-        params.add("username", username);
-        params.add("password", password);
+        ResourceOwnerPasswordResourceDetails resource = buildResource(username, password);
 
-        ResultActions result
-                = mockMvc.perform(post("http://localhost:8080/auth-service/oauth/token")
-                .params(params)
-                .with(httpBasic("trackme-webapp","secret-trackme"))
-                .accept("application/json;charset=UTF-8"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=UTF-8"));
+        AccessTokenRequest atr = new DefaultAccessTokenRequest();
+        OAuth2RestTemplate oAuth2RestTemplate = new OAuth2RestTemplate(resource, new DefaultOAuth2ClientContext(atr));
 
-        String resultString = result.andReturn().getResponse().getContentAsString();
+        OAuth2AccessToken accessToken = oAuth2RestTemplate.getAccessToken();
 
-        JacksonJsonParser jsonParser = new JacksonJsonParser();
-        return jsonParser.parseMap(resultString).get("access_token").toString();
+        return accessToken.getValue();
+
+    }
+
+    private ResourceOwnerPasswordResourceDetails buildResource(String username, String password) {
+        ResourceOwnerPasswordResourceDetails resource =
+                new ResourceOwnerPasswordResourceDetails();
+
+        resource.setAccessTokenUri(OAUTH_API);
+        resource.setClientId("trackme-webapp");
+        resource.setClientSecret("secret-trackme");
+        resource.setGrantType("password");
+        resource.setScope(Arrays.asList("webclient"));
+        resource.setUsername(username);
+        resource.setPassword(password);
+
+        return resource;
     }
 }
