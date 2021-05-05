@@ -5,7 +5,9 @@ import com.trackme.models.payload.request.project.DeleteProjectRequest;
 import com.trackme.models.payload.request.project.GetProjectRequest;
 import com.trackme.models.payload.request.project.NewProjectRequest;
 import com.trackme.models.payload.request.project.UpdateProjectRequest;
+import com.trackme.models.project.ProjectEntity;
 import com.trackme.models.security.permission.AdminPmPermission;
+import com.trackme.models.security.permission.AuthenticatedPermission;
 import com.trackme.models.security.permission.PmDevCustPermission;
 import com.trackme.models.security.permission.PmPermission;
 import com.trackme.projectservice.service.ProjectService;
@@ -25,26 +27,34 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @GetMapping("/project")
-    @PmDevCustPermission
+    @AuthenticatedPermission
     public ResponseEntity<CommonResponse<?>> getProject(@Valid @RequestBody GetProjectRequest request) {
-        return ResponseEntity.ok().body(null);
+        log.info("received request on getProject()");
+        CommonResponse<?> project = projectService.getProject(request);
+        return ResponseEntity.ok().body(project);
     }
 
     @PostMapping("/project")
-    @PmPermission
+    @AdminPmPermission
     public ResponseEntity<CommonResponse<?>> createProject(@Valid @RequestBody NewProjectRequest request) {
-        return ResponseEntity.ok().body(null);
+        log.info("received request on createProject()");
+        CommonResponse<?> project = projectService.createProject(request);
+        return ResponseEntity.ok().body(project);
     }
 
     @PutMapping("/project")
-    @PmPermission
+    @AdminPmPermission
     public ResponseEntity<CommonResponse<?>> updateProject(@Valid @RequestBody UpdateProjectRequest request) {
-        return ResponseEntity.ok().body(null);
+        log.info("received request on updateProject()");
+        CommonResponse response = projectService.updateProject(request);
+        return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping("/project")
     @AdminPmPermission
     public ResponseEntity<CommonResponse<?>> deleteProject(@Valid @RequestBody DeleteProjectRequest request) {
-        return ResponseEntity.ok().body(null);
+        log.info("received request on deleteProject()");
+        CommonResponse response = projectService.deleteProject(request);
+        return ResponseEntity.ok().body(response);
     }
 }
