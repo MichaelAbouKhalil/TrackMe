@@ -17,6 +17,9 @@ public class AssignedCustEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Version
+    private Long version;
+
     @Column(name = "email")
     private String email;
 

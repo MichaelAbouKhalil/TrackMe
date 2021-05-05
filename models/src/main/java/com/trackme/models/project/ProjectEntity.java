@@ -20,6 +20,9 @@ public class ProjectEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Version
+    private Long version;
+
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -40,11 +43,14 @@ public class ProjectEntity {
     private String ordId;
 
     @OneToMany(mappedBy = "project")
+    @Singular
     private List<AssignedPmEntity> assignedPms;
 
     @OneToMany(mappedBy = "project")
+    @Singular
     private List<AssignedDevEntity> assignedDevs;
 
     @OneToMany(mappedBy = "project")
+    @Singular
     private List<AssignedCustEntity> assignedCustomers;
 }
