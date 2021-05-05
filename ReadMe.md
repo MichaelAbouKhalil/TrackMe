@@ -16,4 +16,6 @@ The technology stack:
     - PostgreSQL
     - Docker
 
+Project Management PDF: [TrackMe.pdf](TrackMe.pdf)
+
 _This is the first draft of the Readme file, and it will be updated along the way._
