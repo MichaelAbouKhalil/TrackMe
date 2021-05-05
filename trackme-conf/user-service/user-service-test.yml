@@ -1,7 +1,4 @@
 
-server:
-  port: 8062
-
 spring:
   application:
     name: user-service
