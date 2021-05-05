@@ -21,7 +21,7 @@ public class UserService {
         UserEntity user = null;
 
         log.info("retrieving user info from auth service for username [{}]", SecurityUtils.getUsername());
-        ResponseEntity<CommonResponse> response = authServiceFeignProxy.retrieveUser();
+        ResponseEntity<CommonResponse<UserEntity>> response = authServiceFeignProxy.retrieveUser();
 
         if (response.getStatusCode().equals(HttpStatus.OK)
             && response.getBody().isSuccess()) {
