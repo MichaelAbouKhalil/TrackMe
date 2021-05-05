@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: project-service
+  profiles:
+    active: dev
+  cloud:
+    config:
+      uri: http://localhost:8888
+      fail-fast: true
+      label: project-service-branch
+
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        security: debug
