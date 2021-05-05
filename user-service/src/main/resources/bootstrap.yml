@@ -9,8 +9,8 @@ spring:
       fail-fast: true
       label: user-service-branch-impl
 
-logging:
-  level:
-    org:
-      springframework:
-        security: debug
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        security: debug

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,12 +31,12 @@ class UserServiceTest extends Base {
         @WithMockUser(username = "demo-admin")
         public void getUser_Success_Valid() {
             when(authServiceFeignProxy.retrieveUser())
-                    .thenReturn(CommonResponse.ok(
+                    .thenReturn(ResponseEntity.ok(CommonResponse.ok(
                             UserEntity.builder()
                                     .username("demo-admin")
                                     .id(1L)
                                     .build()
-                    ));
+                    )));
 
             UserEntity user = userService.getUser();
 
@@ -48,7 +49,7 @@ class UserServiceTest extends Base {
         @WithMockUser(username = "demo-admin")
         public void getUser_Failed_Invalid() {
             when(authServiceFeignProxy.retrieveUser())
-                    .thenReturn(CommonResponse.error());
+                    .thenReturn(ResponseEntity.ok(CommonResponse.error()));
 
             UserEntity user = userService.getUser();
 
