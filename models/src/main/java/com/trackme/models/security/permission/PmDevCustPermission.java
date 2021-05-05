@@ -6,10 +6,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * this permission is to enable ADMIN or PM
- * to promote DEV(or CUSTOMER)_PENDING to DEV(or CUSTOMER)
+ * this permission is for PM or DEV or CUSTOMER Role
  */
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM')")
-public @interface PromotePermission {
+@PreAuthorize("hasAnyRole('ROLE_PM', 'ROLE_DEV', ROLE_CUSTOMER)")
+public @interface PmDevCustPermission {
 }
