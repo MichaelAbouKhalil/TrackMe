@@ -52,11 +52,9 @@ class ProfileControllerTest extends BaseController {
             when(profileService.getCompleteUserProfile())
                     .thenReturn(CommonResponse.ok(new ProfileEntity()));
 
-            String accessToken = accessTokenUtil.obtainAccessToken("demo-admin", "demo-admin");
-
             mockMvc.perform(get(BASE_API)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .header("AUTHORIZATION", "Bearer " + accessToken))
+                    .header("AUTHORIZATION", "Bearer " + adminToken))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.status").value(HttpStatus.OK.value()))
                     .andExpect(jsonPath("$.success").value("true"))
@@ -77,13 +75,11 @@ class ProfileControllerTest extends BaseController {
                 when(profileService.saveUpdateProfile(any(ProfileRequest.class)))
                         .thenReturn(CommonResponse.ok(new ProfileEntity()));
 
-                String accessToken = accessTokenUtil
-                        .obtainAccessToken("demo-admin", "demo-admin");
 
                 mockMvc.perform(post(BASE_API)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
-                        .header("AUTHORIZATION", "Bearer " + accessToken))
+                        .header("AUTHORIZATION", "Bearer " + adminToken))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$.status").value(HttpStatus.OK.value()))
                         .andExpect(jsonPath("$.success").value("true"))
@@ -95,15 +91,12 @@ class ProfileControllerTest extends BaseController {
                 when(profileService.saveUpdateProfile(any(ProfileRequest.class)))
                         .thenReturn(CommonResponse.ok(new ProfileEntity()));
 
-                String accessToken = accessTokenUtil
-                        .obtainAccessToken("demo-admin", "demo-admin");
-
                 request.setFirstName("");
 
                 mockMvc.perform(post(BASE_API)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
-                        .header("AUTHORIZATION", "Bearer " + accessToken))
+                        .header("AUTHORIZATION", "Bearer " + adminToken))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.value()))
                         .andExpect(jsonPath("$.success").value("false"))
@@ -116,14 +109,12 @@ class ProfileControllerTest extends BaseController {
                 when(profileService.saveUpdateProfile(any(ProfileRequest.class)))
                         .thenReturn(CommonResponse.ok(new ProfileEntity()));
 
-                String accessToken = accessTokenUtil.obtainAccessToken("demo-admin", "demo-admin");
-
                 request.setLastName("");
 
                 mockMvc.perform(post(BASE_API)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
-                        .header("AUTHORIZATION", "Bearer " + accessToken))
+                        .header("AUTHORIZATION", "Bearer " + adminToken))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.value()))
                         .andExpect(jsonPath("$.success").value("false"))
@@ -151,13 +142,10 @@ class ProfileControllerTest extends BaseController {
             when(profileService.saveUpdateProfile(any(ProfileRequest.class)))
                     .thenReturn(CommonResponse.ok(new ProfileEntity()));
 
-            String accessToken = accessTokenUtil
-                    .obtainAccessToken("demo-admin", "demo-admin");
-
             mockMvc.perform(post(BASE_API)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request))
-                    .header("AUTHORIZATION", "Bearer " + accessToken))
+                    .header("AUTHORIZATION", "Bearer " + adminToken))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.status").value(HttpStatus.OK.value()))
                     .andExpect(jsonPath("$.success").value("true"))
