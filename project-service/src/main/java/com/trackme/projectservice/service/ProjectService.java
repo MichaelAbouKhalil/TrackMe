@@ -21,7 +21,7 @@ public class ProjectService {
     private final ProjectDbService projectDbService;
     private final UserService userService;
 
-    public CommonResponse<?> createProject(NewProjectRequest request) {
+    public CommonResponse createProject(NewProjectRequest request) {
         UserEntity user = userService.getUser();
 
         ProjectEntity project = ProjectUtils.buildProject(request, user);
@@ -31,7 +31,7 @@ public class ProjectService {
         return CommonResponse.ok(savedProject);
     }
 
-    public CommonResponse<?> getProject(GetProjectRequest request) {
+    public CommonResponse getProject(GetProjectRequest request) {
 
         UserEntity user = userService.getUser();
 
