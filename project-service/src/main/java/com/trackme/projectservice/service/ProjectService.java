@@ -1,8 +1,7 @@
 package com.trackme.projectservice.service;
 
+import com.trackme.common.service.UserService;
 import com.trackme.models.common.CommonResponse;
-import com.trackme.models.enums.ProjectStatusEnum;
-import com.trackme.models.enums.RoleEnum;
 import com.trackme.models.payload.request.project.DeleteProjectRequest;
 import com.trackme.models.payload.request.project.GetProjectRequest;
 import com.trackme.models.payload.request.project.NewProjectRequest;
@@ -12,10 +11,7 @@ import com.trackme.models.security.UserEntity;
 import com.trackme.projectservice.utils.ProjectUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor

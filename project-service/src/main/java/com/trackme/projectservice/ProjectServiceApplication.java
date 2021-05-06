@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @EnableResourceServer
 @EnableFeignClients
 @EntityScan(basePackages = {"com.trackme.models.project"})
-@ComponentScan(basePackages = {"com.trackme"})
+@ComponentScan(basePackages = {"com.trackme.projectservice", "com.trackme.common"})
 public class ProjectServiceApplication {
 
     public static void main(String[] args) {
