@@ -11,7 +11,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableResourceServer
-@EnableFeignClients
+@EnableFeignClients(basePackages = {"com.trackme"})
 @EntityScan(basePackages = {"com.trackme.models.project"})
 @ComponentScan(basePackages = {"com.trackme.projectservice", "com.trackme.common"})
 public class ProjectServiceApplication {
