@@ -1,5 +1,6 @@
 package com.trackme.userservice.service;
 
+import com.trackme.common.service.UserService;
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.payload.request.profile.ProfileRequest;
 import com.trackme.models.profile.ProfileEntity;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;

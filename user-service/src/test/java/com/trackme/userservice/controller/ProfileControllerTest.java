@@ -4,7 +4,6 @@ import com.trackme.models.common.CommonResponse;
 import com.trackme.models.payload.request.profile.ProfileRequest;
 import com.trackme.models.profile.ProfileEntity;
 import com.trackme.userservice.service.ProfileService;
-import com.trackme.userservice.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

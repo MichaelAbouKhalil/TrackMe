@@ -11,9 +11,10 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableResourceServer
-@EnableFeignClients
+@EnableFeignClients(basePackages = "com.trackme")
 @EntityScan(basePackages = {"com.trackme.models.profile"})
-@ComponentScan(basePackages = {"com.trackme"})
+@ComponentScan(basePackages = {"com.trackme.userservice",
+        "com.trackme.common"})
 public class UserServiceApplication {
 
     public static void main(String[] args) {

@@ -1,6 +1,7 @@
 package com.trackme.userservice.service;
 
 import com.trackme.common.security.SecurityUtils;
+import com.trackme.common.service.UserService;
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.payload.request.profile.ProfileRequest;
 import com.trackme.models.profile.ProfileEntity;

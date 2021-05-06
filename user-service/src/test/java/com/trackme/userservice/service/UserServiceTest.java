@@ -1,15 +1,17 @@
 package com.trackme.userservice.service;
 
+import com.trackme.common.proxy.auth.AuthServiceFeignProxy;
+import com.trackme.common.service.UserService;
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.security.UserEntity;
 import com.trackme.userservice.Base;
-import com.trackme.userservice.proxy.AuthServiceFeignProxy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,9 +53,12 @@ class UserServiceTest extends Base {
             when(authServiceFeignProxy.retrieveUser())
                     .thenReturn(ResponseEntity.ok(CommonResponse.error()));
 
-            UserEntity user = userService.getUser();
-
-            assertNull(user);
+            assertThrows(
+                    UsernameNotFoundException.class,
+                    () -> {
+                        userService.getUser();
+                    }
+            );
         }
     }
 
