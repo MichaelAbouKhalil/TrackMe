@@ -1,4 +1,4 @@
-package com.trackme.projectservice.utils;
+package com.trackme.common.usercontext;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

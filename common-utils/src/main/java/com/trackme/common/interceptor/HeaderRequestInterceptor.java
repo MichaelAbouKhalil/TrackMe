@@ -1,7 +1,7 @@
-package com.trackme.projectservice.utils.request;
+package com.trackme.common.interceptor;
 
-import com.trackme.projectservice.utils.UserContext;
-import com.trackme.projectservice.utils.UserContextHolder;
+import com.trackme.common.usercontext.UserContext;
+import com.trackme.common.usercontext.UserContextHolder;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.springframework.stereotype.Component;

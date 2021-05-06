@@ -1,4 +1,4 @@
-package com.trackme.projectservice.utils;
+package com.trackme.common.usercontext;
 
 import org.springframework.util.Assert;
 

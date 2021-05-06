@@ -1,8 +1,8 @@
-package com.trackme.projectservice.proxy;
+package com.trackme.common.proxy.auth;
 
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.security.UserEntity;
-import com.trackme.projectservice.utils.request.HeaderRequestInterceptor;
+import com.trackme.common.interceptor.HeaderRequestInterceptor;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

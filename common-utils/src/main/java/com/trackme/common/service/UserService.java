@@ -1,9 +1,9 @@
-package com.trackme.projectservice.service;
+package com.trackme.common.service;
 
 import com.trackme.common.security.SecurityUtils;
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.security.UserEntity;
-import com.trackme.projectservice.proxy.AuthServiceFeignProxy;
+import com.trackme.common.proxy.auth.AuthServiceFeignProxy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
