@@ -10,7 +10,10 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @SpringBootApplication
 @EnableAuthorizationServer
 @EnableResourceServer
-@ComponentScan(basePackages = "com.trackme")
+@ComponentScan(basePackages = {"com.trackme.authservice",
+        "com.trackme.common.security",
+        "com.trackme.common.exceptionhandler",
+        "com.trackme.common.validator"})
 @EntityScan("com.trackme.models.security")
 public class AuthServiceApplication {
 

@@ -7,8 +7,4 @@ import org.springframework.boot.test.context.SpringBootTest;
 public
 class AuthServiceApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
-
 }

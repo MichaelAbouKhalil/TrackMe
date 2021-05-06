@@ -1,6 +1,6 @@
 package com.trackme.authservice.controller;
 
-import com.trackme.authservice.service.UserService;
+import com.trackme.authservice.service.AuthUserService;
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.security.UserEntity;
 import com.trackme.models.security.permission.AuthenticatedPermission;
@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class UserController {
 
-    private final UserService userService;
+    private final AuthUserService authUserService;
 
     @GetMapping("/user")
     @AuthenticatedPermission
     public ResponseEntity<CommonResponse> retrieveUser() {
         log.info("received request on retrieveUser()");
-        UserEntity user = userService.findUserByUsername();
+        UserEntity user = authUserService.findUserByUsername();
 
         CommonResponse response = CommonResponse.ok(user);
 

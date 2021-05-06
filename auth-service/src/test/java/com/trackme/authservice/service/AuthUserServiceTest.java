@@ -2,7 +2,6 @@ package com.trackme.authservice.service;
 
 import com.trackme.authservice.Base;
 import com.trackme.authservice.repository.UserRepository;
-import com.trackme.models.payload.request.retrieveuser.RetrieveUserRequest;
 import com.trackme.models.security.RoleEntity;
 import com.trackme.models.security.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,20 +12,18 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class UserServiceTest extends Base {
+class AuthUserServiceTest extends Base {
 
     @Autowired
-    UserService userService;
+    AuthUserService authUserService;
 
     @MockBean
     UserRepository userRepository;
@@ -48,7 +45,7 @@ class UserServiceTest extends Base {
             when(userRepository.findByUsername(any(String.class)))
                     .thenReturn(Optional.of(returnedUser));
 
-            UserEntity user = userService.findUserByUsername();
+            UserEntity user = authUserService.findUserByUsername();
 
             assertEquals(returnedUser, user);
         }
@@ -65,7 +62,7 @@ class UserServiceTest extends Base {
             when(userRepository.findByEmail(any(String.class)))
                     .thenReturn(Optional.ofNullable(userEntity));
 
-            UserEntity user = userService.findUserByEmail(email);
+            UserEntity user = authUserService.findUserByEmail(email);
 
             assertEquals(email, user.getEmail());
         }
@@ -82,7 +79,7 @@ class UserServiceTest extends Base {
             UsernameNotFoundException exception = assertThrows(
                     UsernameNotFoundException.class,
                     () -> {
-                        userService.findUserByEmail(email);
+                        authUserService.findUserByEmail(email);
                     }
             );
 
@@ -104,7 +101,7 @@ class UserServiceTest extends Base {
             when(userRepository.save(any(UserEntity.class)))
                     .thenReturn(user);
 
-            UserEntity userEntity = userService.updateUserRoles(user, roleToUpdated);
+            UserEntity userEntity = authUserService.updateUserRoles(user, roleToUpdated);
 
             assertEquals(roleToUpdated, userEntity.getRoles().get(0));
         }

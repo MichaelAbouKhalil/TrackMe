@@ -19,14 +19,14 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class RoleUpdateService {
 
-    private final UserService userService;
+    private final AuthUserService authUserService;
     private final RoleService roleService;
     private final OrgService orgService;
 
     public CommonResponse updateRole(RoleUpdateRequest request, boolean isPromote){
 
         // find user to promote
-        UserEntity user = userService.findUserByEmail(request.getEmail());
+        UserEntity user = authUserService.findUserByEmail(request.getEmail());
 
         RoleEntity userRole = user.getRoles().get(0);
 
@@ -48,7 +48,7 @@ public class RoleUpdateService {
         RoleEntity dbRole = roleService.findRoleByRoleName(promoteRole.getRoleName());
 
         // update user in database
-        UserEntity savedUser = userService.updateUserRoles(user, dbRole);
+        UserEntity savedUser = authUserService.updateUserRoles(user, dbRole);
 
         if (savedUser == null) {
             return CommonResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), ConstantMessages.USER_NOT_SAVED);

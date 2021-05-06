@@ -14,7 +14,7 @@ import java.util.ArrayList;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserService {
+public class AuthUserService {
 
     private final UserRepository userRepository;
 

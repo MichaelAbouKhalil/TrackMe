@@ -1,6 +1,6 @@
 package com.trackme.authservice.controller;
 
-import com.trackme.authservice.service.UserService;
+import com.trackme.authservice.service.AuthUserService;
 import com.trackme.models.payload.request.retrieveuser.RetrieveUserRequest;
 import com.trackme.models.security.UserEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ class UserControllerTest extends BaseController {
     private static final String BASE_API = "/user";
 
     @MockBean
-    UserService userService;
+    AuthUserService authUserService;
 
     UserEntity user;
     RetrieveUserRequest request;
@@ -41,7 +41,7 @@ class UserControllerTest extends BaseController {
     class RetrieveUserAccessTests {
         @Test
         public void retrieveUser_NoAuth_Invalid() throws Exception {
-            when(userService.findUserByUsername())
+            when(authUserService.findUserByUsername())
                     .thenReturn(user);
 
             mockMvc.perform(get(BASE_API)
@@ -56,7 +56,7 @@ class UserControllerTest extends BaseController {
 
         @Test
         public void retrieveUser_ADMIN_Valid() throws Exception {
-            when(userService.findUserByUsername())
+            when(authUserService.findUserByUsername())
                     .thenReturn(user);
 
             String accessToken = accessTokenUtil.obtainAccessToken(
@@ -77,7 +77,7 @@ class UserControllerTest extends BaseController {
 
         @Test
         public void retrieveUser_PM_Valid() throws Exception {
-            when(userService.findUserByUsername())
+            when(authUserService.findUserByUsername())
                     .thenReturn(user);
 
             String accessToken = accessTokenUtil.obtainAccessToken(
@@ -98,7 +98,7 @@ class UserControllerTest extends BaseController {
 
         @Test
         public void retrieveUser_DEV_Valid() throws Exception {
-            when(userService.findUserByUsername())
+            when(authUserService.findUserByUsername())
                     .thenReturn(user);
 
             String accessToken = accessTokenUtil.obtainAccessToken(
@@ -119,7 +119,7 @@ class UserControllerTest extends BaseController {
 
         @Test
         public void retrieveUser_CUSTOMER_Valid() throws Exception {
-            when(userService.findUserByUsername())
+            when(authUserService.findUserByUsername())
                     .thenReturn(user);
 
             String accessToken = accessTokenUtil.obtainAccessToken(
