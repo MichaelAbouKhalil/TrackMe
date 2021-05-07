@@ -44,7 +44,7 @@ class ProfileServiceTest extends Base {
         userEntity = UserEntity.builder()
                 .username("demo-admin")
                 .email("demo@admin.com")
-                .role(RoleEntity.builder().roleName("ROLE+ADMIN").build())
+                .role(RoleEntity.builder().roleName("ROLE_ADMIN").build())
                 .build();
         profileEntity = ProfileEntity.builder()
                 .username("demo-admin")
