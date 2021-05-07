@@ -1,5 +1,6 @@
 package com.trackme.projectservice.service;
 
+import com.trackme.common.proxy.auth.AuthServiceFeignProxy;
 import com.trackme.common.service.UserService;
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.enums.ProjectStatusEnum;
@@ -15,16 +16,15 @@ import com.trackme.models.project.ProjectEntity;
 import com.trackme.models.security.RoleEntity;
 import com.trackme.models.security.UserEntity;
 import com.trackme.projectservice.Base;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.Arrays;
 
@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ProjectServiceTest extends Base {
 
     @Autowired
@@ -58,7 +59,7 @@ class ProjectServiceTest extends Base {
                 .email("pm@test.com")
                 .orgId("test-org")
                 .role(RoleEntity.builder()
-                        .roleName(RoleEnum.PM.getRoleName()).build())
+                        .roleName("ROLE_PM").build())
                 .build();
 
         project = ProjectEntity.builder()
@@ -96,20 +97,6 @@ class ProjectServiceTest extends Base {
         }
 
         @Test
-        public void createProject_UserServiceException_Invalid() {
-            when(userService.getUser()).thenThrow(new UsernameNotFoundException(""));
-            when(projectDbService.saveProject(any(ProjectEntity.class)))
-                    .thenReturn(project);
-
-            assertThrows(UsernameNotFoundException.class,
-                    () -> {
-                        projectService.createProject(newProjectRequest);
-                    });
-
-            verify(projectDbService, times(0));
-        }
-
-        @Test
         public void createProject_ProjectDbServiceException_Invalid() {
             when(userService.getUser()).thenReturn(user);
             when(projectDbService.saveProject(any(ProjectEntity.class)))
@@ -140,24 +127,9 @@ class ProjectServiceTest extends Base {
         }
 
         @Test
-        public void getProject_UserServiceException_Invalid() {
-            when(userService.getUser()).thenThrow(new UsernameNotFoundException(""));
-            when(projectDbService.findProject(any(Long.class)))
-                    .thenReturn(project);
-
-            assertThrows(UsernameNotFoundException.class,
-                    () -> {
-                        projectService.getProject(getProjectRequest);
-                    }
-            );
-
-            verify(projectDbService, times(0));
-        }
-
-        @Test
         public void getProject_ProjectDbServiceException_Invalid() {
             when(userService.getUser()).thenReturn(user);
-            when(projectDbService.saveProject(any(ProjectEntity.class)))
+            when(projectDbService.findProject(any(Long.class)))
                     .thenThrow(new ProjectNotFoundException(""));
 
             assertThrows(ProjectNotFoundException.class,
@@ -197,4 +169,100 @@ class ProjectServiceTest extends Base {
         }
     }
 
+    @DisplayName("Update Project Tests")
+    @Nested
+    class UpdateProjectTests{
+        @Test
+        public void updateProject_Valid() {
+            when(userService.getUser()).thenReturn(user);
+            when(projectDbService.findProject(any(Long.class))).thenReturn(project);
+            when(projectDbService.saveProject(any(ProjectEntity.class)))
+                    .thenReturn(project);
+
+            CommonResponse<ProjectEntity> response = projectService.updateProject(updateProjectRequest);
+
+            assertEquals(HttpStatus.OK.value(), response.getStatus());
+            assertTrue(response.isSuccess());
+            assertEquals(updateProjectRequest.getStatus(),
+                    response.getPayload().getStatus());
+            assertEquals(updateProjectRequest.getDescription(),
+                    response.getPayload().getDescription());
+        }
+
+        @Test
+        public void updateProject_DifferentOrg_Admin_Valid() {
+            user.setRoles(Arrays.asList(RoleEntity.builder()
+                    .roleName(RoleEnum.ADMIN.getRoleName()).build()));
+            user.setOrgId(null);
+            when(userService.getUser()).thenReturn(user);
+            when(projectDbService.findProject(any(Long.class)))
+                    .thenReturn(project);
+            when(projectDbService.saveProject(any(ProjectEntity.class)))
+                    .thenReturn(project);
+
+            CommonResponse<ProjectEntity> response = projectService.updateProject(updateProjectRequest);
+
+            assertEquals(HttpStatus.OK.value(), response.getStatus());
+            assertTrue(response.isSuccess());
+            assertEquals(updateProjectRequest.getStatus(),
+                    response.getPayload().getStatus());
+            assertEquals(updateProjectRequest.getDescription(),
+                    response.getPayload().getDescription());
+        }
+
+        @Test
+        public void updateProject_DifferentOrg_PM_Invalid() {
+            when(userService.getUser()).thenReturn(user);
+            project.setOrdId("test");
+            when(projectDbService.findProject(any(Long.class))).thenReturn(project);
+            when(projectDbService.saveProject(any(ProjectEntity.class)))
+                    .thenReturn(project);
+
+            assertThrows(InvalidOperationException.class,
+                    () -> projectService.updateProject(updateProjectRequest));
+
+        }
+    }
+
+    @DisplayName("Delete Project Tests")
+    @Nested
+    class DeleteProjectTests{
+        @Test
+        public void deleteProject_Valid() {
+            when(userService.getUser()).thenReturn(user);
+            when(projectDbService.findProject(any(Long.class))).thenReturn(project);
+            doNothing().when(projectDbService).deleteProject(any(ProjectEntity.class));
+
+            CommonResponse response = projectService.deleteProject(deleteProjectRequest);
+
+            assertEquals(HttpStatus.OK.value(), response.getStatus());
+            assertTrue(response.isSuccess());
+        }
+        @Test
+        public void deleteProject_DifferentOrg_Admin_Valid() {
+            user.setRoles(Arrays.asList(
+                    RoleEntity.builder()
+                            .roleName(RoleEnum.ADMIN.getRoleName()).build()
+            ));
+            user.setOrgId(null);
+            when(userService.getUser()).thenReturn(user);
+            when(projectDbService.findProject(any(Long.class))).thenReturn(project);
+            doNothing().when(projectDbService).deleteProject(any(ProjectEntity.class));
+
+            CommonResponse response = projectService.deleteProject(deleteProjectRequest);
+
+            assertEquals(HttpStatus.OK.value(), response.getStatus());
+            assertTrue(response.isSuccess());
+        }
+        @Test
+        public void deleteProject_DifferentOrg_Pm_Invalid() {
+            user.setOrgId("test");
+            when(userService.getUser()).thenReturn(user);
+            when(projectDbService.findProject(any(Long.class))).thenReturn(project);
+            doNothing().when(projectDbService).deleteProject(any(ProjectEntity.class));
+
+            assertThrows(InvalidOperationException.class,
+                    () -> projectService.deleteProject(deleteProjectRequest));
+        }
+    }
 }

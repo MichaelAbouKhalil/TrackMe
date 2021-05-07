@@ -35,7 +35,7 @@ public class ProjectController {
     }
 
     @PostMapping("/project")
-    @AdminPmPermission
+    @PmPermission
     public ResponseEntity<CommonResponse<?>> createProject(@Valid @RequestBody NewProjectRequest request) {
         log.info("received request on createProject()");
         CommonResponse<?> project = projectService.createProject(request);

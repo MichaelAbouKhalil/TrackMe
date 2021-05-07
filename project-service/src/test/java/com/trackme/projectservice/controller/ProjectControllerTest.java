@@ -298,9 +298,11 @@ class ProjectControllerTest extends BaseController {
                     .content(objectMapper.writeValueAsString(newProjectRequest))
                     .header("AUTHORIZATION", "Bearer " + adminToken))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.status").value(HttpStatus.OK.value()))
-                    .andExpect(jsonPath("$.success").value("true"))
-                    .andExpect(jsonPath("$.payload").exists());
+                    .andExpect(jsonPath("$.status").value(HttpStatus.FORBIDDEN.value()))
+                    .andExpect(jsonPath("$.success").value("false"))
+                    .andExpect(jsonPath("$.payload").doesNotExist())
+                    .andExpect(jsonPath("$.error").exists())
+                    .andExpect(jsonPath("$.error.errorMessage").exists());
         }
 
         @Test

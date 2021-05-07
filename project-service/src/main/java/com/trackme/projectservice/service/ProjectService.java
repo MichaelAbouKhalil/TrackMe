@@ -49,11 +49,11 @@ public class ProjectService {
 
         ProjectUtils.checkOrgConstraint(project, user);
 
-        ProjectUtils.updateProject(request, project);
+        ProjectEntity updatedProject = ProjectUtils.updateProject(request, project);
 
-        projectDbService.saveProject(project);
+        projectDbService.saveProject(updatedProject);
 
-        return CommonResponse.ok();
+        return CommonResponse.ok(updatedProject);
     }
 
     public CommonResponse deleteProject(DeleteProjectRequest request) {

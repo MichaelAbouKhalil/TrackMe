@@ -53,7 +53,7 @@ public class ProjectUtils {
         }
     }
 
-    public static void updateProject(UpdateProjectRequest request, ProjectEntity project){
+    public static ProjectEntity updateProject(UpdateProjectRequest request, ProjectEntity project){
 
         if(!StringUtils.isEmpty(request.getNewName())){
             project.setName(request.getNewName());
@@ -73,5 +73,7 @@ public class ProjectUtils {
             }
             project.setStatus(request.getStatus());
         }
+
+        return project;
     }
 }
