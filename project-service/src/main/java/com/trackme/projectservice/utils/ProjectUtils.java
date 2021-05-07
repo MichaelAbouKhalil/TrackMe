@@ -40,7 +40,8 @@ public class ProjectUtils {
      * @param user
      */
     public static void checkOrgConstraint(ProjectEntity project, UserEntity user) {
-        if(RoleEnum.ADMIN.getRoleName().equals(user.getRoles().get(0))){
+        if(RoleEnum.ADMIN.getRoleName().equals(
+                user.getRoles().get(0).getRoleName())){
             log.info("user is admin will not check correlation with org id");
             return;
         }
