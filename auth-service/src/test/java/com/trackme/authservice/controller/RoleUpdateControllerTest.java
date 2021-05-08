@@ -42,10 +42,8 @@ class RoleUpdateControllerTest extends BaseController {
             when(roleUpdateService.updateRole(any(RoleUpdateRequest.class), eq(true)))
                     .thenReturn(CommonResponse.ok());
 
-            String accessToken = accessTokenUtil.obtainAccessToken("demo-admin", "demo-admin");
-
             mockMvc.perform(post(PROMOTE_API + "/pm")
-                    .header("Authorization", "Bearer " + accessToken)
+                    .header("Authorization", "Bearer " + adminToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isOk())
@@ -58,12 +56,10 @@ class RoleUpdateControllerTest extends BaseController {
             when(roleUpdateService.updateRole(any(RoleUpdateRequest.class), eq(true)))
                     .thenReturn(CommonResponse.ok());
 
-            String accessToken = accessTokenUtil.obtainAccessToken("demo-admin", "demo-admin");
-
             request.setEmail("invalid@email");
 
             mockMvc.perform(post(PROMOTE_API + "/pm")
-                    .header("Authorization", "Bearer " + accessToken)
+                    .header("Authorization", "Bearer " + adminToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isOk())
@@ -92,10 +88,8 @@ class RoleUpdateControllerTest extends BaseController {
             when(roleUpdateService.updateRole(any(RoleUpdateRequest.class), eq(true)))
                     .thenReturn(CommonResponse.ok());
 
-            String accessToken = accessTokenUtil.obtainAccessToken("demo-admin", "demo-admin");
-
             mockMvc.perform(post(PROMOTE_API + "/pm")
-                    .header("Authorization", "Bearer " + accessToken)
+                    .header("Authorization", "Bearer " + adminToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isOk())
@@ -106,10 +100,8 @@ class RoleUpdateControllerTest extends BaseController {
         @Test
         public void promotePm_NotAuthorized() throws Exception {
 
-            String accessToken = accessTokenUtil.obtainAccessToken("demo-pm", "demo-pm");
-
             ResultActions resultActions = mockMvc.perform(post(PROMOTE_API + "/pm")
-                    .header("Authorization", "Bearer " + accessToken)
+                    .header("Authorization", "Bearer " + pmToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isOk())
@@ -138,10 +130,8 @@ class RoleUpdateControllerTest extends BaseController {
             when(roleUpdateService.updateRole(any(RoleUpdateRequest.class), eq(true)))
                     .thenReturn(CommonResponse.ok());
 
-            String accessToken = accessTokenUtil.obtainAccessToken("demo-admin", "demo-admin");
-
             mockMvc.perform(post(PROMOTE_API)
-                    .header("Authorization", "Bearer " + accessToken)
+                    .header("Authorization", "Bearer " + adminToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isOk())
@@ -154,10 +144,8 @@ class RoleUpdateControllerTest extends BaseController {
             when(roleUpdateService.updateRole(any(RoleUpdateRequest.class), eq(true)))
                     .thenReturn(CommonResponse.ok());
 
-            String accessToken = accessTokenUtil.obtainAccessToken("demo-pm", "demo-pm");
-
             mockMvc.perform(post(PROMOTE_API)
-                    .header("Authorization", "Bearer " + accessToken)
+                    .header("Authorization", "Bearer " + pmToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isOk())
@@ -168,10 +156,8 @@ class RoleUpdateControllerTest extends BaseController {
         @Test
         public void promoteDev_NotAuthorized_Invalid() throws Exception {
 
-            String accessToken = accessTokenUtil.obtainAccessToken("demo-dev", "demo-dev");
-
             mockMvc.perform(post(PROMOTE_API)
-                    .header("Authorization", "Bearer " + accessToken)
+                    .header("Authorization", "Bearer " + devToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isOk())
@@ -182,10 +168,8 @@ class RoleUpdateControllerTest extends BaseController {
         @Test
         public void promoteCustomer_NotAuthorized_Invalid() throws Exception {
 
-            String accessToken = accessTokenUtil.obtainAccessToken("demo-customer", "demo-customer");
-
             mockMvc.perform(post(PROMOTE_API)
-                    .header("Authorization", "Bearer " + accessToken)
+                    .header("Authorization", "Bearer " + custToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isOk())
@@ -213,10 +197,8 @@ class RoleUpdateControllerTest extends BaseController {
             when(roleUpdateService.updateRole(any(RoleUpdateRequest.class), eq(false)))
                     .thenReturn(CommonResponse.ok());
 
-            String accessToken = accessTokenUtil.obtainAccessToken("demo-admin", "demo-admin");
-
             mockMvc.perform(post(DEMOTE_API + "/pm")
-                    .header("Authorization", "Bearer " + accessToken)
+                    .header("Authorization", "Bearer " + adminToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isOk())
@@ -227,10 +209,8 @@ class RoleUpdateControllerTest extends BaseController {
         @Test
         public void demotePm_NotAuthorized() throws Exception {
 
-            String accessToken = accessTokenUtil.obtainAccessToken("demo-pm", "demo-pm");
-
             ResultActions resultActions = mockMvc.perform(post(DEMOTE_API + "/pm")
-                    .header("Authorization", "Bearer " + accessToken)
+                    .header("Authorization", "Bearer " + pmToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isOk())
@@ -258,10 +238,8 @@ class RoleUpdateControllerTest extends BaseController {
             when(roleUpdateService.updateRole(any(RoleUpdateRequest.class), eq(false)))
                     .thenReturn(CommonResponse.ok());
 
-            String accessToken = accessTokenUtil.obtainAccessToken("demo-admin", "demo-admin");
-
             mockMvc.perform(post(DEMOTE_API)
-                    .header("Authorization", "Bearer " + accessToken)
+                    .header("Authorization", "Bearer " + adminToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isOk())
@@ -274,10 +252,8 @@ class RoleUpdateControllerTest extends BaseController {
             when(roleUpdateService.updateRole(any(RoleUpdateRequest.class), eq(false)))
                     .thenReturn(CommonResponse.ok());
 
-            String accessToken = accessTokenUtil.obtainAccessToken("demo-pm", "demo-pm");
-
             mockMvc.perform(post(DEMOTE_API)
-                    .header("Authorization", "Bearer " + accessToken)
+                    .header("Authorization", "Bearer " + pmToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isOk())
@@ -288,10 +264,8 @@ class RoleUpdateControllerTest extends BaseController {
         @Test
         public void demoteDev_NotAuthorized_Invalid() throws Exception {
 
-            String accessToken = accessTokenUtil.obtainAccessToken("demo-dev", "demo-dev");
-
             mockMvc.perform(post(DEMOTE_API)
-                    .header("Authorization", "Bearer " + accessToken)
+                    .header("Authorization", "Bearer " + devToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isOk())
@@ -302,10 +276,8 @@ class RoleUpdateControllerTest extends BaseController {
         @Test
         public void demoteCustomer_NotAuthorized_Invalid() throws Exception {
 
-            String accessToken = accessTokenUtil.obtainAccessToken("demo-customer", "demo-customer");
-
             mockMvc.perform(post(DEMOTE_API)
-                    .header("Authorization", "Bearer " + accessToken)
+                    .header("Authorization", "Bearer " + custToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isOk())
