@@ -41,7 +41,7 @@ public class RoleUpdateService {
                 && !(userRole.getRoleName().equals(RoleEnum.PM_PENDING.getRoleName())) ) {
             // to promote/demote DEV and Customers, the PM should have same org ID
             // the admin can do it without having same org ID
-            orgService.validateOrg(user);
+            orgService.validateOrgPromoteDemote(user);
         }
 
         // get role entity from database

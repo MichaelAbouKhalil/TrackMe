@@ -93,7 +93,7 @@ class RoleUpdateServiceTest extends Base {
         public void promote_ADMIN_Invalid() {
             when(userRepository.findByEmail(any(String.class)))
                     .thenReturn(Optional.of(adminUser));
-            doNothing().when(orgService).validateOrg(any(UserEntity.class));
+            doNothing().when(orgService).validateOrgPromoteDemote(any(UserEntity.class));
             when(roleRepository.findByRoleName(any(String.class)))
                     .thenReturn(Optional.of(adminRole));
             when(userRepository.save(any(UserEntity.class)))
@@ -116,7 +116,7 @@ class RoleUpdateServiceTest extends Base {
         public void promote_PM_Valid() {
             when(userRepository.findByEmail(any(String.class)))
                     .thenReturn(Optional.of(pmPendingUser));
-            doNothing().when(orgService).validateOrg(any(UserEntity.class));
+            doNothing().when(orgService).validateOrgPromoteDemote(any(UserEntity.class));
             when(roleRepository.findByRoleName(any(String.class)))
                     .thenReturn(Optional.of(pmRole));
             when(userRepository.save(any(UserEntity.class)))
@@ -133,7 +133,7 @@ class RoleUpdateServiceTest extends Base {
         public void promote_DEV_Valid() {
             when(userRepository.findByEmail(any(String.class)))
                     .thenReturn(Optional.of(devPendingUser));
-            doNothing().when(orgService).validateOrg(any(UserEntity.class));
+            doNothing().when(orgService).validateOrgPromoteDemote(any(UserEntity.class));
             when(roleRepository.findByRoleName(any(String.class)))
                     .thenReturn(Optional.of(devRole));
             when(userRepository.save(any(UserEntity.class)))
@@ -150,7 +150,7 @@ class RoleUpdateServiceTest extends Base {
         public void promote_CUSTOMER_Valid() {
             when(userRepository.findByEmail(any(String.class)))
                     .thenReturn(Optional.of(custPendingUser));
-            doNothing().when(orgService).validateOrg(any(UserEntity.class));
+            doNothing().when(orgService).validateOrgPromoteDemote(any(UserEntity.class));
             when(roleRepository.findByRoleName(any(String.class)))
                     .thenReturn(Optional.of(custRole));
             when(userRepository.save(any(UserEntity.class)))
@@ -171,7 +171,7 @@ class RoleUpdateServiceTest extends Base {
         public void demote_PM_Valid() {
             when(userRepository.findByEmail(any(String.class)))
                     .thenReturn(Optional.of(pmUser));
-            doNothing().when(orgService).validateOrg(any(UserEntity.class));
+            doNothing().when(orgService).validateOrgPromoteDemote(any(UserEntity.class));
             when(roleRepository.findByRoleName(any(String.class)))
                     .thenReturn(Optional.of(pmPendingRole));
             when(userRepository.save(any(UserEntity.class)))
@@ -187,7 +187,7 @@ class RoleUpdateServiceTest extends Base {
         public void demote_DEV_Valid() {
             when(userRepository.findByEmail(any(String.class)))
                     .thenReturn(Optional.of(devUser));
-            doNothing().when(orgService).validateOrg(any(UserEntity.class));
+            doNothing().when(orgService).validateOrgPromoteDemote(any(UserEntity.class));
             when(roleRepository.findByRoleName(any(String.class)))
                     .thenReturn(Optional.of(devPendingRole));
             when(userRepository.save(any(UserEntity.class)))
@@ -203,7 +203,7 @@ class RoleUpdateServiceTest extends Base {
         public void demote_Customer_Valid() {
             when(userRepository.findByEmail(any(String.class)))
                     .thenReturn(Optional.of(custUser));
-            doNothing().when(orgService).validateOrg(any(UserEntity.class));
+            doNothing().when(orgService).validateOrgPromoteDemote(any(UserEntity.class));
             when(roleRepository.findByRoleName(any(String.class)))
                     .thenReturn(Optional.of(custPendingRole));
             when(userRepository.save(any(UserEntity.class)))
