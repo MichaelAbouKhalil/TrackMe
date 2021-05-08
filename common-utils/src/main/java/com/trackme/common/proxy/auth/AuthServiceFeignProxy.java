@@ -1,6 +1,7 @@
 package com.trackme.common.proxy.auth;
 
 import com.trackme.models.common.CommonResponse;
+import com.trackme.models.payload.request.retrieveuser.GetUserDetailsRequest;
 import com.trackme.models.security.UserEntity;
 import com.trackme.common.interceptor.HeaderRequestInterceptor;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -17,6 +18,6 @@ public interface AuthServiceFeignProxy {
     ResponseEntity<CommonResponse<UserEntity>> retrieveUser();
 
     @GetMapping("/userDetails")
-    ResponseEntity<CommonResponse<UserEntity>> getUserDetails();
+    ResponseEntity<CommonResponse<UserEntity>> getUserDetails(GetUserDetailsRequest request);
 }
 
