@@ -1,7 +1,9 @@
 package com.trackme.common.service;
 
 import com.trackme.common.security.SecurityUtils;
+import com.trackme.common.utils.ApiUtils;
 import com.trackme.models.common.CommonResponse;
+import com.trackme.models.payload.request.retrieveuser.GetUserDetailsRequest;
 import com.trackme.models.security.UserEntity;
 import com.trackme.common.proxy.auth.AuthServiceFeignProxy;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -19,26 +22,25 @@ public class UserService {
     private final AuthServiceFeignProxy authServiceFeignProxy;
 
     public UserEntity getUser() {
-        UserEntity user = null;
 
         log.info("retrieving user info from auth service for username [{}]", SecurityUtils.getUsername());
         ResponseEntity<CommonResponse<UserEntity>> response = authServiceFeignProxy.retrieveUser();
 
-        if (!response.getStatusCode().equals(HttpStatus.OK)) {
-            log.error("request failed to auth service, status [{}]", response.getStatusCode());
-            throw new RuntimeException("Error with retrieving user from Auth service");
-        }
+        UserEntity user = ApiUtils.getUserFromResponseEntity(response);
 
-        if (response.getBody().isSuccess()) {
-            CommonResponse body = response.getBody();
-            user = (UserEntity) body.getPayload();
-            log.info("user [{}] found with id [{}]", user.getUsername(), user.getId());
-        } else {
-            log.error("user [{}] not found", SecurityUtils.getUsername());
-            log.error("user not found with response status [{}] and response error message [{}]",
-                    response.getBody().getStatus(), response.getBody().getError().getErrorMessage());
-            throw new UsernameNotFoundException(response.getBody().getError().getErrorMessage());
-        }
         return user;
     }
+
+    public UserEntity getUserDetails(GetUserDetailsRequest request) {
+
+        log.info("location user with username/email [{}] from auth service",
+                StringUtils.isEmpty(request.getUsername()) ? request.getEmail() : request.getUsername());
+
+        ResponseEntity<CommonResponse<UserEntity>> response = authServiceFeignProxy.getUserDetails(request);
+
+        UserEntity user = ApiUtils.getUserFromResponseEntity(response);
+
+        return user;
+    }
+
 }
