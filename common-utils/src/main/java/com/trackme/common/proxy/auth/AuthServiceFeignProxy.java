@@ -15,5 +15,8 @@ public interface AuthServiceFeignProxy {
 
     @GetMapping("/user")
     ResponseEntity<CommonResponse<UserEntity>> retrieveUser();
+
+    @GetMapping("/userDetails")
+    ResponseEntity<CommonResponse<UserEntity>> getUserDetails();
 }
 
