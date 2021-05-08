@@ -8,6 +8,7 @@ import com.trackme.models.security.RoleEntity;
 import com.trackme.models.security.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,7 +18,7 @@ public class OrgService {
 
     private final UserRepository userRepository;
 
-    public void validateOrg(UserEntity user) {
+    public void validateOrgPromoteDemote(UserEntity user) {
         String orgId = user.getOrgId();
 
         // get authenticated user
@@ -43,5 +44,27 @@ public class OrgService {
             throw new InvalidOperationException("user [" + authenticatedUser.getUsername() + "] " +
                     "doesn't have authority to perform this action");
         }
+    }
+
+    public void checkSameOrg(UserEntity user, UserEntity authUser) {
+
+        if (user.getRoles().get(0).getRoleName()
+                .equals(RoleEnum.ADMIN.getRoleName())) {
+            log.info("user [{}] is admin, not org constraint", user.getUsername());
+            return;
+        }
+
+        if (authUser.getRoles().get(0).getRoleName()
+                .equals(RoleEnum.ADMIN.getRoleName())) {
+            log.info("auth user [{}] is admin, not org constraint", authUser.getUsername());
+            return;
+        }
+
+        log.info("checking if auth user [{}] and user [{}] have same org", authUser.getUsername(), user.getUsername());
+        if (!authUser.getOrgId().equals(user.getOrgId())) {
+            throw new InvalidOperationException("auth user [" + authUser.getUsername() + "] cannot request user details for user [" +
+                    user.getUsername() + "]");
+        }
+        log.info("auth user [{}] and user [{}] have same org", authUser.getUsername(), user.getUsername());
     }
 }
