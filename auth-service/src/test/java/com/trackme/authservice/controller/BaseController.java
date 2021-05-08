@@ -3,7 +3,9 @@ package com.trackme.authservice.controller;
 import com.trackme.authservice.Base;
 import com.trackme.authservice.utils.AccessTokenUtil;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -12,6 +14,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class BaseController extends Base {
 
     @Autowired
@@ -25,11 +28,21 @@ public abstract class BaseController extends Base {
 
     public MockMvc mockMvc;
 
-    @BeforeEach
-    void setup() {
+    String adminToken;
+    String pmToken;
+    String devToken;
+    String custToken;
+
+    @BeforeAll
+    void setup() throws Exception {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(wac)
                 .apply(springSecurity())
                 .build();
+
+        adminToken = accessTokenUtil.obtainAccessToken("demo-admin", "demo-admin");
+        pmToken = accessTokenUtil.obtainAccessToken("demo-pm", "demo-pm");
+        devToken = accessTokenUtil.obtainAccessToken("demo-dev", "demo-dev");
+        custToken = accessTokenUtil.obtainAccessToken("demo-customer", "demo-customer");
     }
 }
