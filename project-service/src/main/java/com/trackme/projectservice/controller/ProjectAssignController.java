@@ -2,6 +2,8 @@ package com.trackme.projectservice.controller;
 
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.payload.request.project.AssignRemoveRequest;
+import com.trackme.models.project.ProjectEntity;
+import com.trackme.models.security.permission.AdminPmPermission;
 import com.trackme.models.security.permission.AuthenticatedPermission;
 import com.trackme.projectservice.service.ProjectAssignService;
 import lombok.RequiredArgsConstructor;
@@ -22,15 +24,15 @@ public class ProjectAssignController {
 
     @PostMapping("/project/assign")
     @AuthenticatedPermission
-    public ResponseEntity<CommonResponse> assignToProject(@Valid @RequestBody AssignRemoveRequest request){
+    public ResponseEntity<CommonResponse<ProjectEntity>> assignToProject(@Valid @RequestBody AssignRemoveRequest request){
         log.info("received request on assignToProject()");
-        CommonResponse response = projectAssignService.assign(request);
+        CommonResponse<ProjectEntity> response = projectAssignService.assign(request);
 
         return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/project/remove")
-    @AuthenticatedPermission
+    @AdminPmPermission
     public ResponseEntity<CommonResponse> removeToProject(@Valid @RequestBody AssignRemoveRequest request){
         log.info("received request on removeToProject()");
         CommonResponse response = projectAssignService.remove(request);
