@@ -5,7 +5,10 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -44,13 +47,13 @@ public class ProjectEntity {
 
     @OneToMany(mappedBy = "project")
     @Singular
-    private List<AssignedPmEntity> assignedPms;
+    private Set<AssignedPmEntity> assignedPms = new HashSet<>();
 
     @OneToMany(mappedBy = "project")
     @Singular
-    private List<AssignedDevEntity> assignedDevs;
+    private Set<AssignedDevEntity> assignedDevs = new HashSet<>();
 
     @OneToMany(mappedBy = "project")
     @Singular
-    private List<AssignedCustEntity> assignedCustomers;
+    private Set<AssignedCustEntity> assignedCustomers = new HashSet<>();
 }
