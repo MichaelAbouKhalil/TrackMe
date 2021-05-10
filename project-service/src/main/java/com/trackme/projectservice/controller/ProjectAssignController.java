@@ -23,7 +23,7 @@ public class ProjectAssignController {
     private final ProjectAssignService projectAssignService;
 
     @PostMapping("/project/assign")
-    @AuthenticatedPermission
+    @AdminPmPermission
     public ResponseEntity<CommonResponse<ProjectEntity>> assignToProject(@Valid @RequestBody AssignRemoveRequest request){
         log.info("received request on assignToProject()");
         CommonResponse<ProjectEntity> response = projectAssignService.assign(request);
