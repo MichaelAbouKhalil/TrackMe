@@ -6,17 +6,15 @@ import com.trackme.models.enums.RoleEnum;
 import com.trackme.models.exception.InvalidOperationException;
 import com.trackme.models.payload.request.project.NewProjectRequest;
 import com.trackme.models.payload.request.project.UpdateProjectRequest;
-import com.trackme.models.project.AssignedCustEntity;
-import com.trackme.models.project.AssignedDevEntity;
-import com.trackme.models.project.AssignedPmEntity;
-import com.trackme.models.project.ProjectEntity;
+import com.trackme.models.project.*;
 import com.trackme.models.security.RoleEntity;
 import com.trackme.models.security.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.Iterator;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class ProjectUtils {
@@ -105,14 +103,17 @@ public class ProjectUtils {
         String userEmail = user.getEmail();
 
         if (RoleEnum.PM.getRoleName().equals(userRole.getRoleName())) {
-            project.getAssignedPms().add(
-                    AssignedPmEntity.builder().email(userEmail).build());
+            Set<AssignedPmEntity> assignedPms = new HashSet<>(project.getAssignedPms());
+            assignedPms.add(AssignedPmEntity.builder().email(userEmail).build());
+            project.setAssignedPms(assignedPms);
         } else if (RoleEnum.DEV.getRoleName().equals(userRole.getRoleName())) {
-            project.getAssignedDevs().add(
-                    AssignedDevEntity.builder().email(userEmail).build());
+            Set<AssignedDevEntity> assignedDev = new HashSet<>(project.getAssignedDevs());
+            assignedDev.add(AssignedDevEntity.builder().email(userEmail).build());
+            project.setAssignedDevs(assignedDev);
         } else if (RoleEnum.CUSTOMER.getRoleName().equals(userRole.getRoleName())) {
-            project.getAssignedCustomers().add(
-                    AssignedCustEntity.builder().email(userEmail).build());
+            Set<AssignedCustEntity> assignedCusts = new HashSet<>(project.getAssignedCustomers());
+            assignedCusts.add(AssignedCustEntity.builder().email(userEmail).build());
+            project.setAssignedCustomers(assignedCusts);
         }
 
         return project;
@@ -132,31 +133,23 @@ public class ProjectUtils {
         String userEmail = user.getEmail();
 
         if (RoleEnum.PM.getRoleName().equals(userRole.getRoleName())) {
-            Iterator<AssignedPmEntity> it = project.getAssignedPms().iterator();
-            while (it.hasNext()) {
-                AssignedPmEntity i = it.next();
-                if (i.getEmail().equals(userEmail)) {
-                    it.remove();
-                }
-            }
+            project.setAssignedPms((Set<AssignedPmEntity>) removeFromSet(project.getAssignedPms(),
+                    userEmail));
         } else if (RoleEnum.DEV.getRoleName().equals(userRole.getRoleName())) {
-            Iterator<AssignedDevEntity> it = project.getAssignedDevs().iterator();
-            while (it.hasNext()) {
-                AssignedDevEntity i = it.next();
-                if (i.getEmail().equals(userEmail)) {
-                    it.remove();
-                }
-            }
+            project.setAssignedDevs((Set<AssignedDevEntity>) removeFromSet(project.getAssignedDevs(),
+                    userEmail));
         } else if (RoleEnum.CUSTOMER.getRoleName().equals(userRole.getRoleName())) {
-            Iterator<AssignedCustEntity> it = project.getAssignedCustomers().iterator();
-            while (it.hasNext()) {
-                AssignedCustEntity i = it.next();
-                if (i.getEmail().equals(userEmail)) {
-                    it.remove();
-                }
-            }
+            project.setAssignedCustomers((Set<AssignedCustEntity>) removeFromSet(project.getAssignedCustomers(),
+                    userEmail));
         }
 
         return project;
+    }
+
+    private static Set<? extends AssignUser> removeFromSet(Set<? extends AssignUser> set, String email) {
+        set = set.stream()
+                .filter(o -> !o.getEmail().equals(email)) // keep the odds
+                .collect(Collectors.toSet());     // collect to a new set
+        return set;
     }
 }
