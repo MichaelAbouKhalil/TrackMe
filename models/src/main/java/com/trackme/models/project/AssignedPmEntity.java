@@ -1,29 +1,14 @@
 package com.trackme.models.project;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
-@Builder
+@SuperBuilder
 @Entity
 @Table(name = "assigned_pm_tbl")
-public class AssignedPmEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Version
-    private Long version;
-
-    @Column(name = "email")
-    private String email;
-
-    @ManyToOne
-    @JoinColumn(name = "project_id", referencedColumnName = "id")
-    private ProjectEntity project;
+public class AssignedPmEntity extends AssignUser {
+    public AssignedPmEntity() {
+    }
 }
