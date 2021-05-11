@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  centralized-config:
+    container_name: centralized-conf
+    image: mikelak/centralized-config:0.0.1-SNAPSHOT
+    ports:
+      - "8888:8888"
+    restart: unless-stopped
+    networks:
+      - trackme_network
+    mem_limit: 200
+
+  discovery-service:
+    container_name: discovery-service
+    image: mikelak/discovery-service:0.0.1-SNAPSHOT
+    ports:
+      - "8761:8761"
+    depends_on:
+      - centralized-config
+    restart: unless-stopped
+    networks:
+      - trackme_network
+    mem_limit: 200
+    environment:
+      SPRING.PROFILES.ACTIVE: docker
+      SPRING.CLOUD.CONFIG.URI: http://centralized-config:8888/
+
+  api-gateway:
+    container_name: api-gateway
+    image: mikelak/api-gateway:0.0.1-SNAPSHOT
+    ports:
+      - "8080:8080"
+    depends_on:
+      - centralized-config
+      - discovery-service
+    restart: unless-stopped
+    networks:
+      - trackme_network
+    mem_limit: 300
+    environment:
+      SPRING.PROFILES.ACTIVE: docker
+      SPRING.CLOUD.CONFIG.URI: http://centralized-config:8888/
+
+  auth-service:
+    container_name: auth-service
+    image: mikelak/auth-service:0.0.1-SNAPSHOT
+    ports:
+      - "8060:8060"
+      - "8061:8061"
+    depends_on:
+      - centralized-config
+      - discovery-service
+      - api-gateway
+    restart: unless-stopped
+    networks:
+      - trackme_network
+    mem_limit: 300
+    environment:
+      SPRING.PROFILES.ACTIVE: docker
+      SPRING.CLOUD.CONFIG.URI: http://centralized-config:8888/
+
+networks:
+  trackme_network:
