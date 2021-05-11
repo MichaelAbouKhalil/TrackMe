@@ -1,6 +1,5 @@
 package com.trackme.projectservice.service;
 
-import com.trackme.common.proxy.auth.AuthServiceFeignProxy;
 import com.trackme.common.service.UserService;
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.enums.ProjectStatusEnum;
@@ -11,20 +10,14 @@ import com.trackme.models.payload.request.project.DeleteProjectRequest;
 import com.trackme.models.payload.request.project.GetProjectRequest;
 import com.trackme.models.payload.request.project.NewProjectRequest;
 import com.trackme.models.payload.request.project.UpdateProjectRequest;
-import com.trackme.models.project.AssignedPmEntity;
 import com.trackme.models.project.ProjectEntity;
 import com.trackme.models.security.RoleEntity;
 import com.trackme.models.security.UserEntity;
 import com.trackme.projectservice.Base;
 import org.junit.jupiter.api.*;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.Arrays;
 
@@ -66,8 +59,7 @@ class ProjectServiceTest extends Base {
                 .id(1L).name("test-proj")
                 .ordId("test-org")
                 .status(ProjectStatusEnum.CLOSED_PROJECT.getName())
-                .assignedPm(AssignedPmEntity.builder()
-                        .email(user.getEmail()).build())
+                .assignedPm(user.getEmail())
                 .build();
 
         newProjectRequest = NewProjectRequest.builder().name(project.getName()).build();

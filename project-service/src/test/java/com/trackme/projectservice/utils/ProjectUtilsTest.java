@@ -5,9 +5,6 @@ import com.trackme.models.enums.RoleEnum;
 import com.trackme.models.exception.InvalidOperationException;
 import com.trackme.models.payload.request.project.NewProjectRequest;
 import com.trackme.models.payload.request.project.UpdateProjectRequest;
-import com.trackme.models.project.AssignedCustEntity;
-import com.trackme.models.project.AssignedDevEntity;
-import com.trackme.models.project.AssignedPmEntity;
 import com.trackme.models.project.ProjectEntity;
 import com.trackme.models.security.RoleEntity;
 import com.trackme.models.security.UserEntity;
@@ -46,8 +43,7 @@ class ProjectUtilsTest {
                 .name("proj").ordId("org")
                 .status(ProjectStatusEnum.OPEN_PROJECT.getName())
                 .id(1L).startDate(LocalDateTime.now())
-                .assignedPm(AssignedPmEntity
-                        .builder().email("pm@initial.com").build())
+                .assignedPm("pm@initial.com")
                 .build();
 
         user = UserEntity.builder()
@@ -74,7 +70,7 @@ class ProjectUtilsTest {
             assertEquals(newProjectRequest.getName(), projectEntity.getName());
             assertEquals(newProjectRequest.getDescription(), projectEntity.getDescription());
             assertEquals(ProjectStatusEnum.OPEN_PROJECT.getName(), projectEntity.getStatus());
-            assertEquals(user.getEmail(), projectEntity.getAssignedPms().stream().findFirst().get().getEmail());
+            assertEquals(user.getEmail(), projectEntity.getAssignedPms().stream().findFirst().get());
             assertEquals(user.getOrgId(), projectEntity.getOrdId());
         }
     }
@@ -203,16 +199,13 @@ class ProjectUtilsTest {
                             RoleEnum.CUSTOMER.getRoleName()).build()).build();
 
             project.setAssignedPms(
-                    Set.of(AssignedPmEntity.builder().email(pm.getEmail())
-                            .build())
+                    Set.of(pm.getEmail())
             );
             project.setAssignedDevs(
-                    Set.of(AssignedDevEntity.builder().email(dev.getEmail())
-                            .build())
+                    Set.of(dev.getEmail())
             );
             project.setAssignedCustomers(
-                    Set.of(AssignedCustEntity.builder().email(cust.getEmail())
-                            .build())
+                    Set.of(cust.getEmail())
             );
         }
 

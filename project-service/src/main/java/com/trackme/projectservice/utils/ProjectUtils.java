@@ -27,19 +27,13 @@ public class ProjectUtils {
      * @return
      */
     public static ProjectEntity buildProject(NewProjectRequest request, UserEntity user) {
-        ProjectEntity project = ProjectEntity.builder()
+        return ProjectEntity.builder()
                 .name(request.getName())
                 .description(request.getDescription())
                 .status(ProjectStatusEnum.OPEN_PROJECT.getName())
                 .ordId(user.getOrgId())
+                .assignedPm(user.getEmail())
                 .build();
-
-        AssignedPmEntity assignedPm = AssignedPmEntity.builder()
-                .email(user.getEmail()).project(project).build();
-
-        project = assign(project, user);
-
-        return project;
     }
 
     /**
@@ -108,20 +102,11 @@ public class ProjectUtils {
         String userEmail = user.getEmail();
 
         if (RoleEnum.PM.getRoleName().equals(userRole.getRoleName())) {
-            Set<AssignedPmEntity> assignedPms = new HashSet<>(project.getAssignedPms());
-            AssignedPmEntity assigned = AssignedPmEntity.builder().email(userEmail).project(project).build();
-            assignedPms.add(assigned);
-            project.setAssignedPms(assignedPms);
+            project.setAssignedPms(addToSet(project.getAssignedPms(), userEmail));
         } else if (RoleEnum.DEV.getRoleName().equals(userRole.getRoleName())) {
-            Set<AssignedDevEntity> assignedDev = new HashSet<>(project.getAssignedDevs());
-            AssignedDevEntity assigned = AssignedDevEntity.builder().email(userEmail).project(project).build();
-            assignedDev.add(assigned);
-            project.setAssignedDevs(assignedDev);
+            project.setAssignedDevs(addToSet(project.getAssignedDevs(), userEmail));
         } else if (RoleEnum.CUSTOMER.getRoleName().equals(userRole.getRoleName())) {
-            Set<AssignedCustEntity> assignedCusts = new HashSet<>(project.getAssignedCustomers());
-            AssignedCustEntity assigned = AssignedCustEntity.builder().email(userEmail).project(project).build();
-            assignedCusts.add(assigned);
-            project.setAssignedCustomers(assignedCusts);
+            project.setAssignedCustomers(addToSet(project.getAssignedCustomers(), userEmail));
         }
 
         return project;
@@ -141,22 +126,28 @@ public class ProjectUtils {
         String userEmail = user.getEmail();
 
         if (RoleEnum.PM.getRoleName().equals(userRole.getRoleName())) {
-            project.setAssignedPms((Set<AssignedPmEntity>) removeFromSet(project.getAssignedPms(),
+            project.setAssignedPms(removeFromSet(project.getAssignedPms(),
                     userEmail));
         } else if (RoleEnum.DEV.getRoleName().equals(userRole.getRoleName())) {
-            project.setAssignedDevs((Set<AssignedDevEntity>) removeFromSet(project.getAssignedDevs(),
+            project.setAssignedDevs(removeFromSet(project.getAssignedDevs(),
                     userEmail));
         } else if (RoleEnum.CUSTOMER.getRoleName().equals(userRole.getRoleName())) {
-            project.setAssignedCustomers((Set<AssignedCustEntity>) removeFromSet(project.getAssignedCustomers(),
+            project.setAssignedCustomers(removeFromSet(project.getAssignedCustomers(),
                     userEmail));
         }
 
         return project;
     }
 
-    private static Set<? extends AssignUser> removeFromSet(Set<? extends AssignUser> set, String email) {
+    private static Set<String> addToSet(Set<String> set, String email) {
+        HashSet<String> newSet = new HashSet<>(set);
+        newSet.add(email);
+        return newSet;
+    }
+
+    private static Set<String> removeFromSet(Set<String> set, String email) {
         set = set.stream()
-                .filter(o -> !o.getEmail().equals(email)) // keep the odds
+                .filter(o -> !o.equals(email)) // keep the odds
                 .collect(Collectors.toSet());     // collect to a new set
         return set;
     }

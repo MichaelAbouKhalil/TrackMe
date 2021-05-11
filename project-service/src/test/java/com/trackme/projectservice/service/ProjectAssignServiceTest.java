@@ -5,7 +5,6 @@ import com.trackme.models.common.CommonResponse;
 import com.trackme.models.enums.RoleEnum;
 import com.trackme.models.payload.request.project.AssignRemoveRequest;
 import com.trackme.models.payload.request.retrieveuser.GetUserDetailsRequest;
-import com.trackme.models.project.AssignedPmEntity;
 import com.trackme.models.project.ProjectEntity;
 import com.trackme.models.security.RoleEntity;
 import com.trackme.models.security.UserEntity;
@@ -52,8 +51,7 @@ class ProjectAssignServiceTest extends Base {
                         .roleName(RoleEnum.PM.getRoleName()).build())
                 .build();
         project = ProjectEntity.builder()
-                .id(1L).assignedPm(AssignedPmEntity.builder()
-                .email(removeUser.getEmail()).build()).build();
+                .id(1L).assignedPm(removeUser.getEmail()).build();
 
         assignRequest = AssignRemoveRequest.builder()
                 .projectId(1L).email(assignUser.getEmail()).build();
