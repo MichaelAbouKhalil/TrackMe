@@ -45,15 +45,21 @@ public class ProjectEntity {
     @Column(name = "org_id", nullable = false)
     private String ordId;
 
-    @OneToMany(mappedBy = "project")
+    @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "project")
     @Singular
     private Set<AssignedPmEntity> assignedPms = new HashSet<>();
 
-    @OneToMany(mappedBy = "project")
+    @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "project")
     @Singular
     private Set<AssignedDevEntity> assignedDevs = new HashSet<>();
 
-    @OneToMany(mappedBy = "project")
+    @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "project")
     @Singular
     private Set<AssignedCustEntity> assignedCustomers = new HashSet<>();
 }

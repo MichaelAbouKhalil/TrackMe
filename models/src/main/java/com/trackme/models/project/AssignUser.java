@@ -23,7 +23,7 @@ public abstract class AssignUser {
     @Column(name = "email")
     private String email;
 
-    @ManyToOne
-    @JoinColumn(name = "project_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id", nullable = false)
     private ProjectEntity project;
 }
