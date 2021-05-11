@@ -132,7 +132,7 @@ class ProjectAssignControllerTest extends BaseController {
     class RemoveAccessTests{
         @Test
         public void projectRemove_NoAuth_Invalid() throws Exception{
-            when(projectAssignService.assign(any(AssignRemoveRequest.class)))
+            when(projectAssignService.remove(any(AssignRemoveRequest.class)))
                     .thenReturn(CommonResponse.ok(projectEntity));
 
             mockMvc.perform(post(BASE_REMOVE)
@@ -148,7 +148,7 @@ class ProjectAssignControllerTest extends BaseController {
         }
         @Test
         public void projectRemove_Admin_Valid() throws Exception{
-            when(projectAssignService.assign(any(AssignRemoveRequest.class)))
+            when(projectAssignService.remove(any(AssignRemoveRequest.class)))
                     .thenReturn(CommonResponse.ok(projectEntity));
 
             mockMvc.perform(post(BASE_REMOVE)
@@ -165,7 +165,7 @@ class ProjectAssignControllerTest extends BaseController {
         }
         @Test
         public void projectRemove_Pm_Valid() throws Exception{
-            when(projectAssignService.assign(any(AssignRemoveRequest.class)))
+            when(projectAssignService.remove(any(AssignRemoveRequest.class)))
                     .thenReturn(CommonResponse.ok(projectEntity));
 
             mockMvc.perform(post(BASE_REMOVE)
@@ -182,7 +182,7 @@ class ProjectAssignControllerTest extends BaseController {
         }
         @Test
         public void projectRemove_Dev_Invalid() throws Exception{
-            when(projectAssignService.assign(any(AssignRemoveRequest.class)))
+            when(projectAssignService.remove(any(AssignRemoveRequest.class)))
                     .thenReturn(CommonResponse.ok(projectEntity));
 
             mockMvc.perform(post(BASE_REMOVE)
@@ -199,7 +199,7 @@ class ProjectAssignControllerTest extends BaseController {
         }
         @Test
         public void projectRemove_Cust_Invalid() throws Exception{
-            when(projectAssignService.assign(any(AssignRemoveRequest.class)))
+            when(projectAssignService.remove(any(AssignRemoveRequest.class)))
                     .thenReturn(CommonResponse.ok(projectEntity));
 
             mockMvc.perform(post(BASE_REMOVE)
