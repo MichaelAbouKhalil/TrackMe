@@ -75,6 +75,7 @@ public class ApplicationInitializer implements CommandLineRunner {
                     .email("pm@demo.com")
                     .password(passwordEncoder.encode("demo-pm"))
                     .role(roles.get(RoleEnum.PM))
+                    .orgId("demo-org")
                     .build());
 
             userRepository.save(UserEntity.builder()
@@ -82,6 +83,7 @@ public class ApplicationInitializer implements CommandLineRunner {
                     .email("dev@demo.com")
                     .password(passwordEncoder.encode("demo-dev"))
                     .role(roles.get(RoleEnum.DEV))
+                    .orgId("demo-org")
                     .build());
 
             userRepository.save(UserEntity.builder()
@@ -89,6 +91,7 @@ public class ApplicationInitializer implements CommandLineRunner {
                     .email("customer@demo.com")
                     .password(passwordEncoder.encode("demo-customer"))
                     .role(roles.get(RoleEnum.CUSTOMER))
+                    .orgId("demo-org")
                     .build());
 
         }
