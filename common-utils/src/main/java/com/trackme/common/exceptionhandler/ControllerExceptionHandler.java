@@ -20,6 +20,8 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ConstraintViolationException;
+
 @ControllerAdvice
 @Slf4j
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
@@ -81,8 +83,20 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return exceptionConverter(errorMessage, ex, request, null);
     }
 
+    @ExceptionHandler(value = ConstraintViolationException.class)
+    protected ResponseEntity<Object> handleConstraintViolationException(Exception ex, WebRequest request) {
+        String errorMessage = ex.getMessage();
+        return exceptionConverter(errorMessage, ex, request, null);
+    }
+
     @ExceptionHandler(value = UnauthorizedUserException.class)
     protected ResponseEntity<Object> handleUnauthorizedUserException(Exception ex, WebRequest request) {
+        String errorMessage = ex.getMessage();
+        return exceptionConverter(errorMessage, ex, request, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(value = UnsupportedOperationException.class)
+    protected ResponseEntity<Object> handleUnsupportedOperationException(Exception ex, WebRequest request) {
         String errorMessage = ex.getMessage();
         return exceptionConverter(errorMessage, ex, request, HttpStatus.UNAUTHORIZED);
     }
