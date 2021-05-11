@@ -80,7 +80,6 @@ public class AuthUserService {
         orgService.checkSameOrg(user, authUser);
 
         // remove roles, password, version from user
-        user.setRoles(null);
         user.setPassword(null);
         user.setVersion(null);
 
