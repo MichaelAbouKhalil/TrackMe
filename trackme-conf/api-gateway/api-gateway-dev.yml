@@ -9,6 +9,10 @@ management:
     web:
       exposure:
         include: '*'
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discovery-service:8761/eureka
 
 zuul:
   sensitiveHeaders: Cookie,Set-Cookie

@@ -5,7 +5,7 @@ spring:
   application:
     name: auth-service
   datasource:
-    url: jdbc:postgresql://192.168.176.1:5555/trackme-auth-db
+    url: jdbc:postgresql://localhost:5555/trackme-auth-db
     username: admin
     password: ENC(P/mTks+sO+MKVPFW4JaKh7nvZERQ2lfu)
     driverClassName: org.postgresql.Driver
@@ -19,7 +19,7 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://discovery-service:8761/eureka
 
 jwt:
   secret: ENC(vsphGaygBANGokzkd30owPBUe+q6apyJ)
