@@ -45,21 +45,18 @@ public class ProjectEntity {
     @Column(name = "org_id", nullable = false)
     private String ordId;
 
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            mappedBy = "project")
+    @ElementCollection
+    @CollectionTable(name = "assigned_pms", joinColumns = @JoinColumn(name = "project_id"))
     @Singular
-    private Set<AssignedPmEntity> assignedPms = new HashSet<>();
+    private Set<String> assignedPms = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            mappedBy = "project")
+    @ElementCollection
+    @CollectionTable(name = "assigned_devs", joinColumns = @JoinColumn(name = "project_id"))
     @Singular
-    private Set<AssignedDevEntity> assignedDevs = new HashSet<>();
+    private Set<String> assignedDevs = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            mappedBy = "project")
+    @ElementCollection
+    @CollectionTable(name = "assigned_custs", joinColumns = @JoinColumn(name = "project_id"))
     @Singular
-    private Set<AssignedCustEntity> assignedCustomers = new HashSet<>();
+    private Set<String> assignedCustomers = new HashSet<>();
 }
