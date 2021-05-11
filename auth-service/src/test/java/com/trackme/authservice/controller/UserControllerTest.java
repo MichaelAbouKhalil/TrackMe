@@ -125,7 +125,7 @@ class UserControllerTest extends BaseController {
             when(authUserService.findByUsernameOrEmail(any(GetUserDetailsRequest.class)))
                     .thenReturn(user);
 
-            mockMvc.perform(get(BASE_API_USER_DETAILS)
+            mockMvc.perform(post(BASE_API_USER_DETAILS)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(getUserDetailsRequest)))
                     .andExpect(status().isOk())
@@ -141,7 +141,7 @@ class UserControllerTest extends BaseController {
             when(authUserService.findByUsernameOrEmail(any(GetUserDetailsRequest.class)))
                     .thenReturn(user);
 
-            mockMvc.perform(get(BASE_API_USER_DETAILS)
+            mockMvc.perform(post(BASE_API_USER_DETAILS)
                     .contentType(MediaType.APPLICATION_JSON)
                     .header("AUTHORIZATION", "Bearer " + adminToken)
                     .content(objectMapper.writeValueAsString(getUserDetailsRequest)))
@@ -157,7 +157,7 @@ class UserControllerTest extends BaseController {
             when(authUserService.findByUsernameOrEmail(any(GetUserDetailsRequest.class)))
                     .thenReturn(user);
 
-            mockMvc.perform(get(BASE_API_USER_DETAILS)
+            mockMvc.perform(post(BASE_API_USER_DETAILS)
                     .contentType(MediaType.APPLICATION_JSON)
                     .header("AUTHORIZATION", "Bearer " + pmToken)
                     .content(objectMapper.writeValueAsString(getUserDetailsRequest)))
@@ -173,7 +173,7 @@ class UserControllerTest extends BaseController {
             when(authUserService.findByUsernameOrEmail(any(GetUserDetailsRequest.class)))
                     .thenReturn(user);
 
-            mockMvc.perform(get(BASE_API_USER_DETAILS)
+            mockMvc.perform(post(BASE_API_USER_DETAILS)
                     .contentType(MediaType.APPLICATION_JSON)
                     .header("AUTHORIZATION", "Bearer " + devToken)
                     .content(objectMapper.writeValueAsString(getUserDetailsRequest)))
@@ -189,7 +189,7 @@ class UserControllerTest extends BaseController {
             when(authUserService.findByUsernameOrEmail(any(GetUserDetailsRequest.class)))
                     .thenReturn(user);
 
-            mockMvc.perform(get(BASE_API_USER_DETAILS)
+            mockMvc.perform(post(BASE_API_USER_DETAILS)
                     .contentType(MediaType.APPLICATION_JSON)
                     .header("AUTHORIZATION", "Bearer " + custToken)
                     .content(objectMapper.writeValueAsString(getUserDetailsRequest)))
