@@ -27,14 +27,19 @@ public class ProjectUtils {
      * @return
      */
     public static ProjectEntity buildProject(NewProjectRequest request, UserEntity user) {
-        return ProjectEntity.builder()
+        ProjectEntity project = ProjectEntity.builder()
                 .name(request.getName())
                 .description(request.getDescription())
                 .status(ProjectStatusEnum.OPEN_PROJECT.getName())
                 .ordId(user.getOrgId())
-                .assignedPm(AssignedPmEntity.builder()
-                        .email(user.getEmail()).build())
                 .build();
+
+        AssignedPmEntity assignedPm = AssignedPmEntity.builder()
+                .email(user.getEmail()).project(project).build();
+
+        project = assign(project, user);
+
+        return project;
     }
 
     /**
@@ -104,15 +109,18 @@ public class ProjectUtils {
 
         if (RoleEnum.PM.getRoleName().equals(userRole.getRoleName())) {
             Set<AssignedPmEntity> assignedPms = new HashSet<>(project.getAssignedPms());
-            assignedPms.add(AssignedPmEntity.builder().email(userEmail).build());
+            AssignedPmEntity assigned = AssignedPmEntity.builder().email(userEmail).project(project).build();
+            assignedPms.add(assigned);
             project.setAssignedPms(assignedPms);
         } else if (RoleEnum.DEV.getRoleName().equals(userRole.getRoleName())) {
             Set<AssignedDevEntity> assignedDev = new HashSet<>(project.getAssignedDevs());
-            assignedDev.add(AssignedDevEntity.builder().email(userEmail).build());
+            AssignedDevEntity assigned = AssignedDevEntity.builder().email(userEmail).project(project).build();
+            assignedDev.add(assigned);
             project.setAssignedDevs(assignedDev);
         } else if (RoleEnum.CUSTOMER.getRoleName().equals(userRole.getRoleName())) {
             Set<AssignedCustEntity> assignedCusts = new HashSet<>(project.getAssignedCustomers());
-            assignedCusts.add(AssignedCustEntity.builder().email(userEmail).build());
+            AssignedCustEntity assigned = AssignedCustEntity.builder().email(userEmail).project(project).build();
+            assignedCusts.add(assigned);
             project.setAssignedCustomers(assignedCusts);
         }
 
