@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  centralized-config:
+    image: mikelak/centralized-config:0.0.1-SNAPSHOT
+    ports:
+      - "8888:8888"
+    restart: unless-stopped
+    networks:
+      - trackme
+
+  discovery-service:
+    image: mikelak/discovery-service:0.0.1-SNAPSHOT
+    ports:
+      - "8761:8761"
+    depends_on:
+      - centralized-config
+    restart: unless-stopped
+    networks:
+      - trackme
+    environment:
+      SPRING.CLOUD.CONFIG.URI: http://centralized-config:8888/
+
+  api-gateway:
+    image: mikelak/api-gateway:0.0.1-SNAPSHOT
+    ports:
+      - "8080:8080"
+    depends_on:
+      - centralized-config
+      - discovery-service
+    restart: unless-stopped
+    networks:
+      - trackme
+    environment:
+      SPRING.CLOUD.CONFIG.URI: http://centralized-config:8888/
+
+networks:
+  trackme:
