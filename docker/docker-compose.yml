@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
     networks:
       - trackme_network
-    mem_limit: 200
+    mem_limit: 200M
 
   discovery-service:
     container_name: discovery-service
@@ -21,7 +21,7 @@ services:
     restart: unless-stopped
     networks:
       - trackme_network
-    mem_limit: 200
+    mem_limit: 200M
     environment:
       SPRING.PROFILES.ACTIVE: docker
       SPRING.CLOUD.CONFIG.URI: http://centralized-config:8888/
@@ -37,7 +37,7 @@ services:
     restart: unless-stopped
     networks:
       - trackme_network
-    mem_limit: 300
+    mem_limit: 300M
     environment:
       SPRING.PROFILES.ACTIVE: docker
       SPRING.CLOUD.CONFIG.URI: http://centralized-config:8888/
@@ -55,7 +55,7 @@ services:
     restart: unless-stopped
     networks:
       - trackme_network
-    mem_limit: 300
+    mem_limit: 300M
     environment:
       SPRING.PROFILES.ACTIVE: docker
       SPRING.CLOUD.CONFIG.URI: http://centralized-config:8888/
