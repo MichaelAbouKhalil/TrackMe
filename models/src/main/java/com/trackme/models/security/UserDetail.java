@@ -13,10 +13,14 @@ public class UserDetail implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
     private String password;
     private String username;
+    private String email;
+    private Long userId;
 
     public UserDetail(UserEntity user) {
         this.username = user.getUsername();
         this.password = user.getPassword();
+        this.email = user.getEmail();
+        this.userId = user.getId();
         this.authorities = translate(user.getRoles());
     }
 
@@ -50,6 +54,14 @@ public class UserDetail implements UserDetails {
     @Override
     public String getUsername() {
         return this.username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 
     @Override
