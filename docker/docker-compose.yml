@@ -59,6 +59,7 @@ services:
     environment:
       SPRING.PROFILES.ACTIVE: docker
       SPRING.CLOUD.CONFIG.URI: http://centralized-config:8888/
+      HOST: ${HOST_IP}
 
 networks:
   trackme_network:
