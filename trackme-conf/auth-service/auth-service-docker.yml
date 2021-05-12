@@ -22,6 +22,7 @@ eureka:
       defaultZone: http://discovery-service:8761/eureka
   instance:
     preferIpAddress: true
+    ip-address: "${HOST}"
 jwt:
   secret: ENC(vsphGaygBANGokzkd30owPBUe+q6apyJ)
 
