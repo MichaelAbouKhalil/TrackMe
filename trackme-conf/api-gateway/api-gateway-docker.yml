@@ -13,6 +13,8 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://discovery-service:8761/eureka
+  instance:
+    prefer-ip-address: true
 
 zuul:
   sensitiveHeaders: Cookie,Set-Cookie
