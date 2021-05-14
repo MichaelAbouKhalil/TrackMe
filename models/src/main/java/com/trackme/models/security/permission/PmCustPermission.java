@@ -9,6 +9,6 @@ import java.lang.annotation.RetentionPolicy;
  * this permission is for PM or DEV or CUSTOMER Role
  */
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("hasAnyRole('ROLE_PM', 'ROLE_DEV', 'ROLE_CUSTOMER')")
-public @interface PmDevCustPermission {
+@PreAuthorize("hasAnyRole('ROLE_PM', 'ROLE_CUSTOMER')")
+public @interface PmCustPermission {
 }
