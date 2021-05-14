@@ -59,7 +59,8 @@ services:
     environment:
       SPRING.PROFILES.ACTIVE: docker
       SPRING.CLOUD.CONFIG.URI: http://centralized-config:8888/
-      HOST: ${HOST_IP}
+#      check host file if host.docker.internal is configured to 127.0.0.1
+      HOST: host.docker.internal
 
 networks:
   trackme_network:
