@@ -3,7 +3,7 @@ package com.trackme.common.exceptionhandler;
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.exception.InvalidOperationException;
 import com.trackme.models.exception.InvalidRoleException;
-import com.trackme.models.exception.ProjectNotFoundException;
+import com.trackme.models.exception.NotFoundException;
 import com.trackme.models.exception.UserAlreadyExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -77,7 +77,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return exceptionConverter(errorMessage, ex, request, null);
     }
 
-    @ExceptionHandler(value = ProjectNotFoundException.class)
+    @ExceptionHandler(value = NotFoundException.class)
     protected ResponseEntity<Object> handleProjectNotFoundException(Exception ex, WebRequest request) {
         String errorMessage = ex.getMessage();
         return exceptionConverter(errorMessage, ex, request, null);
