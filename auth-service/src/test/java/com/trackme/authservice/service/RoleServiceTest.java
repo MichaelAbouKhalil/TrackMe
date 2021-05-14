@@ -2,7 +2,7 @@ package com.trackme.authservice.service;
 
 import com.trackme.authservice.Base;
 import com.trackme.authservice.repository.RoleRepository;
-import com.trackme.models.exception.RoleNotFoundException;
+import com.trackme.models.exception.NotFoundException;
 import com.trackme.models.security.RoleEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -51,9 +51,9 @@ class RoleServiceTest extends Base {
             RoleEntity role = RoleEntity.builder().roleName("ROLE_ADMIN").build();
             String message = "Requested Role [" + role.getRoleName() + "] not found.";
             when(roleRepository.findByRoleName(any(String.class)))
-                    .thenThrow(new RoleNotFoundException(message));
+                    .thenThrow(new NotFoundException(message));
 
-            RoleNotFoundException ex = assertThrows(RoleNotFoundException.class,
+            NotFoundException ex = assertThrows(NotFoundException.class,
                     () -> {
                         roleService.findRoleByRoleName(role.getRoleName());
                     });

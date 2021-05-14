@@ -4,7 +4,7 @@ import com.trackme.authservice.repository.RoleRepository;
 import com.trackme.authservice.repository.UserRepository;
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.constants.ConstantMessages;
-import com.trackme.models.exception.RoleNotFoundException;
+import com.trackme.models.exception.NotFoundException;
 import com.trackme.models.exception.UserAlreadyExistException;
 import com.trackme.models.payload.request.signup.SignupRequest;
 import com.trackme.models.security.RoleEntity;
@@ -41,7 +41,7 @@ public class SignupService {
 
         RoleEntity role = roleRepository.findByRoleName(requestedRole)
                 .orElseThrow(() -> {
-                    throw new RoleNotFoundException("Requested Role [" + requestedRole + "] not found.");
+                    throw new NotFoundException("Requested Role [" + requestedRole + "] not found.");
                 });
 
         UserEntity user = UserEntity.builder()

@@ -6,7 +6,7 @@ import com.trackme.authservice.repository.UserRepository;
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.constants.ConstantMessages;
 import com.trackme.models.enums.PendingRoleEnum;
-import com.trackme.models.exception.RoleNotFoundException;
+import com.trackme.models.exception.NotFoundException;
 import com.trackme.models.exception.UserAlreadyExistException;
 import com.trackme.models.payload.request.signup.SignupRequest;
 import com.trackme.models.security.RoleEntity;
@@ -115,10 +115,10 @@ class SignupServiceTest extends Base {
 
         when(roleRepository.findByRoleName(any(String.class)))
                 .thenThrow(
-                        new RoleNotFoundException("Requested Role [" + role.getRoleName() + "] not found."));
+                        new NotFoundException("Requested Role [" + role.getRoleName() + "] not found."));
 
-        RoleNotFoundException exception = assertThrows(
-                RoleNotFoundException.class,
+        NotFoundException exception = assertThrows(
+                NotFoundException.class,
                 () -> signupService.processSignup(validRequest));
 
         assertEquals("Requested Role [" + role.getRoleName() + "] not found.",

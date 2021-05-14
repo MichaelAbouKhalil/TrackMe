@@ -1,7 +1,7 @@
 package com.trackme.authservice.service;
 
 import com.trackme.authservice.repository.RoleRepository;
-import com.trackme.models.exception.RoleNotFoundException;
+import com.trackme.models.exception.NotFoundException;
 import com.trackme.models.security.RoleEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ public class RoleService {
     public RoleEntity findRoleByRoleName(String roleName){
         RoleEntity dbRole = roleRepository.findByRoleName(roleName)
                 .orElseThrow(() -> {
-                    throw new RoleNotFoundException("Requested Role [" + roleName + "] not found.");
+                    throw new NotFoundException("Requested Role [" + roleName + "] not found.");
                 });
         return dbRole;
     }

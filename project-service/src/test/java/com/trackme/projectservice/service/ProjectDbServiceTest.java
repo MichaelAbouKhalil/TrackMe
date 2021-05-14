@@ -1,6 +1,6 @@
 package com.trackme.projectservice.service;
 
-import com.trackme.models.exception.ProjectNotFoundException;
+import com.trackme.models.exception.NotFoundException;
 import com.trackme.models.project.ProjectEntity;
 import com.trackme.projectservice.Base;
 import com.trackme.projectservice.repository.ProjectRepository;
@@ -54,7 +54,7 @@ class ProjectDbServiceTest extends Base {
                     .thenReturn(Optional.empty());
 
             assertThrows(
-                    ProjectNotFoundException.class,
+                    NotFoundException.class,
                     () -> {
                         projectDbService.findProject(any(Long.class));
                     }

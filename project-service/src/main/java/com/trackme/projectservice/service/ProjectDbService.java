@@ -1,7 +1,6 @@
 package com.trackme.projectservice.service;
 
-import com.trackme.models.exception.InvalidOperationException;
-import com.trackme.models.exception.ProjectNotFoundException;
+import com.trackme.models.exception.NotFoundException;
 import com.trackme.models.project.ProjectEntity;
 import com.trackme.projectservice.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,7 @@ public class ProjectDbService {
         log.info("locating project with id [{}]", projectId);
         ProjectEntity project = projectRepository.findById(projectId)
                 .orElseThrow(() ->
-                        new ProjectNotFoundException("project with id [" + projectId + "] is not found."));
+                        new NotFoundException("project with id [" + projectId + "] is not found."));
 
         return project;
     }

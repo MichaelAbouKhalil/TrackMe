@@ -5,7 +5,7 @@ import com.trackme.models.common.CommonResponse;
 import com.trackme.models.enums.ProjectStatusEnum;
 import com.trackme.models.enums.RoleEnum;
 import com.trackme.models.exception.InvalidOperationException;
-import com.trackme.models.exception.ProjectNotFoundException;
+import com.trackme.models.exception.NotFoundException;
 import com.trackme.models.payload.request.project.DeleteProjectRequest;
 import com.trackme.models.payload.request.project.GetProjectRequest;
 import com.trackme.models.payload.request.project.NewProjectRequest;
@@ -122,9 +122,9 @@ class ProjectServiceTest extends Base {
         public void getProject_ProjectDbServiceException_Invalid() {
             when(userService.getUser()).thenReturn(user);
             when(projectDbService.findProject(any(Long.class)))
-                    .thenThrow(new ProjectNotFoundException(""));
+                    .thenThrow(new NotFoundException(""));
 
-            assertThrows(ProjectNotFoundException.class,
+            assertThrows(NotFoundException.class,
                     () -> {
                         projectService.getProject(getProjectRequest);
                     }
