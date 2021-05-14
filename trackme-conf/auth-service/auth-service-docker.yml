@@ -22,8 +22,8 @@ eureka:
       defaultZone: http://discovery-service:8761/eureka
 #      the below is needed for docker, HOST variable is passed in docker compose
   instance:
-    prefer-ip-address: true
-#    ip-address: "${HOST}"
+    preferIpAddress: true
+    ip-address: "${HOST}"
 jwt:
   secret: ENC(vsphGaygBANGokzkd30owPBUe+q6apyJ)
 
