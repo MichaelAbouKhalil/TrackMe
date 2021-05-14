@@ -7,7 +7,7 @@ spring:
     config:
       uri: http://localhost:8888
       fail-fast: true
-      label: project-service-branch
+#      label: project-service-branch
 
 #logging:
 #  level:
