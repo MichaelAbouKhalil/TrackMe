@@ -1,4 +1,4 @@
-package com.trackme.ticketservice;
+package com.trackme.ticketservice.conf;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

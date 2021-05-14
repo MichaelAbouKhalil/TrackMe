@@ -1,6 +1,6 @@
-package com.trackme.ticketservice.security;
+package com.trackme.ticketservice.conf.security;
 
-import com.trackme.ticketservice.ServiceConfig;
+import com.trackme.ticketservice.conf.ServiceConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

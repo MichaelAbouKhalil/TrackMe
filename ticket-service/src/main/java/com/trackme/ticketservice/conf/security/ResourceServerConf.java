@@ -1,4 +1,4 @@
-package com.trackme.ticketservice.security;
+package com.trackme.ticketservice.conf.security;
 
 import com.trackme.common.exceptionhandler.MyAccessDeniedHandler;
 import com.trackme.common.exceptionhandler.MyAuthenticationEntryPoint;
