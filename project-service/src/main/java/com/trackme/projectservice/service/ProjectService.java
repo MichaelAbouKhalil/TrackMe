@@ -2,8 +2,6 @@ package com.trackme.projectservice.service;
 
 import com.trackme.common.service.UserService;
 import com.trackme.models.common.CommonResponse;
-import com.trackme.models.payload.request.project.DeleteProjectRequest;
-import com.trackme.models.payload.request.project.GetProjectRequest;
 import com.trackme.models.payload.request.project.NewProjectRequest;
 import com.trackme.models.payload.request.project.UpdateProjectRequest;
 import com.trackme.models.project.ProjectEntity;
@@ -31,11 +29,11 @@ public class ProjectService {
         return CommonResponse.ok(savedProject);
     }
 
-    public CommonResponse getProject(GetProjectRequest request) {
+    public CommonResponse getProject(Long id) {
 
         UserEntity user = userService.getUser();
 
-        ProjectEntity project = projectDbService.findProject(request.getProjectId());
+        ProjectEntity project = projectDbService.findProject(id);
 
         ProjectUtils.checkOrgConstraint(project, user);
 
@@ -56,11 +54,11 @@ public class ProjectService {
         return CommonResponse.ok(updatedProject);
     }
 
-    public CommonResponse deleteProject(DeleteProjectRequest request) {
+    public CommonResponse deleteProject(Long id) {
 
         UserEntity user = userService.getUser();
 
-        ProjectEntity project = projectDbService.findProject(request.getProjectId());
+        ProjectEntity project = projectDbService.findProject(id);
 
         ProjectUtils.checkOrgConstraint(project, user);
 

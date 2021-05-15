@@ -6,7 +6,6 @@ import com.trackme.models.enums.ProjectStatusEnum;
 import com.trackme.models.enums.RoleEnum;
 import com.trackme.models.exception.InvalidOperationException;
 import com.trackme.models.exception.NotFoundException;
-import com.trackme.models.payload.request.project.DeleteProjectRequest;
 import com.trackme.models.payload.request.project.GetProjectRequest;
 import com.trackme.models.payload.request.project.NewProjectRequest;
 import com.trackme.models.payload.request.project.UpdateProjectRequest;
@@ -41,9 +40,9 @@ class ProjectServiceTest extends Base {
     UserEntity user;
 
     NewProjectRequest newProjectRequest;
-    GetProjectRequest getProjectRequest;
+    Long getProjectId;
     UpdateProjectRequest updateProjectRequest;
-    DeleteProjectRequest deleteProjectRequest;
+    Long deleteProjectId;
 
     @BeforeEach
     void setUp() {
@@ -63,8 +62,8 @@ class ProjectServiceTest extends Base {
                 .build();
 
         newProjectRequest = NewProjectRequest.builder().name(project.getName()).build();
-        getProjectRequest = GetProjectRequest.builder().projectId(project.getId()).build();
-        deleteProjectRequest = DeleteProjectRequest.builder().projectId(project.getId()).build();
+        getProjectId = project.getId();
+        deleteProjectId = project.getId();
         updateProjectRequest = UpdateProjectRequest.builder()
                 .projectId(project.getId())
                 .description(project.getDescription())
@@ -111,7 +110,7 @@ class ProjectServiceTest extends Base {
                     .thenReturn(project);
 
             CommonResponse response =
-                    projectService.getProject(getProjectRequest);
+                    projectService.getProject(getProjectId);
 
             assertEquals(HttpStatus.OK.value(), response.getStatus());
             assertTrue(response.isSuccess());
@@ -126,7 +125,7 @@ class ProjectServiceTest extends Base {
 
             assertThrows(NotFoundException.class,
                     () -> {
-                        projectService.getProject(getProjectRequest);
+                        projectService.getProject(getProjectId);
                     }
             );
         }
@@ -139,7 +138,7 @@ class ProjectServiceTest extends Base {
                     .thenReturn(project);
 
             assertThrows(InvalidOperationException.class,
-                    () -> {projectService.getProject(getProjectRequest);});
+                    () -> {projectService.getProject(getProjectId);});
         }
 
         @Test
@@ -153,7 +152,7 @@ class ProjectServiceTest extends Base {
             when(projectDbService.findProject(any(Long.class)))
                     .thenReturn(project);
 
-            CommonResponse response = projectService.getProject(getProjectRequest);
+            CommonResponse response = projectService.getProject(getProjectId);
 
             assertEquals(HttpStatus.OK.value(), response.getStatus());
             assertTrue(response.isSuccess());
@@ -225,7 +224,7 @@ class ProjectServiceTest extends Base {
             when(projectDbService.findProject(any(Long.class))).thenReturn(project);
             doNothing().when(projectDbService).deleteProject(any(ProjectEntity.class));
 
-            CommonResponse response = projectService.deleteProject(deleteProjectRequest);
+            CommonResponse response = projectService.deleteProject(deleteProjectId);
 
             assertEquals(HttpStatus.OK.value(), response.getStatus());
             assertTrue(response.isSuccess());
@@ -241,7 +240,7 @@ class ProjectServiceTest extends Base {
             when(projectDbService.findProject(any(Long.class))).thenReturn(project);
             doNothing().when(projectDbService).deleteProject(any(ProjectEntity.class));
 
-            CommonResponse response = projectService.deleteProject(deleteProjectRequest);
+            CommonResponse response = projectService.deleteProject(deleteProjectId);
 
             assertEquals(HttpStatus.OK.value(), response.getStatus());
             assertTrue(response.isSuccess());
@@ -254,7 +253,7 @@ class ProjectServiceTest extends Base {
             doNothing().when(projectDbService).deleteProject(any(ProjectEntity.class));
 
             assertThrows(InvalidOperationException.class,
-                    () -> projectService.deleteProject(deleteProjectRequest));
+                    () -> projectService.deleteProject(deleteProjectId));
         }
     }
 }

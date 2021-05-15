@@ -29,10 +29,10 @@ class ProjectControllerTest extends BaseController {
     ProjectService projectService;
 
     ProjectEntity project;
-    GetProjectRequest getProjectRequest;
+    Long getProjectId;
     NewProjectRequest newProjectRequest;
     UpdateProjectRequest updateProjectRequest;
-    DeleteProjectRequest deleteProjectRequest;
+    Long deleteProjectId;
 
     @BeforeEach
     void setUp() {
@@ -41,7 +41,7 @@ class ProjectControllerTest extends BaseController {
                 .status(ProjectStatusEnum.OPEN_PROJECT.getName())
                 .build();
 
-        getProjectRequest = GetProjectRequest.builder().projectId(1L).build();
+        getProjectId = 1L;
         newProjectRequest = NewProjectRequest.builder()
                 .name("temp-proj").description("desc")
                 .build();
@@ -49,7 +49,7 @@ class ProjectControllerTest extends BaseController {
                 .projectId(1L).newName("new-temp-proj")
                 .description("new-desc").status(ProjectStatusEnum.CLOSED_PROJECT.getName())
                 .build();
-        deleteProjectRequest = DeleteProjectRequest.builder().projectId(1L).build();
+        deleteProjectId = 1L;
     }
 
     @DisplayName("Request Validation Tests")
@@ -58,12 +58,10 @@ class ProjectControllerTest extends BaseController {
 
         @Test
         public void getProject_RequestValidation_Valid() throws Exception {
-            when(projectService.getProject(any(GetProjectRequest.class)))
+            when(projectService.getProject(any(Long.class)))
                     .thenReturn(CommonResponse.ok(project));
 
-            mockMvc.perform(get(BASE_API)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(getProjectRequest))
+            mockMvc.perform(get(BASE_API + "/" + getProjectId)
                     .header("AUTHORIZATION", "Bearer " + adminToken))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.status").value(HttpStatus.OK.value()))
@@ -73,14 +71,12 @@ class ProjectControllerTest extends BaseController {
 
         @Test
         public void getProject_RequestValidation_Invalid() throws Exception {
-            when(projectService.getProject(any(GetProjectRequest.class)))
+            when(projectService.getProject(any(Long.class)))
                     .thenReturn(CommonResponse.ok(project));
 
-            getProjectRequest.setProjectId(null);
+            getProjectId = null;
 
-            mockMvc.perform(get(BASE_API)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(getProjectRequest))
+            mockMvc.perform(get(BASE_API + "/" + getProjectId)
                     .header("AUTHORIZATION", "Bearer " + adminToken))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.value()))
@@ -159,12 +155,10 @@ class ProjectControllerTest extends BaseController {
 
         @Test
         public void deleteProject_RequestValidation_Valid() throws Exception {
-            when(projectService.deleteProject(any(DeleteProjectRequest.class)))
+            when(projectService.deleteProject(any(Long.class)))
                     .thenReturn(CommonResponse.ok(project));
 
-            mockMvc.perform(delete(BASE_API)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(deleteProjectRequest))
+            mockMvc.perform(delete(BASE_API + "/" + deleteProjectId)
                     .header("AUTHORIZATION", "Bearer " + adminToken))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.status").value(HttpStatus.OK.value()))
@@ -174,14 +168,12 @@ class ProjectControllerTest extends BaseController {
 
         @Test
         public void deleteProject_RequestValidation_Invalid() throws Exception {
-            when(projectService.deleteProject(any(DeleteProjectRequest.class)))
+            when(projectService.deleteProject(any(Long.class)))
                     .thenReturn(CommonResponse.ok(project));
 
-            deleteProjectRequest.setProjectId(null);
+            deleteProjectId = null;
 
-            mockMvc.perform(delete(BASE_API)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(deleteProjectRequest))
+            mockMvc.perform(delete(BASE_API + "/" + deleteProjectId)
                     .header("AUTHORIZATION", "Bearer " + adminToken))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.value()))
@@ -196,12 +188,11 @@ class ProjectControllerTest extends BaseController {
     class GetProjectAccessTests {
         @Test
         public void getProject_NoAuth_Invalid() throws Exception {
-            when(projectService.getProject(any(GetProjectRequest.class)))
+            when(projectService.getProject(any(Long.class)))
                     .thenReturn(CommonResponse.ok(project));
 
-            mockMvc.perform(get(BASE_API)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(getProjectRequest)))
+            mockMvc.perform(get(BASE_API + "/" + getProjectId)
+            )
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.status").value(HttpStatus.UNAUTHORIZED.value()))
                     .andExpect(jsonPath("$.success").value("false"))
@@ -212,12 +203,10 @@ class ProjectControllerTest extends BaseController {
 
         @Test
         public void getProject_ADMIN_Valid() throws Exception {
-            when(projectService.getProject(any(GetProjectRequest.class)))
+            when(projectService.getProject(any(Long.class)))
                     .thenReturn(CommonResponse.ok(project));
 
-            mockMvc.perform(get(BASE_API)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(getProjectRequest))
+            mockMvc.perform(get(BASE_API + "/" + getProjectId)
                     .header("AUTHORIZATION", "Bearer " + adminToken))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.status").value(HttpStatus.OK.value()))
@@ -227,12 +216,10 @@ class ProjectControllerTest extends BaseController {
 
         @Test
         public void getProject_PM_Valid() throws Exception {
-            when(projectService.getProject(any(GetProjectRequest.class)))
+            when(projectService.getProject(any(Long.class)))
                     .thenReturn(CommonResponse.ok(project));
 
-            mockMvc.perform(get(BASE_API)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(getProjectRequest))
+            mockMvc.perform(get(BASE_API + "/" + getProjectId)
                     .header("AUTHORIZATION", "Bearer " + pmToken))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.status").value(HttpStatus.OK.value()))
@@ -242,12 +229,10 @@ class ProjectControllerTest extends BaseController {
 
         @Test
         public void getProject_Dev_Valid() throws Exception {
-            when(projectService.getProject(any(GetProjectRequest.class)))
+            when(projectService.getProject(any(Long.class)))
                     .thenReturn(CommonResponse.ok(project));
 
-            mockMvc.perform(get(BASE_API)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(getProjectRequest))
+            mockMvc.perform(get(BASE_API + "/" + getProjectId)
                     .header("AUTHORIZATION", "Bearer " + devToken))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.status").value(HttpStatus.OK.value()))
@@ -257,12 +242,10 @@ class ProjectControllerTest extends BaseController {
 
         @Test
         public void getProject_Customer_Valid() throws Exception {
-            when(projectService.getProject(any(GetProjectRequest.class)))
+            when(projectService.getProject(any(Long.class)))
                     .thenReturn(CommonResponse.ok(project));
 
-            mockMvc.perform(get(BASE_API)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(getProjectRequest))
+            mockMvc.perform(get(BASE_API + "/" + getProjectId)
                     .header("AUTHORIZATION", "Bearer " + custToken))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.status").value(HttpStatus.OK.value()))
@@ -425,12 +408,12 @@ class ProjectControllerTest extends BaseController {
 
         @Test
         public void updateProject_Customer_Invalid() throws Exception {
-            when(projectService.getProject(any(GetProjectRequest.class)))
+            when(projectService.updateProject(any(UpdateProjectRequest.class)))
                     .thenReturn(CommonResponse.ok(project));
 
             mockMvc.perform(put(BASE_API)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(getProjectRequest))
+                    .content(objectMapper.writeValueAsString(updateProjectRequest))
                     .header("AUTHORIZATION", "Bearer " + custToken))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.status").value(HttpStatus.FORBIDDEN.value()))
@@ -446,12 +429,11 @@ class ProjectControllerTest extends BaseController {
     class DeleteProjectAccessTests {
         @Test
         public void deleteProject_NoAuth_Invalid() throws Exception {
-            when(projectService.deleteProject(any(DeleteProjectRequest.class)))
+            when(projectService.deleteProject(any(Long.class)))
                     .thenReturn(CommonResponse.ok(project));
 
-            mockMvc.perform(delete(BASE_API)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(deleteProjectRequest)))
+            mockMvc.perform(delete(BASE_API + "/" + deleteProjectId)
+            )
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.status").value(HttpStatus.UNAUTHORIZED.value()))
                     .andExpect(jsonPath("$.success").value("false"))
@@ -462,12 +444,10 @@ class ProjectControllerTest extends BaseController {
 
         @Test
         public void deleteProject_ADMIN_Valid() throws Exception {
-            when(projectService.deleteProject(any(DeleteProjectRequest.class)))
+            when(projectService.deleteProject(any(Long.class)))
                     .thenReturn(CommonResponse.ok(project));
 
-            mockMvc.perform(delete(BASE_API)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(deleteProjectRequest))
+            mockMvc.perform(delete(BASE_API + "/" + deleteProjectId)
                     .header("AUTHORIZATION", "Bearer " + adminToken))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.status").value(HttpStatus.OK.value()))
@@ -477,12 +457,10 @@ class ProjectControllerTest extends BaseController {
 
         @Test
         public void deleteProject_PM_Valid() throws Exception {
-            when(projectService.deleteProject(any(DeleteProjectRequest.class)))
+            when(projectService.deleteProject(any(Long.class)))
                     .thenReturn(CommonResponse.ok(project));
 
-            mockMvc.perform(delete(BASE_API)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(deleteProjectRequest))
+            mockMvc.perform(delete(BASE_API + "/" + deleteProjectId)
                     .header("AUTHORIZATION", "Bearer " + pmToken))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.status").value(HttpStatus.OK.value()))
@@ -492,12 +470,10 @@ class ProjectControllerTest extends BaseController {
 
         @Test
         public void deleteProject_Dev_Invalid() throws Exception {
-            when(projectService.deleteProject(any(DeleteProjectRequest.class)))
+            when(projectService.deleteProject(any(Long.class)))
                     .thenReturn(CommonResponse.ok(project));
 
-            mockMvc.perform(delete(BASE_API)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(deleteProjectRequest))
+            mockMvc.perform(delete(BASE_API + "/" + deleteProjectId)
                     .header("AUTHORIZATION", "Bearer " + devToken))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.status").value(HttpStatus.FORBIDDEN.value()))
@@ -509,12 +485,10 @@ class ProjectControllerTest extends BaseController {
 
         @Test
         public void deleteProject_Customer_Invalid() throws Exception {
-            when(projectService.deleteProject(any(DeleteProjectRequest.class)))
+            when(projectService.deleteProject(any(Long.class)))
                     .thenReturn(CommonResponse.ok(project));
 
-            mockMvc.perform(delete(BASE_API)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(deleteProjectRequest))
+            mockMvc.perform(delete(BASE_API + "/" + deleteProjectId)
                     .header("AUTHORIZATION", "Bearer " + custToken))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.status").value(HttpStatus.FORBIDDEN.value()))
