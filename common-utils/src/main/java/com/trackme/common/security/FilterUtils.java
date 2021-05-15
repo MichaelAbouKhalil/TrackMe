@@ -3,6 +3,7 @@ package com.trackme.common.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trackme.models.common.JwtToken;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -17,9 +18,11 @@ public class FilterUtils {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static JwtToken processJwt(HttpServletRequest request) {
-        String token = request.getHeader("Authorization")
-                .replace("Bearer ", "");
-        String payload = decodeJwt(token);
+        String token = request.getHeader("Authorization");
+
+        if(StringUtils.isEmpty(token) || !token.startsWith("Bearer ")) return null;
+
+        String payload = decodeJwt(token.replace("Bearer ", ""));
 
         JwtToken jwtToken = null;
         try {
@@ -33,6 +36,7 @@ public class FilterUtils {
     }
 
     private static String decodeJwt(String jwtToken) {
+
         String[] chunks = jwtToken.split("\\.");
         Base64.Decoder decoder = Base64.getDecoder();
 
