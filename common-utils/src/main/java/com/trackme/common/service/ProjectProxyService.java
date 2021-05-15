@@ -21,8 +21,7 @@ public class ProjectProxyService {
         log.info("finding project info for project id [{}]", projectId);
 
         ResponseEntity<CommonResponse<ProjectEntity>> response =
-                projectServiceFeignProxy.getProject(GetProjectRequest.builder()
-                        .projectId(projectId).build());
+                projectServiceFeignProxy.getProject(projectId);
 
         ProjectEntity project = ApiUtils.getProjectFromResponseEntity(response);
 

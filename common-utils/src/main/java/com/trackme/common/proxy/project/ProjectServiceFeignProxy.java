@@ -9,6 +9,7 @@ import com.trackme.models.security.UserEntity;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @FeignClient(
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 )
 public interface ProjectServiceFeignProxy {
 
-    @GetMapping("/project")
-    public ResponseEntity<CommonResponse<ProjectEntity>> getProject(GetProjectRequest request);
+    @GetMapping("/project/{id}")
+    public ResponseEntity<CommonResponse<ProjectEntity>> getProject(@PathVariable("id") Long id);
 }
 
