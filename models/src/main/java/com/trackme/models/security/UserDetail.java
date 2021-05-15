@@ -15,12 +15,14 @@ public class UserDetail implements UserDetails {
     private String username;
     private String email;
     private Long userId;
+    private String orgId;
 
     public UserDetail(UserEntity user) {
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.email = user.getEmail();
         this.userId = user.getId();
+        this.orgId = user.getOrgId();
         this.authorities = translate(user.getRoles());
     }
 
@@ -33,10 +35,6 @@ public class UserDetail implements UserDetails {
                 name = "ROLE_" + name;
             }
             authorities.add(new SimpleGrantedAuthority(name));
-
-            for (AuthorityEntity authority : role.getAuthorities()) {
-                authorities.add(new SimpleGrantedAuthority(authority.getPermission()));
-            }
         }
         return authorities;
     }
@@ -57,12 +55,14 @@ public class UserDetail implements UserDetails {
     }
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public Long getUserId() {
-        return userId;
+        return this.userId;
     }
+
+    public String getOrgId(){ return this.orgId;}
 
     @Override
     public boolean isAccountNonExpired() {
