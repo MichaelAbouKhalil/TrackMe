@@ -1,5 +1,6 @@
 package com.trackme.authservice.conf.security.jwt;
 
+import com.trackme.models.constants.JwtFields;
 import com.trackme.models.security.UserDetail;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -20,10 +21,10 @@ public class JwtTokenEnhancer implements TokenEnhancer {
          */
         if(oAuth2Authentication.getPrincipal() != null &&
                 oAuth2Authentication.getPrincipal() instanceof UserDetail){
-            // Not used at the moment vvv
             UserDetail userDetail = (UserDetail) oAuth2Authentication.getPrincipal();
-            additionalInfo.put("userId", userDetail.getUserId());
-            additionalInfo.put("userEmail", userDetail.getEmail());
+            additionalInfo.put(JwtFields.JWT_USER_ID, userDetail.getUserId());
+            additionalInfo.put(JwtFields.JWT_EMAIL, userDetail.getEmail());
+            additionalInfo.put(JwtFields.JWT_ORG_ID, userDetail.getOrgId());
         }
 
         ((DefaultOAuth2AccessToken) oAuth2AccessToken).setAdditionalInformation(additionalInfo);
