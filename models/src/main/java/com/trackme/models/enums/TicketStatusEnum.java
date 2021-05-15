@@ -40,4 +40,10 @@ public enum TicketStatusEnum {
     public Boolean isNextStatusAccepted(TicketStatusEnum next){
         return nextStatus.contains(next);
     }
+
+    public static Boolean isEndStatus(String status){
+        TicketStatusEnum enumStatus = getStatusByName(status);
+        return (TicketStatusEnum.REJECTED.equals(enumStatus))
+                || (TicketStatusEnum.FIXED.equals(enumStatus));
+    }
 }
