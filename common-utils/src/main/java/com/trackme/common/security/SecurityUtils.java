@@ -1,8 +1,13 @@
 package com.trackme.common.security;
 
+import com.trackme.models.constants.JwtFields;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 public class SecurityUtils {
 
@@ -18,13 +23,22 @@ public class SecurityUtils {
     }
 
     public static String getUsername() {
-        Object authObject = getAuthenticatedUser();
-        if (authObject instanceof User) {
-            return ((User) authObject).getUsername();
-        } else if (authObject instanceof String) {
-            return (String) authObject;
-        }
+        return FilterUtils.getUsername();
+    }
 
-        throw new UnauthorizedUserException("Authentication is not instance on User or String, " + authObject);
+    public static String getUserEmail() {
+        return FilterUtils.getUserEmail();
+    }
+
+    public static Long getUserId() {
+        return FilterUtils.getUserId();
+    }
+
+    public static String getUserOrgId() {
+        return FilterUtils.getUserOrgId();
+    }
+
+    public static String[] getUserRoles() {
+        return FilterUtils.getUserRoles();
     }
 }
