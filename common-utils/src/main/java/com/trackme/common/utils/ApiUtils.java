@@ -3,6 +3,7 @@ package com.trackme.common.utils;
 import com.trackme.common.security.SecurityUtils;
 import com.trackme.common.service.UserService;
 import com.trackme.models.common.CommonResponse;
+import com.trackme.models.exception.NotFoundException;
 import com.trackme.models.project.ProjectEntity;
 import com.trackme.models.security.UserEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +52,7 @@ public class ApiUtils {
             log.error("project not found");
             log.error("project not found with response status [{}] and response error message [{}]",
                     response.getBody().getStatus(), response.getBody().getError().getErrorMessage());
-            throw new UsernameNotFoundException(response.getBody().getError().getErrorMessage());
+            throw new NotFoundException(response.getBody().getError().getErrorMessage());
         }
 
         return project;
