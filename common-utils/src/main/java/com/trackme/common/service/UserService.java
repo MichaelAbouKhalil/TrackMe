@@ -4,6 +4,7 @@ import com.trackme.common.security.SecurityUtils;
 import com.trackme.common.utils.ApiUtils;
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.payload.request.retrieveuser.GetUserDetailsRequest;
+import com.trackme.models.security.RoleEntity;
 import com.trackme.models.security.UserEntity;
 import com.trackme.common.proxy.auth.AuthServiceFeignProxy;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -22,11 +28,18 @@ public class UserService {
     private final AuthServiceFeignProxy authServiceFeignProxy;
 
     public UserEntity getUser() {
+        List<RoleEntity> roles = new ArrayList<>();
+        for (String s : SecurityUtils.getUserRoles()){
+            roles.add(RoleEntity.builder().roleName(s).build());
+        }
 
-        log.info("retrieving user info from auth service for username [{}]", SecurityUtils.getUsername());
-        ResponseEntity<CommonResponse<UserEntity>> response = authServiceFeignProxy.retrieveUser();
-
-        UserEntity user = ApiUtils.getUserFromResponseEntity(response);
+        UserEntity user = UserEntity.builder()
+                .username(SecurityUtils.getUsername())
+                .email(SecurityUtils.getUserEmail())
+                .id(SecurityUtils.getUserId())
+                .orgId(SecurityUtils.getUserOrgId())
+                .roles(roles)
+                .build();
 
         return user;
     }
