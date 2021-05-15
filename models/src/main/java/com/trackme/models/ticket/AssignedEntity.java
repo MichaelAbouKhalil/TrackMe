@@ -1,16 +1,18 @@
 package com.trackme.models.ticket;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Builder
 @Entity
 @Table(name = "tbl_assigned_personnel")
+@JsonIgnoreProperties(value = {"ticket", "opened", "closed"})
 public class AssignedEntity {
 
     @Id
