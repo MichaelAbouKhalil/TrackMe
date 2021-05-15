@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
@@ -85,6 +86,12 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = ConstraintViolationException.class)
     protected ResponseEntity<Object> handleConstraintViolationException(Exception ex, WebRequest request) {
+        String errorMessage = ex.getMessage();
+        return exceptionConverter(errorMessage, ex, request, null);
+    }
+
+    @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
+    protected ResponseEntity<Object> handleMethodArgumentTypeMismatchException(Exception ex, WebRequest request) {
         String errorMessage = ex.getMessage();
         return exceptionConverter(errorMessage, ex, request, null);
     }
