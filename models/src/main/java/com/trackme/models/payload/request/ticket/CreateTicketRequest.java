@@ -21,7 +21,7 @@ public class CreateTicketRequest {
     private String title;
 
     @ValidateEnum(targetClassType = CriticalLevelEnum.class,
-    message = "critical level cannot be blank")
+            message = "critical level cannot be blank")
     private String criticalLevel;
 
     private String description;
