@@ -24,21 +24,27 @@ public class TicketService {
     private final ProjectProxyService projectProxyService;
 
     public CommonResponse<TicketEntity> getTicket(Long id) {
-
         UserEntity user = userService.getUser();
 
         TicketEntity ticket = ticketDbService.getTicket(id);
 
         // check if user assigned to project for this ticket
         ProjectEntity project = projectProxyService.getProject(ticket.getProjectId());
-
         TicketUtils.checkIfUserAssignToProject(user, project);
 
         return CommonResponse.ok(ticket);
     }
 
     public CommonResponse<TicketEntity> createTicket(CreateTicketRequest request) {
-        return null;
+
+        UserEntity user = userService.getUser();
+        ProjectEntity project = projectProxyService.getProject(request.getProjectId());
+
+        TicketEntity ticket = TicketUtils.buildTicket(request, user, project);
+
+        TicketEntity savedTicket = ticketDbService.saveTicket(ticket);
+
+        return CommonResponse.ok(savedTicket);
     }
 
     public CommonResponse<TicketEntity> updateTicket(UpdateTicketRequest request) {

@@ -1,10 +1,14 @@
 package com.trackme.ticketservice.utils;
 
 import com.trackme.models.enums.RoleEnum;
+import com.trackme.models.enums.TicketStatusEnum;
 import com.trackme.models.exception.InvalidOperationException;
+import com.trackme.models.payload.request.ticket.CreateTicketRequest;
 import com.trackme.models.project.ProjectEntity;
 import com.trackme.models.security.RoleEntity;
 import com.trackme.models.security.UserEntity;
+import com.trackme.models.ticket.AssignedEntity;
+import com.trackme.models.ticket.TicketEntity;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
@@ -32,5 +36,24 @@ public class TicketUtils {
         if (assigned.isEmpty() || !assigned.contains(user.getEmail())) {
             throw new InvalidOperationException("user [" + user.getUsername() + "] is not assigned to the project");
         }
+    }
+
+    public static TicketEntity buildTicket(CreateTicketRequest request, UserEntity user, ProjectEntity project) {
+        TicketEntity ticket = TicketEntity.builder()
+                .projectId(project.getId())
+                .title(request.getTitle())
+                .status(TicketStatusEnum.NEW_TICKET.getName())
+                .criticalLevel(request.getCriticalLevel())
+                .description(request.getDescription())
+                .reproductionSteps(request.getReproductionSteps())
+                .build();
+
+        AssignedEntity assigned = AssignedEntity.builder()
+                .ticket(ticket).opened(ticket).email(user.getEmail())
+                .role(user.getRoles().get(0).getRoleName())
+                .build();
+        ticket.setAssignedPersonnel(Set.of(assigned));
+        ticket.setOpenedBy(assigned);
+        return ticket;
     }
 }
