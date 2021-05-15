@@ -47,7 +47,7 @@ public class TicketController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PutMapping("/ticket/{id}")
+    @DeleteMapping("/ticket/{id}")
     @PmCustPermission
     public ResponseEntity<CommonResponse<TicketEntity>> deleteTicket(@PathVariable("id") Long id){
         log.info("received request on deleteTicket()");
