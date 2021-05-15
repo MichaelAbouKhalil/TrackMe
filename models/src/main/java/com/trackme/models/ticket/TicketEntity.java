@@ -2,6 +2,7 @@ package com.trackme.models.ticket;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -57,6 +58,7 @@ public class TicketEntity {
     @Column(name = "opened_date")
     private LocalDateTime openedDate;
 
+    @UpdateTimestamp
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
 
