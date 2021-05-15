@@ -45,7 +45,7 @@ public class TicketEntity {
     private String reproductionSteps;
 
     @Singular("assign")
-    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AssignedEntity> assignedPersonnel;
 
     @OneToOne(mappedBy = "opened", cascade = CascadeType.ALL)
