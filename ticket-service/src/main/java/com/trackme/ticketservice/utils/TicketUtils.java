@@ -39,6 +39,10 @@ public class TicketUtils {
     }
 
     public static TicketEntity buildTicket(CreateTicketRequest request, UserEntity user, ProjectEntity project) {
+        AssignedEntity assigned = AssignedEntity.builder()
+                .email(user.getEmail())
+                .role(user.getRoles().get(0).getRoleName())
+                .build();
         TicketEntity ticket = TicketEntity.builder()
                 .projectId(project.getId())
                 .title(request.getTitle())
@@ -48,12 +52,13 @@ public class TicketUtils {
                 .reproductionSteps(request.getReproductionSteps())
                 .build();
 
-        AssignedEntity assigned = AssignedEntity.builder()
-                .ticket(ticket).opened(ticket).email(user.getEmail())
-                .role(user.getRoles().get(0).getRoleName())
-                .build();
-        ticket.setAssignedPersonnel(Set.of(assigned));
+        Set<AssignedEntity> set = new HashSet<>(ticket.getAssignedPersonnel());
+        set.add(assigned);
+        ticket.setAssignedPersonnel(set);
         ticket.setOpenedBy(assigned);
+
+        assigned.setTicket(ticket);
+        assigned.setOpened(ticket);
         return ticket;
     }
 }
