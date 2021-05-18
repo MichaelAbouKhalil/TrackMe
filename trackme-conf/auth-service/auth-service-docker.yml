@@ -32,3 +32,7 @@ jasypt:
     password: trackme-secretkey
     algorithm: PBEWithMD5AndDES
     iv-generator-classname: org.jasypt.iv.NoIvGenerator
+
+verification:
+  token:
+    expiry: 86400000
