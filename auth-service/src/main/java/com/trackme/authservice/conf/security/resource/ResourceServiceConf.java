@@ -22,7 +22,8 @@ public class ResourceServiceConf extends ResourceServerConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("POST", "/signup").permitAll()
+                .antMatchers("POST", "/signup/**").permitAll()
+                .antMatchers("GET", "/signupConfirmation/**").permitAll()
                 .anyRequest().authenticated();
     }
 

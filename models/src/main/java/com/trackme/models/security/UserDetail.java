@@ -16,6 +16,8 @@ public class UserDetail implements UserDetails {
     private String email;
     private Long userId;
     private String orgId;
+    private boolean enabled = false;
+
 
     public UserDetail(UserEntity user) {
         this.username = user.getUsername();
@@ -24,6 +26,7 @@ public class UserDetail implements UserDetails {
         this.userId = user.getId();
         this.orgId = user.getOrgId();
         this.authorities = translate(user.getRoles());
+        this.enabled = user.isEnabled();
     }
 
     private Collection<? extends GrantedAuthority> translate(List<RoleEntity> roles) {
@@ -62,7 +65,9 @@ public class UserDetail implements UserDetails {
         return this.userId;
     }
 
-    public String getOrgId(){ return this.orgId;}
+    public String getOrgId() {
+        return this.orgId;
+    }
 
     @Override
     public boolean isAccountNonExpired() {
@@ -81,6 +86,6 @@ public class UserDetail implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.enabled;
     }
 }

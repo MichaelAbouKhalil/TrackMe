@@ -50,4 +50,7 @@ public class UserEntity {
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     private List<RoleEntity> roles;
+
+    @Column(name = "enabled")
+    private boolean enabled = false;
 }
