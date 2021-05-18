@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -65,4 +66,50 @@ public class TicketEntity {
     @Column(name = "closed_date")
     private LocalDateTime closedDate;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TicketEntity that = (TicketEntity) o;
+        return Objects.equals(id, that.id)
+                && projectId.equals(that.projectId)
+                && title.equals(that.title)
+                && status.equals(that.status)
+                && criticalLevel.equals(that.criticalLevel)
+                && Objects.equals(description, that.description)
+                && Objects.equals(reproductionSteps, that.reproductionSteps)
+                && Objects.equals(assignedPersonnel, that.assignedPersonnel)
+                && Objects.equals(openedBy, that.openedBy)
+                && Objects.equals(closedBy, that.closedBy)
+                && Objects.equals(openedDate, that.openedDate)
+                && Objects.equals(updatedDate, that.updatedDate)
+                && Objects.equals(closedDate, that.closedDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, projectId, title, status,
+                criticalLevel, description, reproductionSteps,
+                assignedPersonnel, openedBy, closedBy, openedDate,
+                updatedDate, closedDate);
+    }
+
+    @Override
+    public String toString() {
+        return "TicketEntity{" +
+                "id=" + id +
+                ", projectId=" + projectId +
+                ", title='" + title + '\'' +
+                ", status='" + status + '\'' +
+                ", criticalLevel='" + criticalLevel + '\'' +
+                ", description='" + description + '\'' +
+                ", reproductionSteps='" + reproductionSteps + '\'' +
+                ", assignedPersonnel=" + assignedPersonnel +
+                ", openedBy=" + openedBy +
+                ", closedBy=" + closedBy +
+                ", openedDate=" + openedDate +
+                ", updatedDate=" + updatedDate +
+                ", closedDate=" + closedDate +
+                '}';
+    }
 }

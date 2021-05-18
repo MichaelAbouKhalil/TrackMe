@@ -54,4 +54,13 @@ public class AssignedEntity {
     public int hashCode() {
         return Objects.hash(email, role);
     }
+
+    @Override
+    public String toString() {
+        return "AssignedEntity{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                '}';
+    }
 }
