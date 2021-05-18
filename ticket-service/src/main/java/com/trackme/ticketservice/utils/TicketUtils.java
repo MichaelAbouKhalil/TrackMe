@@ -132,10 +132,8 @@ public class TicketUtils {
             return ticket;
         }
 
-        Set<AssignedEntity> set = new HashSet<>(assignedPersonnel);
-        set.add(AssignedEntity.builder().email(userToAssign.getEmail())
+        ticket.addAssignEntity(AssignedEntity.builder().email(userToAssign.getEmail())
                 .role(userToAssign.getRoles().get(0).getRoleName()).ticket(ticket).build());
-        ticket.setAssignedPersonnel(set);
         return ticket;
     }
 
@@ -150,14 +148,7 @@ public class TicketUtils {
             return ticket;
         }
 
-        Set<AssignedEntity> set = ticket.getAssignedPersonnel();
-        Iterator<AssignedEntity> iterator = set.iterator();
-        while (iterator.hasNext()) {
-            AssignedEntity temp = iterator.next();
-            if (temp.getEmail().equals(userToRemove.getEmail())) {
-                iterator.remove();
-            }
-        }
+        ticket.removeAssignEntity(tempAssignEntity);
         return ticket;
     }
 }

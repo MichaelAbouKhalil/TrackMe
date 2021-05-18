@@ -66,6 +66,14 @@ public class TicketEntity {
     @Column(name = "closed_date")
     private LocalDateTime closedDate;
 
+    public void addAssignEntity(AssignedEntity assignedEntity){
+        this.assignedPersonnel.add(assignedEntity);
+    }
+
+    public void removeAssignEntity(AssignedEntity assignedEntity){
+        this.assignedPersonnel.remove(assignedEntity);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
