@@ -25,7 +25,7 @@ public class AuthUserService {
     public UserEntity findAuthUser() {
 
         log.info("getting username form auth token");
-        String authUsername = SecurityUtils.getUsername();
+        String authUsername = SecurityUtils.getUsernameFromContext();
 
         log.info("finding user for username [{}]", authUsername);
 

@@ -15,7 +15,7 @@ class SecurityUtilsTest extends Base {
     @WithMockUser(username = "admin")
     public void getUsername_Authenticated_Valid() {
 
-        String username = SecurityUtils.getUsername();
+        String username = SecurityUtils.getUsernameFromContext();
 
         assertEquals("admin", username);
     }
@@ -24,7 +24,7 @@ class SecurityUtilsTest extends Base {
     public void getUsername_Unauthenticated_Invalid() {
         UnauthorizedUserException unauthorizedUserException = assertThrows(UnauthorizedUserException.class,
                 () -> {
-                    SecurityUtils.getUsername();
+                    SecurityUtils.getUsernameFromContext();
                 });
 
         assertNotNull(unauthorizedUserException);

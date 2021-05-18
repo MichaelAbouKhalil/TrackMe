@@ -190,7 +190,7 @@ class AuthUserServiceTest extends Base {
             UserEntity foundUser = spyUserService.findByUsernameOrEmail(request);
 
             verify(spyUserService, times(0)).findUserByEmail(anyString());
-            assertNull(foundUser.getRoles());
+            assertNotNull(foundUser.getRoles());
             assertEquals(admin.getEmail(), foundUser.getEmail());
             assertEquals(admin.getUsername(), foundUser.getUsername());
         }
@@ -207,7 +207,7 @@ class AuthUserServiceTest extends Base {
             UserEntity foundUser = spyUserService.findByUsernameOrEmail(request);
 
             verify(spyUserService, times(0)).findUserByUsername(anyString());
-            assertNull(foundUser.getRoles());
+            assertNotNull(foundUser.getRoles());
             assertEquals(pm.getEmail(), foundUser.getEmail());
             assertEquals(pm.getUsername(), foundUser.getUsername());
         }

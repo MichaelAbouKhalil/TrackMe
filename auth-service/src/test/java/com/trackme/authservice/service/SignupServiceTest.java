@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 class SignupServiceTest extends Base {
@@ -35,6 +36,9 @@ class SignupServiceTest extends Base {
 
     @MockBean
     RoleRepository roleRepository;
+
+    @MockBean
+    VerificationTokenService verificationTokenService;
 
     SignupRequest validRequest;
     RoleEntity role;
@@ -68,6 +72,7 @@ class SignupServiceTest extends Base {
                         .orgId(validRequest.getOrgId())
                         .role(role)
                         .build());
+        doNothing().when(verificationTokenService).createVerificationToken(any(UserEntity.class), any(String.class));
 
         CommonResponse commonResponse = signupService.processSignup(validRequest);
 
