@@ -16,7 +16,6 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 @Slf4j
@@ -126,14 +125,17 @@ public class TicketUtils {
         log.info("assigning user [{}] to ticket with id [{}]", userToAssign.getEmail(), ticket.getId());
 
         Set<AssignedEntity> assignedPersonnel = ticket.getAssignedPersonnel();
-        if (contains(assignedPersonnel, userToAssign.getEmail())) {
+        AssignedEntity temp = AssignedEntity.builder().email(userToAssign.getEmail())
+                .role(userToAssign.getRoles().get(0).getRoleName()).build();
+        if (assignedPersonnel.contains(temp)) {
             log.info("user [{}] already assigned to ticket [{}]", userToAssign.getEmail(), ticket.getId());
             return ticket;
         }
 
-        Set<AssignedEntity> set = assignedPersonnel;
+        Set<AssignedEntity> set = new HashSet<>(assignedPersonnel);
         set.add(AssignedEntity.builder().email(userToAssign.getEmail())
                 .role(userToAssign.getRoles().get(0).getRoleName()).ticket(ticket).build());
+        ticket.setAssignedPersonnel(set);
         return ticket;
     }
 
@@ -141,7 +143,9 @@ public class TicketUtils {
         log.info("removing user [{}] from ticket with id [{}]", userToRemove.getEmail(), ticket.getId());
 
         Set<AssignedEntity> assignedPersonnel = ticket.getAssignedPersonnel();
-        if (!contains(assignedPersonnel, userToRemove.getEmail())) {
+        AssignedEntity tempAssignEntity = AssignedEntity.builder().email(userToRemove.getEmail())
+                .role(userToRemove.getRoles().get(0).getRoleName()).build();
+        if (!assignedPersonnel.contains(tempAssignEntity)) {
             log.info("user [{}] is not assigned to ticket [{}]", userToRemove.getEmail(), ticket.getId());
             return ticket;
         }
@@ -155,14 +159,5 @@ public class TicketUtils {
             }
         }
         return ticket;
-    }
-
-    private static boolean contains(Set<AssignedEntity> set, String email) {
-        for (AssignedEntity a : set) {
-            if (a.getEmail().equals(email)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -51,7 +52,8 @@ public class TicketService {
 
         TicketEntity savedTicket = ticketDbService.saveTicket(ticket);
 
-        return CommonResponse.ok(savedTicket);
+        ticket = savedTicket;
+        return CommonResponse.ok(ticket);
     }
 
     public CommonResponse<TicketEntity> updateTicket(UpdateTicketRequest request) {
@@ -63,13 +65,14 @@ public class TicketService {
 
         TicketEntity savedTicket = ticketDbService.saveTicket(updatedTicket);
 
-        return CommonResponse.ok(savedTicket);
+        updatedTicket = savedTicket;
+        return CommonResponse.ok(updatedTicket);
     }
 
     public CommonResponse<TicketEntity> deleteTicket(Long id) {
         UserEntity user = userService.getUser();
         TicketEntity ticket = ticketDbService.getTicket(id);
-        AssignedEntity assignedEntity = TicketUtils.checkIfUserAssignToTicket(user, ticket);
+        TicketUtils.checkIfUserAssignToTicket(user, ticket);
 
         ticketDbService.deleteTicket(id);
 
@@ -91,7 +94,8 @@ public class TicketService {
 
         TicketEntity savedTicket = ticketDbService.saveTicket(ticket);
 
-        return CommonResponse.ok(savedTicket);
+        ticket = savedTicket;
+        return CommonResponse.ok(ticket);
     }
 
     public CommonResponse<TicketEntity> removeFromTicket(AssignRemoveTicketRequest request) {
@@ -110,5 +114,16 @@ public class TicketService {
         TicketEntity savedTicket = ticketDbService.saveTicket(ticket);
 
         return CommonResponse.ok(savedTicket);
+    }
+
+    public CommonResponse<List<TicketEntity>> getTicketByProjectId(Long projectId) {
+        // get auth user
+        UserEntity user = userService.getUser();
+
+        // get tickets
+        List<TicketEntity> tickets =
+                ticketDbService.findTicketsByProjectId(projectId);
+
+        return CommonResponse.ok(tickets);
     }
 }

@@ -49,7 +49,8 @@ public class TicketDbService {
     public List<TicketEntity> findTicketsByProjectId(Long projectId){
         log.info("finding tickets for project id [{}]", projectId);
 
-        Optional<List<TicketEntity>> optional = ticketRepository.findByProjectId(projectId);
+        Optional<List<TicketEntity>> optional =
+                ticketRepository.findByProjectId(projectId);
 
         List<TicketEntity> tickets;
         if(optional.isPresent()){

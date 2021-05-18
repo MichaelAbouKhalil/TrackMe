@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,7 +34,7 @@ public class TicketController {
 
     @PostMapping("/ticket")
     @PmDevCustPermission
-    public ResponseEntity<CommonResponse<TicketEntity>> createTicket(@Valid @RequestBody CreateTicketRequest request){
+    public ResponseEntity<CommonResponse<TicketEntity>> createTicket(@Valid @RequestBody CreateTicketRequest request) {
         log.info("received request on createTicket()");
         CommonResponse<TicketEntity> response = ticketService.createTicket(request);
         return ResponseEntity.ok().body(response);
@@ -41,7 +42,7 @@ public class TicketController {
 
     @PutMapping("/ticket")
     @PmDevCustPermission
-    public ResponseEntity<CommonResponse<TicketEntity>> updateTicket(@Valid @RequestBody UpdateTicketRequest request){
+    public ResponseEntity<CommonResponse<TicketEntity>> updateTicket(@Valid @RequestBody UpdateTicketRequest request) {
         log.info("received request on updateTicket()");
         CommonResponse<TicketEntity> response = ticketService.updateTicket(request);
         return ResponseEntity.ok().body(response);
@@ -49,7 +50,7 @@ public class TicketController {
 
     @DeleteMapping("/ticket/{id}")
     @PmCustPermission
-    public ResponseEntity<CommonResponse<TicketEntity>> deleteTicket(@PathVariable("id") Long id){
+    public ResponseEntity<CommonResponse<TicketEntity>> deleteTicket(@PathVariable("id") Long id) {
         log.info("received request on deleteTicket()");
         CommonResponse<TicketEntity> response = ticketService.deleteTicket(id);
         return ResponseEntity.ok().body(response);
@@ -58,7 +59,7 @@ public class TicketController {
     @PostMapping("/ticket/assign")
     @PmPermission
     public ResponseEntity<CommonResponse<TicketEntity>> assignToTicket(
-            @Valid @RequestBody AssignRemoveTicketRequest request){
+            @Valid @RequestBody AssignRemoveTicketRequest request) {
         log.info("received request on assignToTicket()");
         CommonResponse<TicketEntity> response = ticketService.assignToTicket(request);
         return ResponseEntity.ok().body(response);
@@ -67,9 +68,18 @@ public class TicketController {
     @PostMapping("/ticket/remove")
     @PmPermission
     public ResponseEntity<CommonResponse<TicketEntity>> removeFromTicket(
-            @Valid @RequestBody AssignRemoveTicketRequest request){
+            @Valid @RequestBody AssignRemoveTicketRequest request) {
         log.info("received request on removeFromTicket()");
         CommonResponse<TicketEntity> response = ticketService.removeFromTicket(request);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/ticket/project/{projectId}")
+    @PmDevCustPermission
+    public ResponseEntity<CommonResponse<List<TicketEntity>>> getTicketsByProject
+            (@PathVariable("projectId") Long projectId) {
+        log.info("received request on getTicketsByProject()");
+        CommonResponse<List<TicketEntity>> response = ticketService.getTicketByProjectId(projectId);
         return ResponseEntity.ok().body(response);
     }
 }

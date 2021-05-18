@@ -16,6 +16,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import java.util.Arrays;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -529,9 +531,9 @@ class TicketControllerTest extends BaseController {
 
     @DisplayName("Assign To Ticket Access Tests")
     @Nested
-    class AssignToTicketAccessTests{
+    class AssignToTicketAccessTests {
         @Test
-        public void assignToTicket_NoAuth_Invalid() throws Exception{
+        public void assignToTicket_NoAuth_Invalid() throws Exception {
             when(ticketService.assignToTicket(any(AssignRemoveTicketRequest.class)))
                     .thenReturn(CommonResponse.ok(ticket));
 
@@ -545,8 +547,9 @@ class TicketControllerTest extends BaseController {
                     .andExpect(jsonPath("$.error").exists())
                     .andExpect(jsonPath("$.error.errorMessage").exists());
         }
+
         @Test
-        public void assignToTicket_Admin_Invalid() throws Exception{
+        public void assignToTicket_Admin_Invalid() throws Exception {
             when(ticketService.assignToTicket(any(AssignRemoveTicketRequest.class)))
                     .thenReturn(CommonResponse.ok(ticket));
 
@@ -561,8 +564,9 @@ class TicketControllerTest extends BaseController {
                     .andExpect(jsonPath("$.error").exists())
                     .andExpect(jsonPath("$.error.errorMessage").exists());
         }
+
         @Test
-        public void assignToTicket_Pm_Valid() throws Exception{
+        public void assignToTicket_Pm_Valid() throws Exception {
             when(ticketService.assignToTicket(any(AssignRemoveTicketRequest.class)))
                     .thenReturn(CommonResponse.ok(ticket));
 
@@ -577,8 +581,9 @@ class TicketControllerTest extends BaseController {
                     .andExpect(jsonPath("$.error").doesNotExist())
                     .andExpect(jsonPath("$.error.errorMessage").doesNotExist());
         }
+
         @Test
-        public void assignToTicket_Dev_Invalid() throws Exception{
+        public void assignToTicket_Dev_Invalid() throws Exception {
             when(ticketService.assignToTicket(any(AssignRemoveTicketRequest.class)))
                     .thenReturn(CommonResponse.ok(ticket));
 
@@ -593,8 +598,9 @@ class TicketControllerTest extends BaseController {
                     .andExpect(jsonPath("$.error").exists())
                     .andExpect(jsonPath("$.error.errorMessage").exists());
         }
+
         @Test
-        public void assignToTicket_Cust_Invalid() throws Exception{
+        public void assignToTicket_Cust_Invalid() throws Exception {
             when(ticketService.assignToTicket(any(AssignRemoveTicketRequest.class)))
                     .thenReturn(CommonResponse.ok(ticket));
 
@@ -613,9 +619,9 @@ class TicketControllerTest extends BaseController {
 
     @DisplayName("Remove From Ticket Access Tests")
     @Nested
-    class RemoveFromTicketAccessTests{
+    class RemoveFromTicketAccessTests {
         @Test
-        public void removeFromTicket_NoAuth_Invalid() throws Exception{
+        public void removeFromTicket_NoAuth_Invalid() throws Exception {
             when(ticketService.removeFromTicket(any(AssignRemoveTicketRequest.class)))
                     .thenReturn(CommonResponse.ok(ticket));
 
@@ -629,8 +635,9 @@ class TicketControllerTest extends BaseController {
                     .andExpect(jsonPath("$.error").exists())
                     .andExpect(jsonPath("$.error.errorMessage").exists());
         }
+
         @Test
-        public void removeFromTicket_Admin_Invalid() throws Exception{
+        public void removeFromTicket_Admin_Invalid() throws Exception {
             when(ticketService.removeFromTicket(any(AssignRemoveTicketRequest.class)))
                     .thenReturn(CommonResponse.ok(ticket));
 
@@ -645,8 +652,9 @@ class TicketControllerTest extends BaseController {
                     .andExpect(jsonPath("$.error").exists())
                     .andExpect(jsonPath("$.error.errorMessage").exists());
         }
+
         @Test
-        public void removeFromTicket_Pm_Valid() throws Exception{
+        public void removeFromTicket_Pm_Valid() throws Exception {
             when(ticketService.removeFromTicket(any(AssignRemoveTicketRequest.class)))
                     .thenReturn(CommonResponse.ok(ticket));
 
@@ -661,8 +669,9 @@ class TicketControllerTest extends BaseController {
                     .andExpect(jsonPath("$.error").doesNotExist())
                     .andExpect(jsonPath("$.error.errorMessage").doesNotExist());
         }
+
         @Test
-        public void removeFromTicket_Dev_Invalid() throws Exception{
+        public void removeFromTicket_Dev_Invalid() throws Exception {
             when(ticketService.removeFromTicket(any(AssignRemoveTicketRequest.class)))
                     .thenReturn(CommonResponse.ok(ticket));
 
@@ -677,8 +686,9 @@ class TicketControllerTest extends BaseController {
                     .andExpect(jsonPath("$.error").exists())
                     .andExpect(jsonPath("$.error.errorMessage").exists());
         }
+
         @Test
-        public void removeFromTicket_Cust_Invalid() throws Exception{
+        public void removeFromTicket_Cust_Invalid() throws Exception {
             when(ticketService.removeFromTicket(any(AssignRemoveTicketRequest.class)))
                     .thenReturn(CommonResponse.ok(ticket));
 
@@ -695,4 +705,81 @@ class TicketControllerTest extends BaseController {
         }
     }
 
+    @DisplayName("Find Tickets By Project ID Access Tests")
+    @Nested
+    class FindTicketsByProjectIdAccessTests {
+        @Test
+        public void findTicketsByProjectId_NoAuth_Invalid() throws Exception {
+            when(ticketService.getTicketByProjectId(any(Long.class)))
+                    .thenReturn(CommonResponse.ok(Arrays.asList(ticket)));
+
+            mockMvc.perform(get(BASE_API + "/project/" + 1L))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(HttpStatus.UNAUTHORIZED.value()))
+                    .andExpect(jsonPath("$.success").value(Boolean.FALSE))
+                    .andExpect(jsonPath("$.payload").doesNotExist())
+                    .andExpect(jsonPath("$.error").exists())
+                    .andExpect(jsonPath("$.error.errorMessage").exists());
+        }
+
+        @Test
+        public void findTicketsByProjectId_Admin_Invalid() throws Exception {
+            when(ticketService.getTicketByProjectId(any(Long.class)))
+                    .thenReturn(CommonResponse.ok(Arrays.asList(ticket)));
+
+            mockMvc.perform(get(BASE_API + "/project/" + 1L)
+                    .header("Authorization", "Bearer " + adminToken))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(HttpStatus.FORBIDDEN.value()))
+                    .andExpect(jsonPath("$.success").value(Boolean.FALSE))
+                    .andExpect(jsonPath("$.payload").doesNotExist())
+                    .andExpect(jsonPath("$.error").exists())
+                    .andExpect(jsonPath("$.error.errorMessage").exists());
+        }
+
+        @Test
+        public void findTicketsByProjectId_Pm_Valid() throws Exception {
+            when(ticketService.getTicketByProjectId(any(Long.class)))
+                    .thenReturn(CommonResponse.ok(Arrays.asList(ticket)));
+
+            mockMvc.perform(get(BASE_API + "/project/" + 1L)
+                    .header("Authorization", "Bearer " + pmToken))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(HttpStatus.OK.value()))
+                    .andExpect(jsonPath("$.success").value(Boolean.TRUE))
+                    .andExpect(jsonPath("$.payload").exists())
+                    .andExpect(jsonPath("$.error").doesNotExist())
+                    .andExpect(jsonPath("$.error.errorMessage").doesNotExist());
+        }
+
+        @Test
+        public void findTicketsByProjectId_Dev_Valid() throws Exception {
+            when(ticketService.getTicketByProjectId(any(Long.class)))
+                    .thenReturn(CommonResponse.ok(Arrays.asList(ticket)));
+
+            mockMvc.perform(get(BASE_API + "/project/" + 1L)
+                    .header("Authorization", "Bearer " + devToken))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(HttpStatus.OK.value()))
+                    .andExpect(jsonPath("$.success").value(Boolean.TRUE))
+                    .andExpect(jsonPath("$.payload").exists())
+                    .andExpect(jsonPath("$.error").doesNotExist())
+                    .andExpect(jsonPath("$.error.errorMessage").doesNotExist());
+        }
+
+        @Test
+        public void findTicketsByProjectId_Customer_Valid() throws Exception {
+            when(ticketService.getTicketByProjectId(any(Long.class)))
+                    .thenReturn(CommonResponse.ok(Arrays.asList(ticket)));
+
+            mockMvc.perform(get(BASE_API + "/project/" + 1L)
+                    .header("Authorization", "Bearer " + custToken))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(HttpStatus.OK.value()))
+                    .andExpect(jsonPath("$.success").value(Boolean.TRUE))
+                    .andExpect(jsonPath("$.payload").exists())
+                    .andExpect(jsonPath("$.error").doesNotExist())
+                    .andExpect(jsonPath("$.error.errorMessage").doesNotExist());
+        }
+    }
 }
