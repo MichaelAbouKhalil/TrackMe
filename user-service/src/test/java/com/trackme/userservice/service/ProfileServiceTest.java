@@ -1,5 +1,6 @@
 package com.trackme.userservice.service;
 
+import com.trackme.common.security.SecurityUtils;
 import com.trackme.common.service.UserService;
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.payload.request.profile.ProfileRequest;
@@ -8,10 +9,8 @@ import com.trackme.models.security.RoleEntity;
 import com.trackme.models.security.UserEntity;
 import com.trackme.userservice.Base;
 import com.trackme.userservice.repository.ProfileRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
@@ -141,6 +140,16 @@ class ProfileServiceTest extends Base {
     @DisplayName("Save/Update Profile Tests")
     @Nested
     class SaveUpdateProfileTests {
+        MockedStatic<SecurityUtils> mockedStatic;
+        @BeforeEach
+        void setUp() {
+            mockedStatic = mockStatic(SecurityUtils.class);
+        }
+
+        @AfterEach
+        void tearDown() {
+            mockedStatic.close();
+        }
 
         @Test
         @WithMockUser(username = "demo-admin", roles = {"ADMIN"})
@@ -151,6 +160,7 @@ class ProfileServiceTest extends Base {
 
             when(profileRepository.save(any(ProfileEntity.class)))
                     .thenReturn(profileEntity);
+            mockedStatic.when(SecurityUtils::getUsername).thenReturn("demo-admin");
 
             CommonResponse response = profileService.saveUpdateProfile(profileRequest);
 
