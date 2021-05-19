@@ -15,7 +15,6 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 @Slf4j
@@ -73,9 +72,7 @@ public class TicketUtils {
                 .reproductionSteps(request.getReproductionSteps())
                 .build();
 
-        Set<AssignedEntity> set = new HashSet<>(ticket.getAssignedPersonnel());
-        set.add(assigned);
-        ticket.setAssignedPersonnel(set);
+        ticket.addAssignEntity(assigned);
         ticket.setOpenedBy(assigned);
 
         assigned.setTicket(ticket);
