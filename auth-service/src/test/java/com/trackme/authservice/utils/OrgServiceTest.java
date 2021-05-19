@@ -4,15 +4,14 @@ import com.trackme.authservice.Base;
 import com.trackme.authservice.repository.RoleRepository;
 import com.trackme.authservice.repository.UserRepository;
 import com.trackme.authservice.service.AuthUserService;
+import com.trackme.common.security.SecurityUtils;
 import com.trackme.common.service.UserService;
 import com.trackme.models.enums.RoleEnum;
 import com.trackme.models.exception.InvalidOperationException;
 import com.trackme.models.security.RoleEntity;
 import com.trackme.models.security.UserEntity;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -37,8 +36,18 @@ class OrgServiceTest extends Base {
     @DisplayName("Validate Org Tests")
     @Nested
     class ValidateOrgTests {
+        MockedStatic<SecurityUtils> mockedStatic;
+        @BeforeEach
+        void setUp() {
+            mockedStatic = mockStatic(SecurityUtils.class);
+        }
+
+        @AfterEach
+        void tearDown() {
+            mockedStatic.close();
+        }
+
         @Test
-        @WithMockUser(username = "pm", roles = {"PM"})
         public void validateOrgPromoteDemote_PmDev_SameOrg_Valid() {
             RoleEntity pmRole = roleRepository.findByRoleName(RoleEnum.PM.getRoleName()).orElseThrow();
             RoleEntity devPendingRole = roleRepository.findByRoleName(RoleEnum.DEV_PENDING.getRoleName()).orElseThrow();
@@ -47,6 +56,7 @@ class OrgServiceTest extends Base {
 
             when(userRepository.findByUsername(any(String.class)))
                     .thenReturn(Optional.ofNullable(pmUser));
+            mockedStatic.when(SecurityUtils::getUsername).thenReturn("pm");
 
             orgService.validateOrgPromoteDemote(devPendingUser);
 
@@ -54,7 +64,6 @@ class OrgServiceTest extends Base {
         }
 
         @Test
-        @WithMockUser(username = "pm", roles = {"PM"})
         public void validateOrgPromoteDemote_PmCustomer_SameOrg_Valid() {
             RoleEntity pmRole = roleRepository.findByRoleName(RoleEnum.PM.getRoleName()).orElseThrow();
             RoleEntity custPendingRole = roleRepository.findByRoleName(RoleEnum.CUSTOMER_PENDING.getRoleName()).orElseThrow();
@@ -63,6 +72,7 @@ class OrgServiceTest extends Base {
 
             when(userRepository.findByUsername(any(String.class)))
                     .thenReturn(Optional.ofNullable(pmUser));
+            mockedStatic.when(SecurityUtils::getUsername).thenReturn("pm");
 
             orgService.validateOrgPromoteDemote(custPendingUser);
 
@@ -70,7 +80,6 @@ class OrgServiceTest extends Base {
         }
 
         @Test
-        @WithMockUser(username = "pm", roles = {"PM"})
         public void validateOrgPromoteDemote_PmDev_SameOrg_Invalid() {
             RoleEntity pmRole = roleRepository.findByRoleName(RoleEnum.PM.getRoleName()).orElseThrow();
             RoleEntity devPendingRole = roleRepository.findByRoleName(RoleEnum.DEV_PENDING.getRoleName()).orElseThrow();
@@ -79,6 +88,7 @@ class OrgServiceTest extends Base {
 
             when(userRepository.findByUsername(any(String.class)))
                     .thenReturn(Optional.ofNullable(pmUser));
+            mockedStatic.when(SecurityUtils::getUsername).thenReturn("pm");
 
             InvalidOperationException exception = assertThrows(InvalidOperationException.class,
                     () -> orgService.validateOrgPromoteDemote(devPendingUser));
@@ -87,7 +97,6 @@ class OrgServiceTest extends Base {
         }
 
         @Test
-        @WithMockUser(username = "pm", roles = {"PM"})
         public void validateOrgPromoteDemote_PmCustomer_SameOrg_Invalid() {
             RoleEntity pmRole = roleRepository.findByRoleName(RoleEnum.PM.getRoleName()).orElseThrow();
             RoleEntity custPendingRole = roleRepository.findByRoleName(RoleEnum.CUSTOMER_PENDING.getRoleName()).orElseThrow();
@@ -96,6 +105,7 @@ class OrgServiceTest extends Base {
 
             when(userRepository.findByUsername(any(String.class)))
                     .thenReturn(Optional.ofNullable(pmUser));
+            mockedStatic.when(SecurityUtils::getUsername).thenReturn("pm");
 
             InvalidOperationException exception = assertThrows(InvalidOperationException.class,
                     () -> orgService.validateOrgPromoteDemote(custPendingUser));
@@ -104,7 +114,6 @@ class OrgServiceTest extends Base {
         }
 
         @Test
-        @WithMockUser(username = "dev", roles = {"DEV"})
         public void validateOrgPromoteDemote_DevCustomer_Invalid() {
             RoleEntity devRole = roleRepository.findByRoleName(RoleEnum.DEV.getRoleName()).orElseThrow();
             RoleEntity custPendingRole = roleRepository.findByRoleName(RoleEnum.CUSTOMER_PENDING.getRoleName()).orElseThrow();
@@ -113,6 +122,7 @@ class OrgServiceTest extends Base {
 
             when(userRepository.findByUsername(any(String.class)))
                     .thenReturn(Optional.ofNullable(devUser));
+            mockedStatic.when(SecurityUtils::getUsername).thenReturn("dev");
 
             InvalidOperationException exception = assertThrows(InvalidOperationException.class,
                     () -> orgService.validateOrgPromoteDemote(custPendingUser));
@@ -122,7 +132,6 @@ class OrgServiceTest extends Base {
         }
 
         @Test
-        @WithMockUser(username = "customer", roles = {"CUSTOMER"})
         public void validateOrgPromoteDemote_CustomerDev_Invalid() {
             RoleEntity custRole = roleRepository.findByRoleName(RoleEnum.CUSTOMER.getRoleName()).orElseThrow();
             RoleEntity devPendingRole = roleRepository.findByRoleName(RoleEnum.DEV.getRoleName()).orElseThrow();
@@ -131,6 +140,7 @@ class OrgServiceTest extends Base {
 
             when(userRepository.findByUsername(any(String.class)))
                     .thenReturn(Optional.ofNullable(custUser));
+            mockedStatic.when(SecurityUtils::getUsername).thenReturn("customer");
 
             InvalidOperationException exception = assertThrows(InvalidOperationException.class,
                     () -> orgService.validateOrgPromoteDemote(devPendingUser));
@@ -140,7 +150,6 @@ class OrgServiceTest extends Base {
         }
 
         @Test
-        @WithMockUser(username = "dev", roles = {"DEV"})
         public void validateOrgPromoteDemote_DevDev_Invalid() {
             RoleEntity devRole = roleRepository.findByRoleName(RoleEnum.DEV.getRoleName()).orElseThrow();
             RoleEntity devPendingRole = roleRepository.findByRoleName(RoleEnum.DEV.getRoleName()).orElseThrow();
@@ -149,6 +158,7 @@ class OrgServiceTest extends Base {
 
             when(userRepository.findByUsername(any(String.class)))
                     .thenReturn(Optional.ofNullable(devUser));
+            mockedStatic.when(SecurityUtils::getUsername).thenReturn("dev");
 
             InvalidOperationException exception = assertThrows(InvalidOperationException.class,
                     () -> orgService.validateOrgPromoteDemote(devPendingUser));
@@ -158,7 +168,6 @@ class OrgServiceTest extends Base {
         }
 
         @Test
-        @WithMockUser(username = "customer", roles = {"CUSTOMER"})
         public void validateOrgPromoteDemote_CustomerCustomer_Invalid() {
             RoleEntity custRole = roleRepository.findByRoleName(RoleEnum.CUSTOMER.getRoleName()).orElseThrow();
             RoleEntity custPendingRole = roleRepository.findByRoleName(RoleEnum.CUSTOMER_PENDING.getRoleName()).orElseThrow();
@@ -167,6 +176,7 @@ class OrgServiceTest extends Base {
 
             when(userRepository.findByUsername(any(String.class)))
                     .thenReturn(Optional.ofNullable(custUser));
+            mockedStatic.when(SecurityUtils::getUsername).thenReturn("customer");
 
             InvalidOperationException exception = assertThrows(InvalidOperationException.class,
                     () -> orgService.validateOrgPromoteDemote(custPendingUser));
@@ -278,7 +288,6 @@ class OrgServiceTest extends Base {
         }
 
         @Test
-        @WithMockUser(username = "test-cust", roles = "CUSTOMER")
         public void validateSameOrg_Cust_PM_SameOrg_Valid() {
             doReturn(cust).when(spy).findAuthUser();
 
@@ -286,7 +295,6 @@ class OrgServiceTest extends Base {
         }
 
         @Test
-        @WithMockUser(username = "test-cust", roles = "CUSTOMER")
         public void validateSameOrg_Cust_Dev_DiffOrg_Invalid() {
             doReturn(cust).when(spy).findAuthUser();
 

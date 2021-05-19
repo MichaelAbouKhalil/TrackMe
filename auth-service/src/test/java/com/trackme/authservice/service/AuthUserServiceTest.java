@@ -3,14 +3,13 @@ package com.trackme.authservice.service;
 import com.trackme.authservice.Base;
 import com.trackme.authservice.repository.UserRepository;
 import com.trackme.authservice.utils.OrgService;
+import com.trackme.common.security.SecurityUtils;
 import com.trackme.models.enums.RoleEnum;
 import com.trackme.models.payload.request.retrieveuser.GetUserDetailsRequest;
 import com.trackme.models.security.RoleEntity;
 import com.trackme.models.security.UserEntity;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -39,14 +38,26 @@ class AuthUserServiceTest extends Base {
     @DisplayName("Find Auth User By Username Tests")
     @Nested
     class FindAuthUserByUsernameTests {
+        MockedStatic<SecurityUtils> mockedStatic;
+
+        @BeforeEach
+        void setUp() {
+            mockedStatic = mockStatic(SecurityUtils.class);
+        }
+
+        @AfterEach
+        void tearDown() {
+            mockedStatic.close();
+        }
+
         @Test
-        @WithMockUser(username = "test-user", roles = {"PM"})
         public void findAuthUserByUsername_Valid() {
             UserEntity returnedUser = UserEntity.builder().username("test-user")
                     .build();
 
             when(userRepository.findByUsername(any(String.class)))
                     .thenReturn(Optional.of(returnedUser));
+            mockedStatic.when(SecurityUtils::getUsername).thenReturn("test-user");
 
             UserEntity user = authUserService.findAuthUser();
 

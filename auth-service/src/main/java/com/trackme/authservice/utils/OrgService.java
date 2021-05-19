@@ -22,7 +22,7 @@ public class OrgService {
         String orgId = user.getOrgId();
 
         // get authenticated user
-        UserEntity authenticatedUser = userRepository.findByUsername(SecurityUtils.getUsernameFromContext()).orElseThrow();
+        UserEntity authenticatedUser = userRepository.findByUsername(SecurityUtils.getUsername()).orElseThrow();
         RoleEntity authUserRole = authenticatedUser.getRoles().get(0);
 
         log.info("checking if user [{}] have the authority to perform this action", authenticatedUser.getUsername());
