@@ -5,9 +5,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 
@@ -47,7 +47,7 @@ public class TicketEntity {
 
     @Singular("assign")
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<AssignedEntity> assignedPersonnel;
+    private Set<AssignedEntity> assignedPersonnel = new HashSet<>();
 
     @OneToOne(mappedBy = "opened", cascade = CascadeType.ALL)
     private AssignedEntity openedBy;
