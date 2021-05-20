@@ -4,17 +4,19 @@ import com.trackme.authservice.Base;
 import com.trackme.authservice.repository.UserRepository;
 import com.trackme.authservice.utils.OrgService;
 import com.trackme.common.security.SecurityUtils;
+import com.trackme.models.common.CommonResponse;
 import com.trackme.models.enums.RoleEnum;
+import com.trackme.models.exception.InvalidCredentialsException;
 import com.trackme.models.payload.request.retrieveuser.GetUserDetailsRequest;
+import com.trackme.models.payload.request.user.password.UserChangePasswordRequest;
 import com.trackme.models.security.RoleEntity;
 import com.trackme.models.security.UserEntity;
 import org.junit.jupiter.api.*;
 import org.mockito.MockedStatic;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.Optional;
 
@@ -30,9 +32,19 @@ class AuthUserServiceTest extends Base {
     @MockBean
     UserRepository userRepository;
 
+    UserEntity user;
+    RoleEntity role;
+    RoleEntity roleToUpdated;
+
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
+        role = RoleEntity.builder().roleName("ROLE_ADMIN").build();
+        roleToUpdated = RoleEntity.builder().roleName("ROLE_PM").build();
+        user = UserEntity.builder().username("user")
+                .email("user@email.com").role(role)
+                .password(passwordEncoder.encode("oldPassword"))
+                .build();
+
     }
 
     @DisplayName("Find Auth User By Username Tests")
@@ -52,16 +64,13 @@ class AuthUserServiceTest extends Base {
 
         @Test
         public void findAuthUserByUsername_Valid() {
-            UserEntity returnedUser = UserEntity.builder().username("test-user")
-                    .build();
-
             when(userRepository.findByUsername(any(String.class)))
-                    .thenReturn(Optional.of(returnedUser));
+                    .thenReturn(Optional.of(user));
             mockedStatic.when(SecurityUtils::getUsername).thenReturn("test-user");
 
             UserEntity user = authUserService.findAuthUser();
 
-            assertEquals(returnedUser, user);
+            assertEquals(user, user);
         }
     }
 
@@ -70,34 +79,25 @@ class AuthUserServiceTest extends Base {
     class FindUserByEmailTests {
         @Test
         public void findUserByEmail_Found_Valid() {
-            String email = "test@email.com";
-
-            UserEntity userEntity = UserEntity.builder().email(email).build();
             when(userRepository.findByEmail(any(String.class)))
-                    .thenReturn(Optional.ofNullable(userEntity));
+                    .thenReturn(Optional.ofNullable(user));
 
-            UserEntity user = authUserService.findUserByEmail(email);
+            UserEntity result = authUserService.findUserByEmail(user.getEmail());
 
-            assertEquals(email, user.getEmail());
+            assertEquals(user.getEmail(), result.getEmail());
         }
 
         @Test
         public void findUserByEmail_NotFound_Invalid() {
-            String email = "test@email.com";
-            String exceptionMessage = "User with email [" + email + "] is not found.";
             when(userRepository.findByEmail(anyString()))
                     .thenThrow(
-                            new UsernameNotFoundException(exceptionMessage)
+                            new UsernameNotFoundException("")
                     );
 
-            UsernameNotFoundException exception = assertThrows(
+            assertThrows(
                     UsernameNotFoundException.class,
-                    () -> {
-                        authUserService.findUserByEmail(email);
-                    }
+                    () -> authUserService.findUserByEmail(user.getEmail())
             );
-
-            assertEquals(exceptionMessage, exception.getMessage());
         }
     }
 
@@ -106,37 +106,29 @@ class AuthUserServiceTest extends Base {
     class FindUserByUsernameTests {
         @Test
         public void findUserByUsername_Found_Valid() {
-            String username = "test";
 
-            UserEntity userEntity = UserEntity.builder().username(username).build();
             when(userRepository.findByUsername(any(String.class)))
-                    .thenReturn(Optional.ofNullable(userEntity));
+                    .thenReturn(Optional.ofNullable(user));
 
-            UserEntity user = authUserService.findUserByUsername(username);
+            UserEntity result = authUserService.findUserByUsername(user.getUsername());
 
-            assertEquals(username, user.getUsername());
+            assertEquals(user.getUsername(), result.getUsername());
+            assertEquals(user.getEmail(), result.getEmail());
         }
 
         @Test
         public void findUserByUsername_NotFound_Invalid() {
-            String username = "test";
-            String exceptionMessage = "User with username [" + username + "] is not found.";
             when(userRepository.findByUsername(anyString()))
                     .thenThrow(
-                            new UsernameNotFoundException(exceptionMessage)
+                            new UsernameNotFoundException("")
                     );
 
-            UsernameNotFoundException exception = assertThrows(
+            assertThrows(
                     UsernameNotFoundException.class,
-                    () -> {
-                        authUserService.findUserByUsername(username);
-                    }
+                    () -> authUserService.findUserByUsername(user.getUsername())
             );
-
-            assertEquals(exceptionMessage, exception.getMessage());
         }
     }
-
 
     @DisplayName("Update User Roles Tests")
     @Nested
@@ -144,20 +136,16 @@ class AuthUserServiceTest extends Base {
 
         @Test
         public void updateUserRoles_Valid() {
-            RoleEntity role = RoleEntity.builder().roleName("ROLE_ADMIN").build();
-            RoleEntity roleToUpdated = RoleEntity.builder().roleName("ROLE_PM").build();
-            UserEntity user = UserEntity.builder().email("test@email.com")
-                    .role(role).build();
-
             when(userRepository.save(any(UserEntity.class)))
                     .thenReturn(user);
 
-            UserEntity userEntity = authUserService.updateUserRoles(user, roleToUpdated);
+            UserEntity result = authUserService.updateUserRoles(user, roleToUpdated);
 
-            assertEquals(roleToUpdated, userEntity.getRoles().get(0));
+            assertEquals(user.getUsername(), result.getUsername());
+            assertEquals(user.getEmail(), result.getEmail());
+            assertEquals(user.getRoles().get(0), result.getRoles().get(0));
         }
     }
-
 
     @DisplayName("Find By Username Or Email Tests")
     @Nested
@@ -174,7 +162,7 @@ class AuthUserServiceTest extends Base {
                     .username("test").email("test@test.com")
                     .build();
             spyOrgService = spy(new OrgService(userRepository));
-            spyUserService = spy(new AuthUserService(userRepository, spyOrgService));
+            spyUserService = spy(new AuthUserService(userRepository, spyOrgService, passwordEncoder));
 
             admin = UserEntity.builder()
                     .username("admin").email("admin@email.com")
@@ -221,6 +209,105 @@ class AuthUserServiceTest extends Base {
             assertNotNull(foundUser.getRoles());
             assertEquals(pm.getEmail(), foundUser.getEmail());
             assertEquals(pm.getUsername(), foundUser.getUsername());
+        }
+    }
+
+    @DisplayName("Change Password Tests")
+    @Nested
+    class ChangePasswordTests {
+        MockedStatic<SecurityUtils> mockedStatic;
+        UserChangePasswordRequest userChangePasswordRequest;
+
+        @BeforeEach
+        void setUp() {
+            mockedStatic = mockStatic(SecurityUtils.class);
+            userChangePasswordRequest = UserChangePasswordRequest.builder()
+                    .oldPassword("oldPassword")
+                    .newPassword("newPassword")
+                    .build();
+        }
+
+        @AfterEach
+        void tearDown() {
+            mockedStatic.close();
+        }
+
+        @Test
+        public void changePassword_Valid() {
+            mockedStatic.when(SecurityUtils::getUsername).thenReturn("user");
+            when(userRepository.findByUsername(any(String.class)))
+                    .thenReturn(Optional.of(user));
+            when(userRepository.save(any(UserEntity.class)))
+                    .thenReturn(user);
+
+            CommonResponse response =
+                    authUserService.changePassword(userChangePasswordRequest);
+
+            assertEquals(HttpStatus.OK.value(), response.getStatus());
+            assertTrue(response.isSuccess());
+            assertNull(response.getPayload());
+            assertNull(response.getError());
+        }
+
+        @Test
+        public void changePassword_UserNotFound_Invalid() {
+            mockedStatic.when(SecurityUtils::getUsername).thenReturn("user");
+            when(userRepository.findByUsername(any(String.class)))
+                    .thenThrow(new UsernameNotFoundException(""));
+            when(userRepository.save(any(UserEntity.class)))
+                    .thenReturn(user);
+
+            assertThrows(
+                    UsernameNotFoundException.class,
+                    () -> authUserService.changePassword(userChangePasswordRequest)
+            );
+        }
+
+        @Test
+        public void changePassword_OldPasswordDoesntMatch_Invalid() {
+            mockedStatic.when(SecurityUtils::getUsername).thenReturn("user");
+            when(userRepository.findByUsername(any(String.class)))
+                    .thenReturn(Optional.of(user));
+            when(userRepository.save(any(UserEntity.class)))
+                    .thenReturn(user);
+
+            user.setPassword(passwordEncoder.encode(
+                    userChangePasswordRequest.getOldPassword() + "q"));
+            assertThrows(
+                    InvalidCredentialsException.class,
+                    () -> authUserService.changePassword(userChangePasswordRequest)
+            );
+        }
+
+        @Test
+        public void changePassword_NewPasswordSameAsOld_Invalid() {
+            mockedStatic.when(SecurityUtils::getUsername).thenReturn("user");
+            when(userRepository.findByUsername(any(String.class)))
+                    .thenReturn(Optional.of(user));
+            when(userRepository.save(any(UserEntity.class)))
+                    .thenReturn(user);
+
+            user.setPassword(passwordEncoder.encode(
+                    userChangePasswordRequest.getNewPassword()));
+
+            assertThrows(
+                    InvalidCredentialsException.class,
+                    () -> authUserService.changePassword(userChangePasswordRequest)
+            );
+        }
+
+        @Test
+        public void changePassword_FailedToSave_Invalid() {
+            mockedStatic.when(SecurityUtils::getUsername).thenReturn("user");
+            when(userRepository.findByUsername(any(String.class)))
+                    .thenReturn(Optional.of(user));
+            when(userRepository.save(any(UserEntity.class)))
+                    .thenThrow(new RuntimeException(""));
+
+            assertThrows(
+                    RuntimeException.class,
+                    () -> authUserService.changePassword(userChangePasswordRequest)
+            );
         }
     }
 }

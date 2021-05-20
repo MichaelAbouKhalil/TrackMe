@@ -1,10 +1,7 @@
 package com.trackme.common.exceptionhandler;
 
 import com.trackme.models.common.CommonResponse;
-import com.trackme.models.exception.InvalidOperationException;
-import com.trackme.models.exception.InvalidRoleException;
-import com.trackme.models.exception.NotFoundException;
-import com.trackme.models.exception.UserAlreadyExistException;
+import com.trackme.models.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -94,6 +91,12 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodArgumentTypeMismatchException(Exception ex, WebRequest request) {
         String errorMessage = ex.getMessage();
         return exceptionConverter(errorMessage, ex, request, null);
+    }
+
+    @ExceptionHandler(value = InvalidCredentialsException.class)
+    protected ResponseEntity<Object> handleInvalidCredentialsException(Exception ex, WebRequest request) {
+        String errorMessage = ex.getMessage();
+        return exceptionConverter(errorMessage, ex, request, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(value = UnauthorizedUserException.class)

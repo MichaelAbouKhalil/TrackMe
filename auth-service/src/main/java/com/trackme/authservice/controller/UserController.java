@@ -3,6 +3,7 @@ package com.trackme.authservice.controller;
 import com.trackme.authservice.service.AuthUserService;
 import com.trackme.models.common.CommonResponse;
 import com.trackme.models.payload.request.retrieveuser.GetUserDetailsRequest;
+import com.trackme.models.payload.request.user.password.UserChangePasswordRequest;
 import com.trackme.models.security.UserEntity;
 import com.trackme.models.security.permission.AuthenticatedPermission;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,16 @@ public class UserController {
 
         CommonResponse<UserEntity> response = CommonResponse.ok(user);
 
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/user/changePassword")
+    @AuthenticatedPermission
+    public ResponseEntity<CommonResponse> changePassword(
+            @Valid @RequestBody UserChangePasswordRequest request) {
+        log.info("received request on changePassword()");
+
+        CommonResponse response = authUserService.changePassword(request);
         return ResponseEntity.ok().body(response);
     }
 }

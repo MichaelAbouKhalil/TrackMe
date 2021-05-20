@@ -1,7 +1,9 @@
 package com.trackme.authservice.controller;
 
 import com.trackme.authservice.service.AuthUserService;
+import com.trackme.models.common.CommonResponse;
 import com.trackme.models.payload.request.retrieveuser.GetUserDetailsRequest;
+import com.trackme.models.payload.request.user.password.UserChangePasswordRequest;
 import com.trackme.models.security.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
@@ -20,12 +22,14 @@ class UserControllerTest extends BaseController {
 
     private static final String BASE_API_AUTH_USER = "/user";
     private static final String BASE_API_USER_DETAILS = "/userDetails";
+    private static final String BASE_API_CHANGE_PASSWORD = "/user/changePassword";
 
     @MockBean
     AuthUserService authUserService;
 
     UserEntity user;
     GetUserDetailsRequest getUserDetailsRequest;
+    UserChangePasswordRequest userChangePasswordRequest;
 
     @BeforeEach
     void setUp() {
@@ -33,6 +37,10 @@ class UserControllerTest extends BaseController {
                 .username("test-username").build();
         getUserDetailsRequest = GetUserDetailsRequest.builder()
                 .email("test@email.com").build();
+        userChangePasswordRequest = UserChangePasswordRequest.builder()
+                .oldPassword("oldPassword")
+                .newPassword("newPassword")
+                .build();
     }
 
     @DisplayName("Retrieve User Access Tests")
@@ -198,6 +206,95 @@ class UserControllerTest extends BaseController {
                     .andExpect(jsonPath("$.success").value(Boolean.TRUE))
                     .andExpect(jsonPath("$.payload").exists())
                     .andExpect(jsonPath("$.error").doesNotExist());
+        }
+    }
+
+    @DisplayName("User Change Password Access Tests")
+    @Nested
+    class UserChangePasswordAccessTests{
+        @Test
+        public void userChangePassword_NoAuth_Invalid() throws Exception{
+            when(authUserService.changePassword(any(UserChangePasswordRequest.class)))
+                    .thenReturn(CommonResponse.ok());
+
+            mockMvc.perform(post(BASE_API_CHANGE_PASSWORD)
+                .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(userChangePasswordRequest))
+            )
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(HttpStatus.UNAUTHORIZED.value()))
+                    .andExpect(jsonPath("$.success").value(Boolean.FALSE))
+                    .andExpect(jsonPath("$.payload").doesNotExist())
+                    .andExpect(jsonPath("$.error").exists())
+                    .andExpect(jsonPath("$.error.errorMessage").exists());
+        }
+        @Test
+        public void userChangePassword_Admin_Valid() throws Exception{
+            when(authUserService.changePassword(any(UserChangePasswordRequest.class)))
+                    .thenReturn(CommonResponse.ok());
+
+            mockMvc.perform(post(BASE_API_CHANGE_PASSWORD)
+                .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(userChangePasswordRequest))
+                    .header("AUTHORIZATION", "Bearer " + adminToken)
+            )
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(HttpStatus.OK.value()))
+                    .andExpect(jsonPath("$.success").value(Boolean.TRUE))
+                    .andExpect(jsonPath("$.payload").doesNotExist())
+                    .andExpect(jsonPath("$.error").doesNotExist())
+                    .andExpect(jsonPath("$.errorMessage").doesNotExist());
+        }
+        @Test
+        public void userChangePassword_PM_Valid() throws Exception{
+            when(authUserService.changePassword(any(UserChangePasswordRequest.class)))
+                    .thenReturn(CommonResponse.ok());
+
+            mockMvc.perform(post(BASE_API_CHANGE_PASSWORD)
+                .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(userChangePasswordRequest))
+                    .header("AUTHORIZATION", "Bearer " + pmToken)
+            )
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(HttpStatus.OK.value()))
+                    .andExpect(jsonPath("$.success").value(Boolean.TRUE))
+                    .andExpect(jsonPath("$.payload").doesNotExist())
+                    .andExpect(jsonPath("$.error").doesNotExist())
+                    .andExpect(jsonPath("$.errorMessage").doesNotExist());
+        }
+        @Test
+        public void userChangePassword_Dev_Valid() throws Exception{
+            when(authUserService.changePassword(any(UserChangePasswordRequest.class)))
+                    .thenReturn(CommonResponse.ok());
+
+            mockMvc.perform(post(BASE_API_CHANGE_PASSWORD)
+                .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(userChangePasswordRequest))
+                    .header("AUTHORIZATION", "Bearer " + devToken)
+            )
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(HttpStatus.OK.value()))
+                    .andExpect(jsonPath("$.success").value(Boolean.TRUE))
+                    .andExpect(jsonPath("$.payload").doesNotExist())
+                    .andExpect(jsonPath("$.error").doesNotExist())
+                    .andExpect(jsonPath("$.errorMessage").doesNotExist());
+        }
+        @Test
+        public void userChangePassword_Customer_Valid() throws Exception{
+            when(authUserService.changePassword(any(UserChangePasswordRequest.class)))
+                    .thenReturn(CommonResponse.ok());
+
+            mockMvc.perform(post(BASE_API_CHANGE_PASSWORD)
+                .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(userChangePasswordRequest))
+                    .header("AUTHORIZATION", "Bearer " + custToken)
+            )
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(HttpStatus.OK.value()))
+                    .andExpect(jsonPath("$.success").value(Boolean.TRUE))
+                    .andExpect(jsonPath("$.payload").doesNotExist())
+                    .andExpect(jsonPath("$.error").doesNotExist())
+                    .andExpect(jsonPath("$.errorMessage").doesNotExist());
         }
     }
 }

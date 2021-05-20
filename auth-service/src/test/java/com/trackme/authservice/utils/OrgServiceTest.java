@@ -5,7 +5,6 @@ import com.trackme.authservice.repository.RoleRepository;
 import com.trackme.authservice.repository.UserRepository;
 import com.trackme.authservice.service.AuthUserService;
 import com.trackme.common.security.SecurityUtils;
-import com.trackme.common.service.UserService;
 import com.trackme.models.enums.RoleEnum;
 import com.trackme.models.exception.InvalidOperationException;
 import com.trackme.models.security.RoleEntity;
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.*;
 import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.Optional;
 
@@ -124,11 +122,9 @@ class OrgServiceTest extends Base {
                     .thenReturn(Optional.ofNullable(devUser));
             mockedStatic.when(SecurityUtils::getUsername).thenReturn("dev");
 
-            InvalidOperationException exception = assertThrows(InvalidOperationException.class,
+            assertThrows(InvalidOperationException.class,
                     () -> orgService.validateOrgPromoteDemote(custPendingUser));
 
-            assertEquals("user [" + devUser.getUsername() + "] " +
-                    "doesn't have authority to perform this action", exception.getMessage());
         }
 
         @Test
@@ -142,11 +138,9 @@ class OrgServiceTest extends Base {
                     .thenReturn(Optional.ofNullable(custUser));
             mockedStatic.when(SecurityUtils::getUsername).thenReturn("customer");
 
-            InvalidOperationException exception = assertThrows(InvalidOperationException.class,
+            assertThrows(InvalidOperationException.class,
                     () -> orgService.validateOrgPromoteDemote(devPendingUser));
 
-            assertEquals("user [" + custUser.getUsername() + "] " +
-                    "doesn't have authority to perform this action", exception.getMessage());
         }
 
         @Test
@@ -160,11 +154,8 @@ class OrgServiceTest extends Base {
                     .thenReturn(Optional.ofNullable(devUser));
             mockedStatic.when(SecurityUtils::getUsername).thenReturn("dev");
 
-            InvalidOperationException exception = assertThrows(InvalidOperationException.class,
+            assertThrows(InvalidOperationException.class,
                     () -> orgService.validateOrgPromoteDemote(devPendingUser));
-
-            assertEquals("user [" + devUser.getUsername() + "] " +
-                    "doesn't have authority to perform this action", exception.getMessage());
         }
 
         @Test
@@ -178,11 +169,8 @@ class OrgServiceTest extends Base {
                     .thenReturn(Optional.ofNullable(custUser));
             mockedStatic.when(SecurityUtils::getUsername).thenReturn("customer");
 
-            InvalidOperationException exception = assertThrows(InvalidOperationException.class,
+            assertThrows(InvalidOperationException.class,
                     () -> orgService.validateOrgPromoteDemote(custPendingUser));
-
-            assertEquals("user [" + custUser.getUsername() + "] " +
-                    "doesn't have authority to perform this action", exception.getMessage());
         }
     }
 
@@ -218,7 +206,7 @@ class OrgServiceTest extends Base {
                     .role(RoleEntity.builder().roleName(RoleEnum.CUSTOMER.getRoleName())
                             .build()).orgId(orgId).build();
 
-            spy = spy(new AuthUserService(userRepository, orgService));
+            spy = spy(new AuthUserService(userRepository, orgService, passwordEncoder));
         }
 
         @Test
@@ -260,9 +248,7 @@ class OrgServiceTest extends Base {
             dev.setOrgId("tesstt");
             assertThrows(
                     InvalidOperationException.class,
-                    () -> {
-                        orgService.checkSameOrg(userEntity, pm);
-                    }
+                    () -> orgService.checkSameOrg(userEntity, pm)
             );
         }
 
@@ -281,9 +267,7 @@ class OrgServiceTest extends Base {
             userEntity.setOrgId("tesstt");
             assertThrows(
                     InvalidOperationException.class,
-                    () -> {
-                        orgService.checkSameOrg(userEntity, dev);
-                    }
+                    () -> orgService.checkSameOrg(userEntity, dev)
             );
         }
 
@@ -303,9 +287,7 @@ class OrgServiceTest extends Base {
             userEntity.setOrgId("tesstt");
             assertThrows(
                     InvalidOperationException.class,
-                    () -> {
-                        orgService.checkSameOrg(userEntity, cust);
-                    }
+                    () -> orgService.checkSameOrg(userEntity, cust)
             );
         }
     }
