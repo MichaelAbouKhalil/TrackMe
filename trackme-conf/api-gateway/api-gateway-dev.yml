@@ -1,6 +1,10 @@
 spring:
   application:
     name: api-gateway
+    cloud:
+      loadbalancer:
+        ribbon:
+          enabled: false
 server:
   port: 8080
 
@@ -18,6 +22,7 @@ zuul:
   sensitiveHeaders: Cookie,Set-Cookie
   host:
     connect-timeout-millis: 60000
+
 
 #hystrix:
 #  command:
