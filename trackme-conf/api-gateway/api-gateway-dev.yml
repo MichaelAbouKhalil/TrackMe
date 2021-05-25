@@ -19,15 +19,15 @@ zuul:
   host:
     connect-timeout-millis: 60000
 
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          strategy: THREAD
-          thread:
-            timeoutInMilliseconds:  60000
-
-ribbon:
-    ConnectTimeout: 10000
-    ReadTimeout: 10000
+#hystrix:
+#  command:
+#    default:
+#      execution:
+#        isolation:
+#          strategy: THREAD
+#          thread:
+#            timeoutInMilliseconds:  60000
+#
+#ribbon:
+#    ConnectTimeout: 10000
+#    ReadTimeout: 10000
